@@ -127,6 +127,10 @@
         .name-text { font-weight: 600; color: var(--dark); font-size: 13px; line-height: 1.4; } 
         .edit-icon { background: none; border: none; font-size: 13px; opacity: 0.4; cursor: pointer; margin-left: 4px; padding: 4px; }
         .edit-icon:hover { opacity: 1; }
+        
+        /* CẬP NHẬT: Định dạng Nút Sửa SKU cho đẹp */
+        .btn-edit-sku { margin-left: 6px; padding: 3px 6px; font-size: 12px; background: #e2e8f0; color: #475569; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer; transition: 0.2s; }
+        .btn-edit-sku:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
         .qty-badge { font-size: 16px; font-weight: 800; }
 
@@ -205,14 +209,18 @@
             transition: all 0.2s;
         }
         .btn-scan-trigger:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: var(--shadow-md); }
-        .scan-mode-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        
+        /* CẬP NHẬT: Thêm nút Sửa SKU vào lưới */
+        .scan-mode-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; margin-bottom: 15px; }
         .scan-mode-btn { 
-            padding: 12px 6px; border-radius: 8px; border: 1px solid var(--slate-200); background: var(--slate-100); 
-            color: var(--slate-600); font-weight: 700; font-size: 14px; cursor: pointer; text-align: center; transition: all 0.2s; 
+            padding: 10px 4px; border-radius: 8px; border: 1px solid var(--slate-200); background: var(--slate-100); 
+            color: var(--slate-600); font-weight: 700; font-size: 12px; cursor: pointer; text-align: center; transition: all 0.2s; 
         }
         .scan-mode-btn.active[data-mode="nhap"] { background: var(--success); color: white; border-color: var(--success); }
         .scan-mode-btn.active[data-mode="xuat"] { background: var(--warning); color: white; border-color: var(--warning); }
         .scan-mode-btn.active[data-mode="muon"] { background: #fd7e14; color: white; border-color: #fd7e14; }
+        .scan-mode-btn.active[data-mode="edit_sku"] { background: var(--primary); color: white; border-color: var(--primary); }
+        
         #scanner-container { width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid var(--slate-300); background: #000; position: relative;}
         #scanner-view { width: 100%; min-height: 250px; }
     </style>
@@ -222,7 +230,7 @@
 <div class="container">
     <div class="header">
         <h2>HỆ THỐNG QUẢN LÝ KHO</h2>
-        <p>Bản nâng cấp tối ưu hóa Hybrid (Chạy mượt Desktop & Tích hợp Quét QR iOS)</p>
+        <p>Bản nâng cấp tối ưu hóa Hybrid (Tích hợp Camera Quét sửa SKU)</p>
     </div>
     
     <form id="inventoryForm">
@@ -239,7 +247,7 @@
             <button type="button" id="btnSync" onclick="dongBoLenGoogleSheet()" class="btn-icon" style="background: var(--success-gradient);">☁️ Đẩy Cloud</button>
             <button type="button" id="btnRestore" onclick="khoiPhucTuGoogleSheet()" class="btn-icon" style="background: var(--primary-gradient);">⬇️ Tải Xuống</button>
             <button type="button" onclick="xuatFileKiemKho()" class="btn-icon" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">📊 Báo Cáo Excel</button>
-            <button type="button" class="btn-scan-trigger" onclick="openScannerModal()">📷 Quét Mã Nhập/Xuất/Mượn</button>
+            <button type="button" class="btn-scan-trigger" onclick="openScannerModal('nhap')">📷 Quét Mã Đa Năng</button>
         </div>
         <input type="text" id="searchInput" class="search-box" placeholder="🔍 Tìm kiếm sản phẩm..." onkeyup="searchProduct()">
     </div>
@@ -264,7 +272,7 @@
                         <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" style="width: 18px; height: 18px; cursor:pointer;">
                     </th>
                     <th class="cell-center" style="width: 80px;">Ảnh</th>
-                    <th class="cell-center" style="width: 110px;">SKU</th>
+                    <th class="cell-center" style="width: 150px;">SKU</th>
                     <th class="cell-left">Tên Sản Phẩm</th>
                     <th class="cell-center" style="width: 90px;">Tồn Kho</th>
                     <th class="cell-left" style="min-width: 180px;">Chi Tiết Mượn</th>
@@ -328,14 +336,15 @@
                 <button type="button" class="scan-mode-btn active" data-mode="nhap" onclick="setScanMode('nhap')">📥 NHẬP</button>
                 <button type="button" class="scan-mode-btn" data-mode="xuat" onclick="setScanMode('xuat')">📤 XUẤT</button>
                 <button type="button" class="scan-mode-btn" data-mode="muon" onclick="setScanMode('muon')">📦 MƯỢN</button>
+                <button type="button" class="scan-mode-btn" data-mode="edit_sku" onclick="setScanMode('edit_sku')">✏️ SỬA SKU</button>
             </div>
             
             <div id="scanner-container">
                 <div id="scanner-view"></div>
             </div>
             
-            <p style="text-align: center; color: var(--slate-600); font-size: 13px; font-weight: 500; margin-top: 12px; margin-bottom: 5px;">
-                Đưa mã vạch hoặc mã QR vào vùng camera để hệ thống tự nhận diện SKU.
+            <p id="scanner-hint" style="text-align: center; color: var(--slate-600); font-size: 13px; font-weight: 500; margin-top: 12px; margin-bottom: 5px;">
+                Đưa mã vạch hoặc mã QR vào vùng camera.
             </p>
         </div>
     </div>
@@ -367,7 +376,7 @@
         let btn = document.getElementById('btnSync'); 
         btn.innerHTML = "⏳ Đang đẩy mây...";
         
-        let payload = { thoi_gian: getFormatedDate(), ton_kho: inventory };
+        let payload = { thoi_gian: getFormatedDate(), ton_kho: inventory, nhat_ky: historyLog };
         
         fetch(GOOGLE_SHEET_URL, { 
             method: "POST", 
@@ -403,7 +412,8 @@
                 let data = JSON.parse(text); 
                 if(data && data.ton_kho && data.ton_kho.length > 0) {
                     inventory = data.ton_kho.map(item => { item.image = item.image || DEFAULT_IMAGE; if(!item.borrowList) item.borrowList = []; return item; });
-                    luuDuLieu(false); renderTable(); 
+                    if(data.nhat_ky && data.nhat_ky.length > 0) historyLog = data.nhat_ky;
+                    luuDuLieu(false); renderTable(); renderHistory();
                     ghiLog("HỆ THỐNG", "Tải dữ liệu", "Cloud ➔ Máy", inventory.length, "var(--primary)", "Đồng bộ hóa");
                     if(!isAuto) alert(`✅ Đồng bộ thành công ${inventory.length} sản phẩm từ Cloud!`);
                 } else { 
@@ -454,8 +464,16 @@
     function suaThongTin(index, field) {
         const item = inventory[index];
         if (field === 'sku') {
-            let n = prompt(`Cập nhật SKU mới cho [${item.sku || 'Trống'}]:`, item.sku || '');
-            if (n !== null) { let o = item.sku||'Trống'; item.sku = n.trim().toUpperCase(); luuDuLieu(); ghiLog(item.sku, item.name, "Sửa SKU", "-", "var(--primary)", `[${o}] ➔ [${item.sku}]`); searchProduct(); }
+            let n = prompt(`Nhập mã bằng phím cho [${item.sku || 'Trống'}]:`, item.sku || '');
+            if (n !== null) { 
+                let decodedText = n.trim().toUpperCase();
+                let isDuplicate = inventory.some(i => i.sku === decodedText && i.id !== item.id);
+                if (isDuplicate) {
+                    alert(`⚠️ LỖI: Mã SKU [${decodedText}] đã tồn tại ở một sản phẩm khác!`);
+                    return;
+                }
+                let o = item.sku||'Trống'; item.sku = decodedText; luuDuLieu(); ghiLog(item.sku, item.name, "Sửa SKU", "-", "var(--primary)", `[${o}] ➔ [${item.sku}]`); searchProduct(); 
+            }
         } else if (field === 'name') {
             let n = prompt(`Cập nhật Tên sản phẩm cho [${item.name}]:`, item.name);
             if (n && n.trim()!=="") { let o = item.name; item.name = n.trim(); luuDuLieu(); ghiLog(item.sku, item.name, "Sửa Tên", "-", "var(--primary)", `[${o}] ➔ [${item.name}]`); searchProduct(); }
@@ -467,6 +485,9 @@
         fi.onchange = function(e) { if (e.target.files[0]) compressImage(e.target.files[0], function(data) { inventory[index].image = data; luuDuLieu(); ghiLog(inventory[index].sku, inventory[index].name, "Sửa Ảnh", "-", "#8b5cf6", `Cập nhật ảnh hiển thị`); searchProduct(); }); }; fi.click(); 
     }
 
+    // ====================================================================
+    // RENDER BẢNG: ĐÃ BỔ SUNG NÚT QUÉT 📷 VÀO CỘT SKU
+    // ====================================================================
     function renderTable(data = inventory) {
         const tbody = document.querySelector('#inventoryTable tbody'); tbody.innerHTML = '';
         let selAll = document.getElementById('selectAll'); if(selAll) selAll.checked = false;
@@ -487,11 +508,18 @@
                 listMuon += `</div>`;
             } else listMuon = `<span style="color: #cbd5e1;">—</span>`;
 
+            // CẬP NHẬT: Thêm nút 📷 quét vào cột SKU
             tbody.innerHTML += `
                 <tr>
                     <td class="cell-center"><input type="checkbox" class="item-checkbox" value="${realIdx}" onclick="updateBulkUI()" style="width:18px; height:18px; cursor:pointer;"></td>
                     <td class="cell-center"><div class="img-wrapper"><img src="${item.image || DEFAULT_IMAGE}"><span class="btn-change-image-link" onclick="suaHinhAnh(${realIdx})">📷 Đổi</span></div></td>
-                    <td class="cell-center"><div class="flex-center"><span class="sku-text">${item.sku||'---'}</span><button class="edit-icon" onclick="suaThongTin(${realIdx}, 'sku')">✏️</button></div></td>
+                    <td class="cell-center">
+                        <div class="flex-center">
+                            <span class="sku-text">${item.sku || '<span style="color:#94a3b8; font-weight:normal;">Trống</span>'}</span>
+                            <button class="btn-edit-sku" onclick="suaThongTin(${realIdx}, 'sku')" title="Gõ phím">✏️</button>
+                            <button class="btn-edit-sku" onclick="openScannerModal('edit_sku', '${item.id}')" title="Quét mã cập nhật">📷</button>
+                        </div>
+                    </td>
                     <td class="cell-left"><div class="flex-left"><span class="name-text">${item.name}</span><button class="edit-icon" onclick="suaThongTin(${realIdx}, 'name')">✏️</button></div></td>
                     <td class="cell-center">${qtyDisplay}</td>
                     <td class="cell-left"><div style="font-size: 11px; color: var(--purple); font-weight: 700; margin-bottom: 4px;">Tổng đang mượn: ${item.borrowedQty||0}</div>${listMuon}</td>
@@ -557,7 +585,7 @@
     function traHang(pIdx, bIdx) { let i = inventory[pIdx], m = i.borrowList[bIdx]; let s = parseInt(prompt(`Nhận lại hàng từ: ${m.note}\nSố lượng nhập trả:`, m.qty)); if(s>0 && s<=m.qty){ i.qty+=s; m.qty-=s; i.borrowedQty-=s; if(m.qty===0) i.borrowList.splice(bIdx, 1); luuDuLieu(); ghiLog(i.sku, i.name, "Nhận trả (🔀)", s, "var(--purple)", `Hoàn trả từ danh mục mượn của [${m.note}]`); searchProduct(); } }
     function xoaHang(idx) { if (confirm(`Bạn chắc chắn muốn xóa vĩnh viễn sản phẩm: ${inventory[idx].name}?`)) { let n=prompt("Nhập lý do xóa mã hàng:"); if(n !== null){ ghiLog(inventory[idx].sku, inventory[idx].name, "Xóa 🗑️", "-", "var(--dark)", n); inventory.splice(idx, 1); luuDuLieu(); searchProduct(); } } }
     function searchProduct() { const k = document.getElementById('searchInput').value.toLowerCase(); renderTable(inventory.filter(i => i.name.toLowerCase().includes(k) || (i.sku && i.sku.toLowerCase().includes(k)))); }
-    function xoaLichSu() { if(confirm("Xóa vĩnh viễn toàn bộ nhật ký? Hành động này không thể khôi phục.")) { historyLog = []; luuLichSu(); renderHistory(); } }
+    function xoaLichSu() { if(confirm("Xóa vĩnh viễn toàn bộ nhật ký? Hành động này không thể khôi phục.")) { historyLog = []; luuLichSu(); renderHistory(); triggerAutoSave(); } }
 
     function boChonTatCa() {
         let sa = document.getElementById('selectAll'); if (sa) sa.checked = false;
@@ -671,14 +699,14 @@
     }
 
     // ====================================================================
-    // LOGIC XỬ LÝ QUÉT MÃ VẠCH / QR CODE TRÊN ĐIỆN THOẠI (HTML5-QRCODE)
+    // HỆ THỐNG QUÉT MÃ QR/BARCODE (HTML5-QRCODE) BỔ SUNG SỬA SKU
     // ====================================================================
     let html5QrCode = null;
-    let currentScanMode = 'nhap'; 
+    let editingSkuProductId = null; // CẬP NHẬT: Biến lưu ID sản phẩm đang cần sửa SKU
 
-    function openScannerModal() {
+    function openScannerModal(mode = 'nhap', productId = null) {
         document.getElementById('scannerModal').style.display = 'flex';
-        setScanMode('nhap'); 
+        setScanMode(mode, productId); 
         setTimeout(() => { startCameraScanner(); }, 300);
     }
 
@@ -687,12 +715,24 @@
         stopCameraScanner();
     }
 
-    function setScanMode(mode) {
+    function setScanMode(mode, productId = null) {
         currentScanMode = mode;
+        editingSkuProductId = productId;
+        
         document.querySelectorAll('.scan-mode-btn').forEach(btn => {
             btn.classList.remove('active');
             if (btn.getAttribute('data-mode') === mode) btn.classList.add('active');
         });
+
+        // Cập nhật câu hướng dẫn cho rõ ràng
+        let hint = document.getElementById('scanner-hint');
+        if (mode === 'edit_sku') {
+            hint.innerText = "Đưa mã vạch vào vùng camera để thay thế SKU cho sản phẩm.";
+            hint.style.color = "var(--primary)";
+        } else {
+            hint.innerText = "Đưa mã vạch hoặc mã QR vào vùng camera để hệ thống tự nhận diện SKU.";
+            hint.style.color = "var(--slate-600)";
+        }
     }
 
     function startCameraScanner() {
@@ -723,6 +763,38 @@
     function onScanSuccess(decodedText, decodedResult) {
         if (html5QrCode) html5QrCode.pause(true);
         const skuScanned = decodedText.trim().toUpperCase();
+        
+        // ==========================================
+        // CẬP NHẬT: XỬ LÝ NHÁNH SỬA MÃ SKU
+        // ==========================================
+        if (currentScanMode === 'edit_sku') {
+            let itemIndex = inventory.findIndex(i => i.id === editingSkuProductId);
+            if (itemIndex !== -1) {
+                let item = inventory[itemIndex];
+                
+                // Kiểm tra xem mã quét được có bị trùng với sản phẩm khác không
+                let isDuplicate = inventory.some(i => i.sku === skuScanned && i.id !== editingSkuProductId);
+                if (isDuplicate) {
+                    alert(`⚠️ LỖI: Mã SKU [${skuScanned}] đã được sử dụng cho một sản phẩm khác trong kho! Vui lòng quét mã khác.`);
+                    if (html5QrCode) html5QrCode.resume();
+                    return;
+                }
+
+                let oldSku = item.sku || 'Trống';
+                item.sku = skuScanned;
+                luuDuLieu();
+                ghiLog(item.sku, item.name, "Sửa SKU", "-", "var(--primary)", `Quét mã: [${oldSku}] ➔ [${item.sku}]`);
+                searchProduct(); 
+                
+                alert(`✅ Đã cập nhật SKU thành công!\nSản phẩm: ${item.name}\nMã mới: ${skuScanned}`);
+                closeScannerModal();
+            }
+            return; // Dừng lại, không chạy các nhánh dưới
+        }
+
+        // ==========================================
+        // XỬ LÝ CÁC NHÁNH ĐIỀU PHỐI (Nhập/Xuất/Mượn) CŨ
+        // ==========================================
         let exIdx = inventory.findIndex(item => item.sku && item.sku.toUpperCase() === skuScanned);
         
         if (exIdx === -1) {
