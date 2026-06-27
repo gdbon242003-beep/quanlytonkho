@@ -208,7 +208,6 @@
         }
         .btn-scan-trigger:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: var(--shadow-md); }
         
-        /* CẬP NHẬT: CSS Các nút chuyển đổi chế độ quét mã */
         .scan-mode-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
         .scan-mode-btn { 
             flex: 1 1 22%; padding: 10px 4px; border-radius: 8px; border: 1px solid var(--slate-200); 
@@ -224,7 +223,6 @@
         #scanner-container { width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid var(--slate-300); background: #000; position: relative;}
         #scanner-view { width: 100%; min-height: 250px; }
         
-        /* CẬP NHẬT: Hộp thông báo trạng thái quét POS */
         #qr-status {
             font-size: 14px; font-weight: 700; text-align: center; margin-top: 10px; line-height: 1.4;
             padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box;
@@ -344,6 +342,8 @@
                 <button type="button" class="scan-mode-btn" data-mode="pos" onclick="setScanMode('pos')">🛒 POS XUẤT</button>
             </div>
             
+            <input type="text" id="scanNoteInput" placeholder="Nhập tên người giao/nhận hoặc lý do..." style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--primary); font-size: 14px; box-sizing: border-box; outline: none; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); font-weight: 600;">
+            
             <div id="scanner-container">
                 <div id="scanner-view"></div>
             </div>
@@ -381,14 +381,12 @@
             gainNode.connect(audioCtx.destination);
             
             if (type === 'success') {
-                // Kêu Tít trong trẻo
                 oscillator.type = 'sine';
                 oscillator.frequency.setValueAtTime(900, audioCtx.currentTime); 
                 gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
                 oscillator.start();
                 oscillator.stop(audioCtx.currentTime + 0.15);
             } else {
-                // Kêu Bíp trầm rè báo lỗi
                 oscillator.type = 'sawtooth';
                 oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
                 gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
@@ -714,22 +712,36 @@
 
         let hint = document.getElementById('scanner-hint');
         let statusEl = document.getElementById('qr-status');
+        let noteInput = document.getElementById('scanNoteInput'); 
         
+        // Đặt mặc định trạng thái
+        statusEl.style.display = 'block';
+        statusEl.innerText = "Sẵn sàng quét mã...";
+        statusEl.style.backgroundColor = "#f8fafc";
+        statusEl.style.color = "var(--primary)";
+        if(noteInput) { noteInput.style.display = 'block'; noteInput.value = ''; }
+
         if (mode === 'edit_sku') {
-            hint.innerText = "Đưa mã vạch vào vùng camera để thay thế SKU cho sản phẩm.";
+            hint.innerText = "Đưa mã vạch vào vùng camera để thay thế SKU.";
             hint.style.color = "var(--primary)";
             statusEl.style.display = 'none';
+            if(noteInput) noteInput.style.display = 'none'; // Ẩn ô ghi chú khi sửa SKU
         } else if (mode === 'pos') {
-            hint.innerText = "Đưa mã vào camera. Quét đến đâu tự động trừ kho đến đó (POS).";
+            hint.innerText = "Quét đến đâu tự động trừ kho đến đó (POS).";
             hint.style.color = "#e11d48";
-            statusEl.style.display = 'block';
-            statusEl.innerText = "Sẵn sàng quét mã...";
-            statusEl.style.backgroundColor = "#f8fafc";
-            statusEl.style.color = "var(--primary)";
-        } else {
-            hint.innerText = "Đưa mã vạch hoặc mã QR vào vùng camera để hệ thống tự nhận diện SKU.";
-            hint.style.color = "var(--slate-600)";
-            statusEl.style.display = 'none';
+            if(noteInput) noteInput.placeholder = "Ghi chú POS (tuỳ chọn)...";
+        } else if (mode === 'nhap') {
+            hint.innerText = "Quét mã để tự động CỘNG (+1) vào kho.";
+            hint.style.color = "var(--success)";
+            if(noteInput) noteInput.placeholder = "Tên người giao hoặc lý do nhập (tuỳ chọn)...";
+        } else if (mode === 'xuat') {
+            hint.innerText = "Quét mã để tự động TRỪ (-1) khỏi kho.";
+            hint.style.color = "var(--warning)";
+            if(noteInput) noteInput.placeholder = "Tên người nhận hoặc lý do xuất (tuỳ chọn)...";
+        } else if (mode === 'muon') {
+            hint.innerText = "Quét mã để tự động ghi nhận MƯỢN (-1) khỏi kho.";
+            hint.style.color = "#fd7e14";
+            if(noteInput) noteInput.placeholder = "Tên người mượn (Khuyên dùng để dễ quản lý)...";
         }
     }
 
@@ -758,9 +770,13 @@
     }
 
     function onScanSuccess(decodedText, decodedResult) {
-        if (isScanningPaused) return; // Khoá máy quét tạm thời
+        if (isScanningPaused) return; // Khoá nhịp quét chống lặp
         const skuScanned = decodedText.trim().toUpperCase();
         
+        let statusEl = document.getElementById('qr-status');
+        let scanNote = document.getElementById('scanNoteInput') ? document.getElementById('scanNoteInput').value.trim() : "";
+        if (!scanNote) scanNote = "Quét mã tự động";
+
         // --- 1. NHÁNH SỬA MÃ SKU ---
         if (currentScanMode === 'edit_sku') {
             if (html5QrCode) html5QrCode.pause(true);
@@ -782,100 +798,96 @@
             return; 
         }
 
-        // --- 2. NHÁNH MÁY POS (TỰ ĐỘNG TRỪ KHO CÓ ÂM THANH) ---
-        if (currentScanMode === 'pos') {
-            isScanningPaused = true; // Bắt đầu khoá nhịp quét
-            let idx = inventory.findIndex(i => (i.sku && i.sku.toUpperCase() === skuScanned));
-            let statusEl = document.getElementById('qr-status');
-            statusEl.style.display = 'block';
+        // --- 2. NHÁNH TỰ ĐỘNG HÓA (+1/-1 MỖI LẦN QUÉT) ---
+        isScanningPaused = true; 
+        statusEl.style.display = 'block';
+        
+        let idx = inventory.findIndex(i => (i.sku && i.sku.toUpperCase() === skuScanned));
 
-            if (idx !== -1) {
-                let item = inventory[idx];
+        if (idx !== -1) {
+            let item = inventory[idx];
+            
+            if (currentScanMode === 'nhap') {
+                playBeep('success');
+                item.qty += 1; 
+                luuDuLieu(true); 
+                ghiLog(item.sku, item.name, "Nhập 📥", 1, "var(--success)", scanNote);
+                statusEl.innerHTML = `✅ Đã nhập 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho: ${item.qty})</span>`;
+                statusEl.style.backgroundColor = "#dcfce7"; statusEl.style.color = "#166534";
+            } 
+            else if (currentScanMode === 'xuat' || currentScanMode === 'pos') {
                 if (item.qty > 0) {
                     playBeep('success');
                     item.qty -= 1; 
                     luuDuLieu(true); 
-                    ghiLog(item.sku, item.name, "POS Xuất", 1, "#e11d48", "Xuất kho tự động qua máy POS");
-                    searchProduct(); 
-                    
-                    statusEl.innerHTML = `✅ Đã xuất 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho hiện tại: ${item.qty})</span>`;
-                    statusEl.style.backgroundColor = "#dcfce7"; statusEl.style.color = "#166534";
+                    let type = currentScanMode === 'pos' ? "POS Xuất" : "Xuất 📤";
+                    let color = currentScanMode === 'pos' ? "#e11d48" : "var(--warning)";
+                    ghiLog(item.sku, item.name, type, 1, color, scanNote);
+                    statusEl.innerHTML = `✅ Đã xuất 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho: ${item.qty})</span>`;
+                    statusEl.style.backgroundColor = "#fef3c7"; statusEl.style.color = "#b45309";
                 } else {
                     playBeep('error');
                     statusEl.innerHTML = `❌ <b>${item.name}</b> ĐÃ HẾT HÀNG!`;
                     statusEl.style.backgroundColor = "#fee2e2"; statusEl.style.color = "#991b1b";
                 }
-            } else {
-                playBeep('error');
-                statusEl.innerHTML = `⚠️ Mã <b>${skuScanned}</b> không có trong hệ thống!`;
-                statusEl.style.backgroundColor = "#ffedd5"; statusEl.style.color = "#9a3412";
+            } 
+            else if (currentScanMode === 'muon') {
+                if (item.qty > 0) {
+                    playBeep('success');
+                    item.qty -= 1; 
+                    item.borrowedQty = (item.borrowedQty || 0) + 1;
+                    if (!item.borrowList) item.borrowList = [];
+                    
+                    // Gộp chung người mượn nếu quét liên tục nhiều lần với cùng 1 nội dung Ghi chú
+                    let exB = item.borrowList.find(b => b.note === scanNote);
+                    if (exB && scanNote !== "Quét mã tự động") {
+                        exB.qty += 1;
+                    } else {
+                        item.borrowList.push({ id: Date.now().toString(), qty: 1, note: scanNote, time: getFormatedDate() });
+                    }
+                    
+                    luuDuLieu(true); 
+                    ghiLog(item.sku, item.name, "Mượn 📦 ➔", 1, "#fd7e14", scanNote);
+                    statusEl.innerHTML = `✅ Đã cho mượn 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho: ${item.qty})</span>`;
+                    statusEl.style.backgroundColor = "#ffedd5"; statusEl.style.color = "#c2410c";
+                } else {
+                    playBeep('error');
+                    statusEl.innerHTML = `❌ <b>${item.name}</b> ĐÃ HẾT HÀNG!`;
+                    statusEl.style.backgroundColor = "#fee2e2"; statusEl.style.color = "#991b1b";
+                }
             }
             
-            // Chờ 1.2s trước khi mở khoá quét mã tiếp theo
+            searchProduct();
+            
+            // Nghỉ 1.2s trước khi cho phép quét mã tiếp theo (chống nhảy mã liên tục)
             setTimeout(() => {
                 isScanningPaused = false;
                 statusEl.innerText = "Sẵn sàng quét mã tiếp theo...";
                 statusEl.style.backgroundColor = "#f8fafc"; statusEl.style.color = "var(--primary)";
             }, 1200);
-            
-            return;
-        }
 
-        // --- 3. NHÁNH HỎI SỐ LƯỢNG (NHẬP/XUẤT/MƯỢN) CŨ ---
-        if (html5QrCode) html5QrCode.pause(true);
-        let exIdx = inventory.findIndex(item => item.sku && item.sku.toUpperCase() === skuScanned);
-        
-        if (exIdx === -1) {
+        } else {
+            // --- 3. NHÁNH KHÔNG TÌM THẤY SẢN PHẨM TRONG KHO ---
             playBeep('error');
-            if (confirm(`⚠️ Mã SKU [${skuScanned}] chưa có trong kho.\n\nBạn có muốn tự động điền mã này vào Form tạo sản phẩm mới không?`)) {
-                document.getElementById('productSKU').value = skuScanned;
-                closeScannerModal(); document.getElementById('productName').focus();
-            } else { if (html5QrCode) html5QrCode.resume(); }
-            return;
+            if (html5QrCode) html5QrCode.pause(true);
+            
+            statusEl.innerHTML = `⚠️ Mã <b>${skuScanned}</b> chưa có trong hệ thống!`;
+            statusEl.style.backgroundColor = "#ffedd5"; statusEl.style.color = "#9a3412";
+            
+            // Nghỉ 1 nhịp nhẹ trước khi hiện bảng confirm để UI không bị treo
+            setTimeout(() => {
+                if (confirm(`⚠️ Mã SKU [${skuScanned}] chưa có trong kho.\nBạn có muốn tự động điền mã này vào Form tạo sản phẩm mới không?`)) {
+                    document.getElementById('productSKU').value = skuScanned;
+                    closeScannerModal(); 
+                    document.getElementById('productName').focus();
+                } else {
+                    if (html5QrCode) html5QrCode.resume();
+                    isScanningPaused = false;
+                    statusEl.innerText = "Sẵn sàng quét mã tiếp theo...";
+                    statusEl.style.backgroundColor = "#f8fafc"; statusEl.style.color = "var(--primary)";
+                }
+            }, 150); 
         }
-        
-        playBeep('success');
-        let item = inventory[exIdx];
-        if (currentScanMode === 'nhap') {
-            let slStr = prompt(`📥 [NHẬP KHO]\nSản phẩm: ${item.name}\nTồn hiện tại: ${item.qty}\n\nNhập số lượng thêm:`, "1");
-            if (slStr) {
-                let sl = parseInt(slStr);
-                if (sl > 0) {
-                    let note = prompt("Ghi chú nhập kho:", "Quét mã nhập kho");
-                    item.qty += sl; luuDuLieu(); ghiLog(item.sku, item.name, "Nhập 📥", sl, "var(--success)", note || "Quét mã nhập kho"); searchProduct(); alert(`✅ Đã thêm +${sl}!`);
-                }
-            }
-        } else if (currentScanMode === 'xuat') {
-            let slStr = prompt(`📤 [XUẤT KHO]\nSản phẩm: ${item.name}\nTồn hiện tại: ${item.qty}\n\nNhập số lượng xuất:`, "1");
-            if (slStr) {
-                let sl = parseInt(slStr);
-                if (sl > 0) {
-                    if (item.qty < sl) { alert(`⚠️ Không đủ hàng tồn! Chỉ còn ${item.qty}.`); } 
-                    else {
-                        let note = prompt("Ghi chú xuất kho:", "Quét mã xuất kho");
-                        item.qty -= sl; luuDuLieu(); ghiLog(item.sku, item.name, "Xuất 📤", sl, "var(--warning)", note || "Quét mã xuất kho"); searchProduct(); alert(`✅ Đã xuất -${sl}!`);
-                    }
-                }
-            }
-        } else if (currentScanMode === 'muon') {
-            let slStr = prompt(`📦 [CHO MƯỢN]\nSản phẩm: ${item.name}\nTồn hiện tại: ${item.qty}\n\nNhập số lượng cho mượn:`, "1");
-            if (slStr) {
-                let sl = parseInt(slStr);
-                if (sl > 0) {
-                    if (item.qty < sl) { alert(`⚠️ Không đủ hàng! Kho còn: ${item.qty}`); } 
-                    else {
-                        let note = prompt("Nhập tên người mượn hoặc lý do:", "Mượn hàng qua mã QR");
-                        if (note) {
-                            item.qty -= sl; item.borrowedQty = (item.borrowedQty || 0) + sl;
-                            if (!item.borrowList) item.borrowList = [];
-                            item.borrowList.push({ id: Date.now().toString(), qty: sl, note: note.trim(), time: getFormatedDate() });
-                            luuDuLieu(); ghiLog(item.sku, item.name, "Mượn 📦 ➔", sl, "#fd7e14", note.trim()); searchProduct(); alert(`✅ Đã ghi nhận mượn ${sl}!`);
-                        }
-                    }
-                }
-            }
-        }
-        if (html5QrCode) html5QrCode.resume();
     }
 
     function onScanFailure(error) {}
