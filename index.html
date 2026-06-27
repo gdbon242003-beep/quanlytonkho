@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
     <style>
         :root {
             --primary: #4f46e5;
@@ -102,6 +104,7 @@
             .toolbar { flex-direction: column; align-items: stretch; }
             .btn-group-cloud { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;}
             .btn-group-cloud button:nth-child(3) { grid-column: span 2; }
+            .btn-group-cloud button.btn-scan-trigger { grid-column: span 2; }
             .search-box { width: 100%; box-sizing: border-box; }
         }
 
@@ -193,6 +196,25 @@
             .modal-actions { display: grid; grid-template-columns: 1fr 1.5fr; }
             .modal-actions .btn-icon { padding: 14px 10px; width: 100%; }
         }
+
+        /* --- CSS TÍNH NĂNG QUÉT MÃ --- */
+        .btn-scan-trigger {
+            background: linear-gradient(135deg, #0f172a 0%, #334155 100%); color: white; cursor: pointer; 
+            font-weight: 700; border: none; padding: 11px 14px; border-radius: 10px; font-size: 13px; 
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-shadow: var(--shadow-sm); 
+            transition: all 0.2s;
+        }
+        .btn-scan-trigger:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .scan-mode-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .scan-mode-btn { 
+            padding: 12px 6px; border-radius: 8px; border: 1px solid var(--slate-200); background: var(--slate-100); 
+            color: var(--slate-600); font-weight: 700; font-size: 14px; cursor: pointer; text-align: center; transition: all 0.2s; 
+        }
+        .scan-mode-btn.active[data-mode="nhap"] { background: var(--success); color: white; border-color: var(--success); }
+        .scan-mode-btn.active[data-mode="xuat"] { background: var(--warning); color: white; border-color: var(--warning); }
+        .scan-mode-btn.active[data-mode="muon"] { background: #fd7e14; color: white; border-color: #fd7e14; }
+        #scanner-container { width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid var(--slate-300); background: #000; position: relative;}
+        #scanner-view { width: 100%; min-height: 250px; }
     </style>
 </head>
 <body>
@@ -200,7 +222,7 @@
 <div class="container">
     <div class="header">
         <h2>HỆ THỐNG QUẢN LÝ KHO</h2>
-        <p>Bản nâng cấp tối ưu hóa Hybrid (Chạy mượt Desktop & iPhone iOS)</p>
+        <p>Bản nâng cấp tối ưu hóa Hybrid (Chạy mượt Desktop & Tích hợp Quét QR iOS)</p>
     </div>
     
     <form id="inventoryForm">
@@ -217,6 +239,7 @@
             <button type="button" id="btnSync" onclick="dongBoLenGoogleSheet()" class="btn-icon" style="background: var(--success-gradient);">☁️ Đẩy Cloud</button>
             <button type="button" id="btnRestore" onclick="khoiPhucTuGoogleSheet()" class="btn-icon" style="background: var(--primary-gradient);">⬇️ Tải Xuống</button>
             <button type="button" onclick="xuatFileKiemKho()" class="btn-icon" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">📊 Báo Cáo Excel</button>
+            <button type="button" class="btn-scan-trigger" onclick="openScannerModal()">📷 Quét Mã Nhập/Xuất/Mượn</button>
         </div>
         <input type="text" id="searchInput" class="search-box" placeholder="🔍 Tìm kiếm sản phẩm..." onkeyup="searchProduct()">
     </div>
@@ -294,8 +317,31 @@
     </div>
 </div>
 
+<div id="scannerModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 480px;">
+        <div class="modal-header">
+            <div class="modal-title">📷 QUÉT MÃ ĐIỀU PHỐI KHO</div>
+            <button type="button" class="close-btn" onclick="closeScannerModal()">&times;</button>
+        </div>
+        <div class="modal-body" style="padding-bottom: 0;">
+            <div class="scan-mode-tabs">
+                <button type="button" class="scan-mode-btn active" data-mode="nhap" onclick="setScanMode('nhap')">📥 NHẬP</button>
+                <button type="button" class="scan-mode-btn" data-mode="xuat" onclick="setScanMode('xuat')">📤 XUẤT</button>
+                <button type="button" class="scan-mode-btn" data-mode="muon" onclick="setScanMode('muon')">📦 MƯỢN</button>
+            </div>
+            
+            <div id="scanner-container">
+                <div id="scanner-view"></div>
+            </div>
+            
+            <p style="text-align: center; color: var(--slate-600); font-size: 13px; font-weight: 500; margin-top: 12px; margin-bottom: 5px;">
+                Đưa mã vạch hoặc mã QR vào vùng camera để hệ thống tự nhận diện SKU.
+            </p>
+        </div>
+    </div>
+</div>
+
 <script>
-    // DÁN ĐƯỜNG LINK GOOGLE APP SCRIPT VÀO ĐÂY:
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwKhAKh-3Im8h5Pcu9A2QDYgwCO-PSUx6iXHifbhl4_no8VeWrFLJemYu0Yyz_WJeSyCw/exec"; 
     
     const DEFAULT_IMAGE = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 24 24' fill='%23cbd5e1'%3E%3Cpath d='M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9M12 4.15L5.46 7.82l6.54 3.67 6.54-3.67L12 4.15z'/%3E%3C/svg%3E";
@@ -304,7 +350,7 @@
     let historyLog = JSON.parse(localStorage.getItem('khoHangHistory')) || [];
 
     // ====================================================================
-    // CẬP NHẬT MỚI: HỆ THỐNG LƯU ĐỒNG BỘ AUTO-SAVE (CHỐNG LỖI SAFARI IOS)
+    // HỆ THỐNG LƯU ĐỒNG BỘ AUTO-SAVE
     // ====================================================================
     let autoSaveTimeout = null;
     function triggerAutoSave() {
@@ -347,15 +393,14 @@
         btn.innerHTML = "⏳ Đang tải..."; 
         btn.style.opacity = "0.7";
 
-        // Tối ưu hóa fetch để bắt chính xác lỗi từ Server (Ngăn chặn lỗi App Script bắt đăng nhập)
         fetch(GOOGLE_SHEET_URL)
         .then(response => {
             if (!response.ok) throw new Error("Mạng bị gián đoạn hoặc Server trả về lỗi.");
-            return response.text(); // Đọc dạng text trước để bắt HTML rác nếu có
+            return response.text(); 
         })
         .then(text => {
             try {
-                let data = JSON.parse(text); // Nếu là HTML (do chưa cấp quyền), đoạn này sẽ báo lỗi
+                let data = JSON.parse(text); 
                 if(data && data.ton_kho && data.ton_kho.length > 0) {
                     inventory = data.ton_kho.map(item => { item.image = item.image || DEFAULT_IMAGE; if(!item.borrowList) item.borrowList = []; return item; });
                     luuDuLieu(false); renderTable(); 
@@ -380,7 +425,7 @@
     }
 
     // ====================================================================
-    // CÁC HÀM XỬ LÝ KHÁC GIỮ NGUYÊN (HOẠT ĐỘNG TỐT)
+    // CÁC HÀM XỬ LÝ KHÁC
     // ====================================================================
 
     function compressImage(file, callback) {
@@ -624,6 +669,125 @@
         a.download = 'HiSports_KiemKho_' + now.toISOString().slice(0,10) + '.xls';
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
+
+    // ====================================================================
+    // LOGIC XỬ LÝ QUÉT MÃ VẠCH / QR CODE TRÊN ĐIỆN THOẠI (HTML5-QRCODE)
+    // ====================================================================
+    let html5QrCode = null;
+    let currentScanMode = 'nhap'; 
+
+    function openScannerModal() {
+        document.getElementById('scannerModal').style.display = 'flex';
+        setScanMode('nhap'); 
+        setTimeout(() => { startCameraScanner(); }, 300);
+    }
+
+    function closeScannerModal() {
+        document.getElementById('scannerModal').style.display = 'none';
+        stopCameraScanner();
+    }
+
+    function setScanMode(mode) {
+        currentScanMode = mode;
+        document.querySelectorAll('.scan-mode-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-mode') === mode) btn.classList.add('active');
+        });
+    }
+
+    function startCameraScanner() {
+        if (html5QrCode && html5QrCode.isScanning) return;
+        
+        html5QrCode = new Html5Qrcode("scanner-view");
+        
+        const config = { 
+            fps: 15, 
+            qrbox: function(width, height) { return { width: Math.floor(width * 0.85), height: Math.floor(height * 0.5) }; },
+            aspectRatio: 1.0
+        };
+        
+        html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
+        .catch(err => {
+            console.error("Camera Error:", err);
+            alert("⚠️ Không thể mở Camera!\nLưu ý: Bạn phải cấp quyền truy cập Camera cho trình duyệt và đường link web bắt buộc phải có bảo mật HTTPS.");
+            closeScannerModal();
+        });
+    }
+
+    function stopCameraScanner() {
+        if (html5QrCode) {
+            html5QrCode.stop().then(() => { html5QrCode = null; }).catch(err => console.error("Lỗi đóng camera:", err));
+        }
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+        if (html5QrCode) html5QrCode.pause(true);
+        const skuScanned = decodedText.trim().toUpperCase();
+        let exIdx = inventory.findIndex(item => item.sku && item.sku.toUpperCase() === skuScanned);
+        
+        if (exIdx === -1) {
+            if (confirm(`⚠️ Mã SKU [${skuScanned}] chưa có trong kho hàng.\n\nBạn có muốn tự động điền mã này vào Form tạo sản phẩm mới không?`)) {
+                document.getElementById('productSKU').value = skuScanned;
+                closeScannerModal();
+                document.getElementById('productName').focus();
+            } else {
+                if (html5QrCode) html5QrCode.resume(); 
+            }
+            return;
+        }
+        
+        let item = inventory[exIdx];
+        if (currentScanMode === 'nhap') {
+            let slStr = prompt(`📥 [NHẬP KHO]\nSản phẩm: ${item.name}\nTồn hiện tại: ${item.qty}\n\nNhập số lượng thêm:`, "1");
+            if (slStr) {
+                let sl = parseInt(slStr);
+                if (sl > 0) {
+                    let note = prompt("Ghi chú nhập kho:", "Quét mã nhập kho");
+                    item.qty += sl; luuDuLieu(); 
+                    ghiLog(item.sku, item.name, "Nhập 📥", sl, "var(--success)", note || "Quét mã nhập kho"); 
+                    searchProduct(); alert(`✅ Đã thêm +${sl} vào tồn kho [${item.name}]!`);
+                }
+            }
+        } else if (currentScanMode === 'xuat') {
+            let slStr = prompt(`📤 [XUẤT KHO]\nSản phẩm: ${item.name}\nTồn hiện tại: ${item.qty}\n\nNhập số lượng xuất:`, "1");
+            if (slStr) {
+                let sl = parseInt(slStr);
+                if (sl > 0) {
+                    if (item.qty < sl) {
+                        alert(`⚠️ Không đủ hàng tồn! Hiện trong kho chỉ còn ${item.qty}.`);
+                    } else {
+                        let note = prompt("Ghi chú xuất kho:", "Quét mã xuất kho");
+                        item.qty -= sl; luuDuLieu();
+                        ghiLog(item.sku, item.name, "Xuất 📤", sl, "var(--warning)", note || "Quét mã xuất kho");
+                        searchProduct(); alert(`✅ Đã xuất -${sl} [${item.name}] thành công!`);
+                    }
+                }
+            }
+        } else if (currentScanMode === 'muon') {
+            let slStr = prompt(`📦 [CHO MƯỢN]\nSản phẩm: ${item.name}\nTồn hiện tại: ${item.qty}\n\nNhập số lượng cho mượn:`, "1");
+            if (slStr) {
+                let sl = parseInt(slStr);
+                if (sl > 0) {
+                    if (item.qty < sl) {
+                        alert(`⚠️ Không đủ hàng để mượn! Kho còn: ${item.qty}`);
+                    } else {
+                        let note = prompt("Nhập tên người mượn hoặc lý do:", "Mượn hàng qua mã QR");
+                        if (note) {
+                            item.qty -= sl; item.borrowedQty = (item.borrowedQty || 0) + sl;
+                            if (!item.borrowList) item.borrowList = [];
+                            item.borrowList.push({ id: Date.now().toString(), qty: sl, note: note.trim(), time: getFormatedDate() });
+                            luuDuLieu();
+                            ghiLog(item.sku, item.name, "Mượn 📦 ➔", sl, "#fd7e14", note.trim());
+                            searchProduct(); alert(`✅ Đã ghi nhận [${note.trim()}] mượn ${sl} [${item.name}]!`);
+                        }
+                    }
+                }
+            }
+        }
+        if (html5QrCode) html5QrCode.resume();
+    }
+
+    function onScanFailure(error) {}
 
     // KHỞI CHẠY HỆ THỐNG
     if (inventory.length === 0 && GOOGLE_SHEET_URL) { khoiPhucTuGoogleSheet(true); } else { renderTable(); renderHistory(); }
