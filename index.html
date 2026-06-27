@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Hệ Thống Quản Lý Kho Vận - Hi SPORTS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            --success: #10b981;
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --purple: #8b5cf6;
+            --dark: #0f172a;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --card-bg: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+
+        body { 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            background-color: #f4f6f9; 
+            color: var(--slate-700);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -webkit-overflow-scrolling: touch; 
+        }
+
+        .container { 
+            max-width: 1500px; 
+            margin: 20px auto; 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 16px; 
+            box-shadow: var(--shadow-lg); 
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 767px) {
+            body { background-color: var(--card-bg); margin: 0; padding-top: max(15px, env(safe-area-inset-top)); }
+            .container { margin: 0 auto; padding: 15px 10px; border-radius: 0; box-shadow: none; }
+        }
+
+        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px dashed var(--slate-200); }
+        .header h2 { margin: 0; color: var(--dark); font-size: clamp(22px, 4vw, 28px); font-weight: 800; background: linear-gradient(135deg, #1e293b 0%, #4f46e5 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { margin: 8px 0 0; color: var(--slate-600); font-size: 14px; font-weight: 500; }
+        
+        form { 
+            display: grid; 
+            grid-template-columns: 1.2fr 2fr 1fr 1.5fr auto; 
+            gap: 12px; 
+            background: var(--slate-50); 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 30px; 
+            border: 1px solid var(--slate-200); 
+            align-items: center;
+        }
+        
+        @media (max-width: 1024px) { form { grid-template-columns: 1fr 1fr; } .form-full { grid-column: span 2; } }
+        @media (max-width: 600px) { form { grid-template-columns: 1fr; padding: 15px; } .form-full { grid-column: span 1; } }
+        
+        input, select, textarea { 
+            width: 100%; box-sizing: border-box; padding: 12px 16px; border: 1px solid var(--slate-200); 
+            border-radius: 10px; font-size: 15px; background-color: var(--card-bg); 
+            transition: all 0.25s ease; color: var(--dark); font-weight: 500; 
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); -webkit-appearance: none; 
+        }
+        
+        @media (max-width: 991px) { input, select, textarea { font-size: 16px !important; } }
+        
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+        input[type="file"] { padding: 9px; background: #fff; cursor: pointer; }
+        
+        button[type="submit"] { 
+            background: var(--primary-gradient); color: white; cursor: pointer; font-weight: 700; border: none; 
+            text-transform: uppercase; padding: 14px 20px; border-radius: 10px; font-size: 14px; transition: all 0.2s; 
+            height: 100%; min-height: 44px; width: 100%; white-space: nowrap;
+        }
+        button[type="submit"]:active { transform: scale(0.98); }
+
+        .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        .btn-group-cloud { display: flex; gap: 8px; flex-wrap: wrap; width: auto; }
+        .search-box { width: 280px; padding: 11px 20px; border-radius: 50px; border: 1px solid var(--slate-200); background: var(--card-bg); }
+
+        @media (max-width: 767px) {
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .btn-group-cloud { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;}
+            .btn-group-cloud button:nth-child(3) { grid-column: span 2; }
+            .search-box { width: 100%; box-sizing: border-box; }
+        }
+
+        .table-responsive { 
+            overflow-x: auto; margin-bottom: 30px; border-radius: 12px; border: 1px solid var(--slate-200); 
+            box-shadow: var(--shadow-sm); -webkit-overflow-scrolling: touch; 
+        }
+        table { width: 100%; border-collapse: collapse; background: white; min-width: 900px; }
+        th { background-color: #f8fafc; color: var(--slate-600); font-weight: 700; font-size: 12px; text-transform: uppercase; padding: 14px; border-bottom: 2px solid var(--slate-200); white-space: nowrap; }
+        td { padding: 12px 10px; border-bottom: 1px solid var(--slate-100); vertical-align: middle; }
+
+        .cell-center { text-align: center; } .cell-left { text-align: left; }
+        .flex-center { display: flex; align-items: center; justify-content: center; } .flex-left { display: flex; align-items: center; justify-content: flex-start; }
+
+        .img-wrapper { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        img { width: 48px; height: 48px; object-fit: cover; border-radius: 8px; box-shadow: var(--shadow-sm); border: 1px solid var(--slate-200); }
+        .btn-change-image-link { font-size: 11px; color: var(--primary); font-weight: 600; cursor: pointer; opacity: 0.8; padding: 2px; }
+        
+        .sku-text { font-family: monospace; font-weight: 700; color: var(--primary); background: #f5f3ff; padding: 4px 8px; border-radius: 6px; font-size: 12px; border: 1px solid #e0e7ff; white-space: nowrap; }
+        .name-text { font-weight: 600; color: var(--dark); font-size: 13px; line-height: 1.4; } 
+        .edit-icon { background: none; border: none; font-size: 13px; opacity: 0.4; cursor: pointer; margin-left: 4px; padding: 4px; }
+        .edit-icon:hover { opacity: 1; }
+
+        .qty-badge { font-size: 16px; font-weight: 800; }
+
+        .borrow-list { display: flex; flex-direction: column; gap: 5px; min-width: 140px; }
+        .borrow-item { display: flex; justify-content: space-between; align-items: center; background: #fffbeb; border: 1px solid #fde68a; padding: 5px 8px; border-radius: 6px; font-size: 12px; gap: 6px; }
+        .borrow-item .truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
+        .btn-return-mini { background: #8b5cf6; color: white; border: none; border-radius: 4px; padding: 3px 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
+
+        .action-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 130px; margin: 0 auto; }
+        .btn-compact { padding: 6px 4px; border-radius: 6px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; text-align: center; width: 100%; box-sizing: border-box; }
+        .btn-compact.add { background: #dcfce7; color: #059669; } .btn-compact.sub { background: #ffedd5; color: #d97706; }
+        .btn-compact.borrow { background: #e0e7ff; color: #4f46e5; } .btn-compact.del { background: #fee2e2; color: #dc2626; }
+
+        .btn-icon { padding: 11px 14px; color: white; border: none; cursor: pointer; border-radius: 10px; font-weight: 700; font-size: 13px; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        
+        .log-tag { padding: 4px 8px; border-radius: 6px; color: white; font-size: 11px; font-weight: 700; display: inline-block; white-space: nowrap; }
+        .section-title { color: var(--dark); font-weight: 800; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+        .section-title::before { content: ''; display: inline-block; width: 5px; height: 18px; background: var(--primary-gradient); border-radius: 4px; }
+        .text-note-log { font-size: 13px; padding: 6px; border-bottom: 1px dashed #cbd5e1; }
+        
+        .modal-overlay { 
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+            background: rgba(15, 23, 42, 0.65); z-index: 9999; 
+            align-items: center; justify-content: center; padding: 15px;
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+        }
+        
+        @media (max-width: 767px) {
+            .modal-overlay { align-items: flex-start; padding: 5dvh 10px 15px 10px; }
+        }
+        
+        .modal-content { 
+            background: var(--card-bg); width: 100%; max-width: 650px; 
+            border-radius: 16px; padding: 20px; box-shadow: var(--shadow-lg); 
+            display: flex; flex-direction: column; box-sizing: border-box;
+            max-height: 90vh; 
+        }
+        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--slate-200); padding-bottom: 12px; margin-bottom: 15px; }
+        .modal-title { font-size: 18px; font-weight: 800; color: var(--dark); text-transform: uppercase; }
+        .close-btn { background: none; border: none; font-size: 26px; cursor: pointer; color: var(--slate-600); padding: 0 5px; line-height: 1; }
+        
+        .modal-body { overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 4px; margin-bottom: 15px; flex-grow: 1; }
+        
+        .bulk-item-row { 
+            display: flex; flex-direction: row; align-items: center; justify-content: space-between;
+            padding: 12px; border-bottom: 1px solid var(--slate-200); background: var(--slate-50); 
+            margin-bottom: 10px; border-radius: 10px; gap: 15px; 
+        }
+        
+        .bulk-item-name { font-weight: 600; font-size: 13px; line-height: 1.4; flex: 1; min-width: 0; }
+        .bulk-item-qty-container { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        
+        @media (max-width: 550px) {
+            .bulk-item-row { flex-direction: column; align-items: stretch; gap: 10px; }
+            .bulk-item-qty-container { width: 100%; justify-content: flex-start; }
+        }
+        
+        .bulk-item-qty { width: 70px; padding: 10px; text-align: center; border: 2px solid var(--primary); font-weight: 700; font-size: 16px !important; border-radius: 8px; color: var(--dark); }
+        .bulk-item-note { flex: 1; min-width: 0; padding: 10px 12px; border: 1px solid var(--slate-300); border-radius: 8px; font-size: 16px !important; }
+        
+        .modal-footer { border-top: 1px solid var(--slate-200); padding-top: 15px; display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; }
+        .bulk-note-input { width: 100%; font-size: 16px !important; padding: 12px; border-radius: 8px; border: 1px solid var(--primary); }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+        
+        @media (max-width: 550px) {
+            .modal-actions { display: grid; grid-template-columns: 1fr 1.5fr; }
+            .modal-actions .btn-icon { padding: 14px 10px; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>HỆ THỐNG QUẢN LÝ KHO</h2>
+        <p>Bản nâng cấp tối ưu hóa Hybrid (Chạy mượt Desktop & iPhone iOS)</p>
+    </div>
+    
+    <form id="inventoryForm">
+        <input type="text" id="productSKU" placeholder="Mã SKU (Không bắt buộc)...">
+        <input type="text" id="productName" placeholder="Tên sản phẩm (Bắt buộc)..." required>
+        <input type="number" id="productQty" placeholder="Số lượng gốc..." required min="1">
+        <input type="file" id="productImage" accept="image/*">
+        <button type="submit" class="form-full">Xác Nhận</button>
+    </form>
+
+    <div class="toolbar">
+        <div class="section-title">Danh Sách Tồn Kho</div>
+        <div class="btn-group-cloud">
+            <button type="button" id="btnSync" onclick="dongBoLenGoogleSheet()" class="btn-icon" style="background: var(--success-gradient);">☁️ Đẩy Cloud</button>
+            <button type="button" id="btnRestore" onclick="khoiPhucTuGoogleSheet()" class="btn-icon" style="background: var(--primary-gradient);">⬇️ Tải Xuống</button>
+            <button type="button" onclick="xuatFileKiemKho()" class="btn-icon" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">📊 Báo Cáo Excel</button>
+        </div>
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Tìm kiếm sản phẩm..." onkeyup="searchProduct()">
+    </div>
+
+    <div id="bulkActions" style="display: none; flex-direction: column; align-items: stretch; margin-bottom: 20px; padding: 15px; background: #fffbeb; border: 1px dashed #f59e0b; border-radius: 12px; gap: 12px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <span style="font-weight: 700; color: #d97706; font-size: 15px;">☑ Đã chọn <span id="selectedCount" style="font-size: 18px;">0</span> mặt hàng</span>
+            <button type="button" onclick="boChonTatCa()" style="padding: 6px 12px; font-size: 12px; background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; font-weight: bold; cursor:pointer;">✖ Bỏ chọn tất cả</button>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; width: 100%;">
+            <button type="button" class="btn-compact add" onclick="openBulkModal('nhap')" style="padding: 12px 8px; font-size:13px;">➕ Nhập Lô</button>
+            <button type="button" class="btn-compact sub" onclick="openBulkModal('xuat')" style="padding: 12px 8px; font-size:13px;">➖ Xuất Lô</button>
+            <button type="button" class="btn-compact borrow" onclick="openBulkModal('muon')" style="padding: 12px 8px; font-size:13px;">📤 Cho Mượn Lô</button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th class="cell-center" style="width: 40px;">
+                        <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" style="width: 18px; height: 18px; cursor:pointer;">
+                    </th>
+                    <th class="cell-center" style="width: 80px;">Ảnh</th>
+                    <th class="cell-center" style="width: 110px;">SKU</th>
+                    <th class="cell-left">Tên Sản Phẩm</th>
+                    <th class="cell-center" style="width: 90px;">Tồn Kho</th>
+                    <th class="cell-left" style="min-width: 180px;">Chi Tiết Mượn</th>
+                    <th class="cell-center" style="width: 150px;">Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="toolbar" style="margin-top: 30px;">
+        <div class="section-title">📜 Nhật Ký Hoạt Động</div>
+        <button onclick="xoaLichSu()" style="background: none; color: var(--danger); border: none; font-weight: 600; padding: 10px; cursor:pointer; font-size:13px;">Xóa toàn bộ lịch sử</button>
+    </div>
+    
+    <div class="table-responsive" style="max-height: 400px;">
+        <table id="historyTable">
+            <thead>
+                <tr>
+                    <th class="cell-center" style="width: 150px;">Thời Gian</th>
+                    <th class="cell-center" style="width: 100px;">SKU</th>
+                    <th class="cell-left">Sản Phẩm</th>
+                    <th class="cell-center" style="width: 130px;">Hành Động</th>
+                    <th class="cell-center" style="width: 60px;">SL</th>
+                    <th class="cell-left">Ghi Chú Chi Tiết</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div id="bulkModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title" id="bulkModalTitle">Thao Tác Hàng Loạt</div>
+            <button class="close-btn" onclick="closeBulkModal()">&times;</button>
+        </div>
+        
+        <div class="modal-body" id="bulkModalBody">
+            </div>
+        
+        <div class="modal-footer">
+            <input type="text" id="bulkModalNote" class="bulk-note-input" placeholder="Nhập lý do/ghi chú chung (Không bắt buộc)...">
+            <div class="modal-actions">
+                <button type="button" class="btn-icon" style="background: var(--slate-600);" onclick="closeBulkModal()">Hủy Bỏ</button>
+                <button type="button" class="btn-icon" id="bulkModalConfirmBtn" style="background: var(--primary-gradient);" onclick="confirmBulkAction()">Hoàn Tất Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // DÁN ĐƯỜNG LINK GOOGLE APP SCRIPT VÀO ĐÂY:
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwKhAKh-3Im8h5Pcu9A2QDYgwCO-PSUx6iXHifbhl4_no8VeWrFLJemYu0Yyz_WJeSyCw/exec"; 
+    
+    const DEFAULT_IMAGE = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 24 24' fill='%23cbd5e1'%3E%3Cpath d='M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9M12 4.15L5.46 7.82l6.54 3.67 6.54-3.67L12 4.15z'/%3E%3C/svg%3E";
+
+    let inventory = JSON.parse(localStorage.getItem('khoHangPro')) || [];
+    let historyLog = JSON.parse(localStorage.getItem('khoHangHistory')) || [];
+
+    // ====================================================================
+    // CẬP NHẬT MỚI: HỆ THỐNG LƯU ĐỒNG BỘ AUTO-SAVE (CHỐNG LỖI SAFARI IOS)
+    // ====================================================================
+    let autoSaveTimeout = null;
+    function triggerAutoSave() {
+        let btn = document.getElementById('btnSync'); 
+        btn.innerHTML = "🔄 Đang chờ..."; 
+        btn.style.background = "linear-gradient(135deg, var(--warning) 0%, #d97706 100%)";
+        clearTimeout(autoSaveTimeout); 
+        autoSaveTimeout = setTimeout(() => { dongBoLenGoogleSheet(true); }, 2500); 
+    }
+
+    function dongBoLenGoogleSheet(isAuto = false) {
+        if(!GOOGLE_SHEET_URL) { if(!isAuto) alert("Chưa kết nối App Script URL!"); return; }
+        if (inventory.length === 0) return;
+        let btn = document.getElementById('btnSync'); 
+        btn.innerHTML = "⏳ Đang đẩy mây...";
+        
+        let payload = { thoi_gian: getFormatedDate(), ton_kho: inventory };
+        
+        fetch(GOOGLE_SHEET_URL, { 
+            method: "POST", 
+            body: JSON.stringify(payload) 
+        })
+        .then(() => { 
+            btn.innerHTML = "☁️ Đã lưu Cloud"; 
+            btn.style.background = "var(--success-gradient)";
+            setTimeout(() => { btn.innerHTML = "☁️ Đẩy Cloud"; }, 3000); 
+        }).catch(e => { 
+            btn.innerHTML = "⚠️ Lỗi Đồng Bộ"; 
+            btn.style.background = "linear-gradient(135deg, var(--danger) 0%, #b91c1c 100%)";
+            console.error("Lỗi Push Cloud:", e);
+        });
+    }
+
+    function khoiPhucTuGoogleSheet(isAuto = false) {
+        if(!GOOGLE_SHEET_URL) return;
+        if(!isAuto && !confirm("⚠️ Tải và ghi đè dữ liệu từ Cloud Google Sheet xuống thiết bị?")) return;
+
+        let btn = document.getElementById('btnRestore'); 
+        let oldText = btn.innerHTML; 
+        btn.innerHTML = "⏳ Đang tải..."; 
+        btn.style.opacity = "0.7";
+
+        // Tối ưu hóa fetch để bắt chính xác lỗi từ Server (Ngăn chặn lỗi App Script bắt đăng nhập)
+        fetch(GOOGLE_SHEET_URL)
+        .then(response => {
+            if (!response.ok) throw new Error("Mạng bị gián đoạn hoặc Server trả về lỗi.");
+            return response.text(); // Đọc dạng text trước để bắt HTML rác nếu có
+        })
+        .then(text => {
+            try {
+                let data = JSON.parse(text); // Nếu là HTML (do chưa cấp quyền), đoạn này sẽ báo lỗi
+                if(data && data.ton_kho && data.ton_kho.length > 0) {
+                    inventory = data.ton_kho.map(item => { item.image = item.image || DEFAULT_IMAGE; if(!item.borrowList) item.borrowList = []; return item; });
+                    luuDuLieu(false); renderTable(); 
+                    ghiLog("HỆ THỐNG", "Tải dữ liệu", "Cloud ➔ Máy", inventory.length, "var(--primary)", "Đồng bộ hóa");
+                    if(!isAuto) alert(`✅ Đồng bộ thành công ${inventory.length} sản phẩm từ Cloud!`);
+                } else { 
+                    if(!isAuto) alert("❌ Dữ liệu trên Google Sheet hiện đang rỗng."); 
+                }
+            } catch (err) {
+                console.error("Lỗi Parse JSON:", err);
+                if(!isAuto) alert("❌ Lỗi Cấu Hình App Script: Trình duyệt bị bắt 'Đăng nhập'. Vui lòng Deploy App Script và chọn 'Who has access: ANYONE (Bất kỳ ai)'");
+            }
+        })
+        .catch(e => { 
+            console.error("Fetch Error:", e);
+            if(!isAuto) alert("❌ Không có kết nối mạng hoặc Safari chặn kết nối (CORS)."); 
+        })
+        .finally(() => { 
+            btn.innerHTML = oldText; 
+            btn.style.opacity = "1"; 
+        });
+    }
+
+    // ====================================================================
+    // CÁC HÀM XỬ LÝ KHÁC GIỮ NGUYÊN (HOẠT ĐỘNG TỐT)
+    // ====================================================================
+
+    function compressImage(file, callback) {
+        const r = new FileReader();
+        r.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas'); const MAX = 150; 
+                let w = img.width, h = img.height;
+                if (w > h) { if (w > MAX) { h *= MAX / w; w = MAX; } } else { if (h > MAX) { w *= MAX / h; h = MAX; } }
+                canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                callback(canvas.toDataURL('image/jpeg', 0.6));
+            }; img.src = e.target.result;
+        }; r.readAsDataURL(file);
+    }
+
+    function chuanHoaDuLieu() { inventory.forEach(item => { if (!item.borrowList) { item.borrowList = []; if (item.borrowedQty > 0) item.borrowList.push({ id: "old_"+Date.now(), qty: item.borrowedQty, note: "Mượn cũ", time: "" }); } if (!item.image) item.image = DEFAULT_IMAGE; }); luuDuLieu(false); }
+    chuanHoaDuLieu();
+
+    function getFormatedDate() { return new Date().toLocaleString('vi-VN', { hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
+    function luuDuLieu(isSync = true) { try { localStorage.setItem('khoHangPro', JSON.stringify(inventory)); if(isSync) triggerAutoSave(); } catch(e) { alert("⚠️ Bộ nhớ cache của trình duyệt đã đầy!"); } }
+    function luuLichSu() { try { if (historyLog.length > 300) historyLog = historyLog.slice(0, 300); localStorage.setItem('khoHangHistory', JSON.stringify(historyLog)); } catch(e) {} }
+
+    function ghiLog(sku, name, type, qty, color, noteText) { historyLog.unshift({ time: getFormatedDate(), sku: sku, name: name, type: type, qty: qty, color: color, note: noteText ? noteText.trim() : "Không có", returnedQty: 0 }); luuLichSu(); renderHistory(); }
+
+    function suaThongTin(index, field) {
+        const item = inventory[index];
+        if (field === 'sku') {
+            let n = prompt(`Cập nhật SKU mới cho [${item.sku || 'Trống'}]:`, item.sku || '');
+            if (n !== null) { let o = item.sku||'Trống'; item.sku = n.trim().toUpperCase(); luuDuLieu(); ghiLog(item.sku, item.name, "Sửa SKU", "-", "var(--primary)", `[${o}] ➔ [${item.sku}]`); searchProduct(); }
+        } else if (field === 'name') {
+            let n = prompt(`Cập nhật Tên sản phẩm cho [${item.name}]:`, item.name);
+            if (n && n.trim()!=="") { let o = item.name; item.name = n.trim(); luuDuLieu(); ghiLog(item.sku, item.name, "Sửa Tên", "-", "var(--primary)", `[${o}] ➔ [${item.name}]`); searchProduct(); }
+        }
+    }
+
+    function suaHinhAnh(index) {
+        const fi = document.createElement('input'); fi.type = 'file'; fi.accept = 'image/*';
+        fi.onchange = function(e) { if (e.target.files[0]) compressImage(e.target.files[0], function(data) { inventory[index].image = data; luuDuLieu(); ghiLog(inventory[index].sku, inventory[index].name, "Sửa Ảnh", "-", "#8b5cf6", `Cập nhật ảnh hiển thị`); searchProduct(); }); }; fi.click(); 
+    }
+
+    function renderTable(data = inventory) {
+        const tbody = document.querySelector('#inventoryTable tbody'); tbody.innerHTML = '';
+        let selAll = document.getElementById('selectAll'); if(selAll) selAll.checked = false;
+        updateBulkUI(); 
+
+        if (data.length === 0) { tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:35px; color:var(--slate-600); font-weight:500;">Chưa có sản phẩm nào trong hệ thống.</td></tr>`; return; }
+
+        data.forEach((item) => {
+            const realIdx = inventory.findIndex(i => i.id === item.id);
+            let qtyDisplay = `<span class="qty-badge" style="color: var(--success);">${item.qty}</span>`;
+            if (item.qty === 0) qtyDisplay = `<span style="background: #fee2e2; color: #dc2626; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight:bold;">HẾT HÀNG</span>`;
+            else if (item.qty <= 5) qtyDisplay = `<span class="qty-badge" style="color: var(--danger);">${item.qty}</span>`;
+
+            let listMuon = '';
+            if (item.borrowList && item.borrowList.length > 0) {
+                listMuon += `<div class="borrow-list">`;
+                item.borrowList.forEach((muc, bIdx) => { listMuon += `<div class="borrow-item"><span class="truncate" title="${muc.note}">📦 <b>${muc.qty}</b> - ${muc.note}</span><button class="btn-return-mini" onclick="traHang(${realIdx}, ${bIdx})">Trả</button></div>`; });
+                listMuon += `</div>`;
+            } else listMuon = `<span style="color: #cbd5e1;">—</span>`;
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="cell-center"><input type="checkbox" class="item-checkbox" value="${realIdx}" onclick="updateBulkUI()" style="width:18px; height:18px; cursor:pointer;"></td>
+                    <td class="cell-center"><div class="img-wrapper"><img src="${item.image || DEFAULT_IMAGE}"><span class="btn-change-image-link" onclick="suaHinhAnh(${realIdx})">📷 Đổi</span></div></td>
+                    <td class="cell-center"><div class="flex-center"><span class="sku-text">${item.sku||'---'}</span><button class="edit-icon" onclick="suaThongTin(${realIdx}, 'sku')">✏️</button></div></td>
+                    <td class="cell-left"><div class="flex-left"><span class="name-text">${item.name}</span><button class="edit-icon" onclick="suaThongTin(${realIdx}, 'name')">✏️</button></div></td>
+                    <td class="cell-center">${qtyDisplay}</td>
+                    <td class="cell-left"><div style="font-size: 11px; color: var(--purple); font-weight: 700; margin-bottom: 4px;">Tổng đang mượn: ${item.borrowedQty||0}</div>${listMuon}</td>
+                    <td class="cell-center">
+                        <div class="action-group">
+                            <button class="btn-compact add" onclick="nhapHang(${realIdx})">➕ Nhập</button>
+                            <button class="btn-compact sub" onclick="xuatHang(${realIdx})">➖ Xuất</button>
+                            <button class="btn-compact borrow" onclick="muonHang(${realIdx})">📤 Mượn</button>
+                            <button class="btn-compact del" onclick="xoaHang(${realIdx})">🗑️ Xóa</button>
+                        </div>
+                    </td>
+                </tr>`;
+        });
+    }
+
+    function renderHistory() {
+        const tbody = document.querySelector('#historyTable tbody'); tbody.innerHTML = '';
+        if (historyLog.length === 0) { tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--slate-600);">Lịch sử giao dịch trống.</td></tr>`; return; }
+
+        historyLog.forEach((log, idx) => {
+            let hd = `<span class="log-tag" style="background-color: ${log.color};">${log.type}</span>`;
+            if (log.type === "Xuất hàng (-)" || log.type === "Xuất (Lô)") {
+                let max = log.qty - (log.returnedQty || 0);
+                if (max > 0) hd += `<br><button class="btn-return-mini" style="background: var(--success); margin-top: 5px; padding: 4px 8px;" onclick="nhapLai(${idx})">↩ Hoàn nhập (${max})</button>`;
+                else hd += `<br><span style="color: var(--success); font-size: 10px; font-weight: bold;">✓ Hoàn tất</span>`;
+            }
+            tbody.innerHTML += `<tr><td class="cell-center" style="font-size:12px; color:var(--slate-600);">${log.time}</td><td class="cell-center"><span class="sku-text" style="font-size:11px;">${log.sku}</span></td><td class="cell-left" style="font-size:13px; font-weight:600;">${log.name}</td><td class="cell-center">${hd}</td><td class="cell-center" style="font-weight:700;">${log.qty}</td><td class="cell-left text-note-log" contenteditable="true" onblur="capNhatGhiChu(${idx}, this.innerText)">${log.note}</td></tr>`;
+        });
+    }
+
+    function nhapLai(idx) {
+        const log = historyLog[idx]; const pIdx = inventory.findIndex(i => i.sku === log.sku); if (pIdx === -1) return alert("Không tìm thấy sản phẩm có SKU này trong hệ thống!");
+        let max = log.qty - (log.returnedQty || 0);
+        let sl = parseInt(prompt(`Hoàn lại hàng lỗi/hủy đơn cho mã ${log.sku}\nTối đa khả dụng: ${max}\nNhập số lượng thực tế:`, max)); if (isNaN(sl) || sl <= 0 || sl > max) return;
+        let nt = prompt("Nhập lý do hoàn nhập:", `Khách hủy/trả từ đơn xuất lúc ${log.time}`); if (nt === null) return;
+        inventory[pIdx].qty += sl; log.returnedQty = (log.returnedQty || 0) + sl; luuDuLieu();
+        ghiLog(log.sku, log.name, "Nhập lại (↩)", sl, "var(--success)", nt || 'Hoàn nhập từ lịch sử'); searchProduct();
+    }
+
+    function capNhatGhiChu(idx, txt) { historyLog[idx].note = txt.trim() || "Không có"; luuLichSu(); renderHistory(); }
+
+    document.getElementById('inventoryForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const sku = document.getElementById('productSKU').value.trim().toUpperCase(); const name = document.getElementById('productName').value.trim();
+        const qty = parseInt(document.getElementById('productQty').value); const file = document.getElementById('productImage').files[0];
+        let exIdx = sku !== "" ? inventory.findIndex(i => i.sku === sku) : inventory.findIndex(i => i.name.toLowerCase() === name.toLowerCase());
+        const fSku = sku !== "" ? sku : (exIdx !== -1 ? inventory[exIdx].sku : "SP" + Math.floor(1000 + Math.random() * 9000));
+
+        if (exIdx !== -1) {
+            inventory[exIdx].qty += qty;
+            if (file) compressImage(file, data => { inventory[exIdx].image = data; doneFormCu(exIdx, fSku, qty); }); else doneFormCu(exIdx, fSku, qty);
+        } else {
+            if (file) compressImage(file, data => { taoMoi(fSku, name, qty, data); }); else taoMoi(fSku, name, qty, DEFAULT_IMAGE);
+        }
+    });
+
+    function taoMoi(sku, name, qty, img) { inventory.unshift({ id: Date.now().toString(), sku: sku, name: name, qty: qty, borrowedQty: 0, borrowList: [], image: img }); luuDuLieu(); ghiLog(sku, name, "Khởi tạo mã", qty, "var(--primary)", "Khởi tạo mã hàng mới"); renderTable(); document.getElementById('inventoryForm').reset(); }
+    function doneFormCu(idx, sku, qty) { luuDuLieu(); ghiLog(sku, inventory[idx].name, "Nhập (+)", qty, "var(--success)", "Cộng dồn số lượng qua form chính"); alert(`Sản phẩm đã tồn tại. Đã tự động cộng dồn +${qty} vào kho!`); renderTable(); document.getElementById('inventoryForm').reset(); }
+
+    function nhapHang(idx) { let i = inventory[idx]; let s = parseInt(prompt(`Nhập thêm số lượng cho [${i.name}]:`, "1")); if(s>0){ let n=prompt("Lý do / Ghi chú nhập kho:"); if(n !== null){ i.qty+=s; luuDuLieu(); ghiLog(i.sku, i.name, "Nhập kho (+)", s, "var(--success)", n); searchProduct(); } } }
+    function xuatHang(idx) { let i = inventory[idx]; let s = parseInt(prompt(`Nhập số lượng xuất kho cho [${i.name}]:`, "1")); if(s>0 && s<=i.qty){ let n=prompt("Lý do xuất kho (Bán lẻ / Trả hàng...):"); if(n !== null){ i.qty-=s; luuDuLieu(); ghiLog(i.sku, i.name, "Xuất kho (-)", s, "var(--warning)", n); searchProduct(); } } else if(s>i.qty) alert("Số lượng xuất vượt quá tồn kho hiện tại!"); }
+    function muonHang(idx) { let i = inventory[idx]; let s = parseInt(prompt(`Số lượng cho mượn của [${i.name}]:`, "1")); if(s>0 && s<=i.qty){ let n=prompt("Tên đơn vị / Người mượn hàng:"); if(n){ i.qty-=s; i.borrowedQty=(i.borrowedQty||0)+s; i.borrowList.push({id:Date.now().toString(), qty:s, note:n.trim(), time:getFormatedDate()}); luuDuLieu(); ghiLog(i.sku, i.name, "Cho mượn (➔)", s, "#fd7e14", n); searchProduct(); } } }
+    function traHang(pIdx, bIdx) { let i = inventory[pIdx], m = i.borrowList[bIdx]; let s = parseInt(prompt(`Nhận lại hàng từ: ${m.note}\nSố lượng nhập trả:`, m.qty)); if(s>0 && s<=m.qty){ i.qty+=s; m.qty-=s; i.borrowedQty-=s; if(m.qty===0) i.borrowList.splice(bIdx, 1); luuDuLieu(); ghiLog(i.sku, i.name, "Nhận trả (🔀)", s, "var(--purple)", `Hoàn trả từ danh mục mượn của [${m.note}]`); searchProduct(); } }
+    function xoaHang(idx) { if (confirm(`Bạn chắc chắn muốn xóa vĩnh viễn sản phẩm: ${inventory[idx].name}?`)) { let n=prompt("Nhập lý do xóa mã hàng:"); if(n !== null){ ghiLog(inventory[idx].sku, inventory[idx].name, "Xóa 🗑️", "-", "var(--dark)", n); inventory.splice(idx, 1); luuDuLieu(); searchProduct(); } } }
+    function searchProduct() { const k = document.getElementById('searchInput').value.toLowerCase(); renderTable(inventory.filter(i => i.name.toLowerCase().includes(k) || (i.sku && i.sku.toLowerCase().includes(k)))); }
+    function xoaLichSu() { if(confirm("Xóa vĩnh viễn toàn bộ nhật ký? Hành động này không thể khôi phục.")) { historyLog = []; luuLichSu(); renderHistory(); } }
+
+    function boChonTatCa() {
+        let sa = document.getElementById('selectAll'); if (sa) sa.checked = false;
+        document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = false);
+        updateBulkUI();
+    }
+
+    function toggleSelectAll() {
+        let st = document.getElementById('selectAll').checked;
+        document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = st);
+        updateBulkUI();
+    }
+
+    document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeBulkModal(); });
+
+    function updateBulkUI() {
+        const cks = document.querySelectorAll('.item-checkbox:checked');
+        const d = document.getElementById('bulkActions'); const s = document.getElementById('selectedCount');
+        if (cks.length > 0) { d.style.display = 'flex'; s.innerText = cks.length; } else { d.style.display = 'none'; }
+    }
+
+    let currentBulkType = ''; let currentBulkItems = [];
+
+    function openBulkModal(loai) {
+        const cks = document.querySelectorAll('.item-checkbox:checked'); if (cks.length === 0) return;
+        currentBulkType = loai; currentBulkItems = Array.from(cks).map(cb => parseInt(cb.value));
+
+        let an = loai === 'nhap' ? 'NHẬP HÀNG LOẠT' : (loai === 'xuat' ? 'XUẤT HÀNG LOẠT' : 'CHO MƯỢN HÀNG LOẠT');
+        let cl = loai === 'nhap' ? 'var(--success)' : (loai === 'xuat' ? 'var(--warning)' : 'var(--purple)');
+        let bc = loai === 'nhap' ? 'var(--success-gradient)' : (loai === 'xuat' ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)');
+        
+        document.getElementById('bulkModalTitle').innerText = `${an} (${currentBulkItems.length} MÓN)`;
+        document.getElementById('bulkModalTitle').style.color = cl;
+        document.getElementById('bulkModalConfirmBtn').style.background = bc;
+        document.getElementById('bulkModalNote').value = '';
+
+        const tbody = document.getElementById('bulkModalBody'); tbody.innerHTML = '';
+
+        currentBulkItems.forEach(idx => {
+            const item = inventory[idx];
+            const max = (loai === 'xuat' || loai === 'muon') ? `<span style="font-size:12px; color:var(--danger); font-weight:700; white-space:nowrap;">Tồn: ${item.qty}</span>` : '';
+            
+            tbody.innerHTML += `
+                <div class="bulk-item-row">
+                    <div class="bulk-item-name">
+                        <span style="color:var(--primary); font-size:11px; font-weight:700; letter-spacing:0.5px;">${item.sku || '---'}</span><br>
+                        ${item.name}
+                    </div>
+                    <div class="bulk-item-qty-container">
+                        ${max}
+                        <input type="number" class="bulk-item-qty" id="bulk_qty_${idx}" min="1" value="1" placeholder="SL">
+                        <input type="text" class="bulk-item-note" id="bulk_note_${idx}" placeholder="Ghi chú riêng lẻ (nếu có)...">
+                    </div>
+                </div>
+            `;
+        });
+
+        document.getElementById('bulkModal').style.display = 'flex';
+    }
+
+    function closeBulkModal() { document.getElementById('bulkModal').style.display = 'none'; }
+
+    function confirmBulkAction() {
+        let gNote = document.getElementById('bulkModalNote').value.trim();
+        let sCount = 0; let fails = []; let acts = [];
+
+        for (let idx of currentBulkItems) {
+            let iEl = document.getElementById(`bulk_qty_${idx}`); let nEl = document.getElementById(`bulk_note_${idx}`);
+            let sl = parseInt(iEl.value); let iNote = nEl ? nEl.value.trim() : ''; let item = inventory[idx];
+
+            if (isNaN(sl) || sl <= 0) { alert(`Vui lòng nhập đúng số lượng cho sản phẩm: "${item.name}"`); iEl.focus(); return; }
+            if ((currentBulkType === 'xuat' || currentBulkType === 'muon') && sl > item.qty) { fails.push(`- ${item.name} (Cần: ${sl} / Hiện có: ${item.qty})`); continue; }
+
+            let fn = "";
+            if (gNote && iNote) fn = `${gNote} (${iNote})`; else if (gNote) fn = gNote; else if (iNote) fn = iNote;
+
+            acts.push({ item: item, sl: sl, note: fn });
+        }
+
+        acts.forEach(a => {
+            if (currentBulkType === 'nhap') {
+                a.item.qty += a.sl; ghiLog(a.item.sku, a.item.name, "Nhập (Lô)", a.sl, "var(--success)", a.note); sCount++;
+            } else if (currentBulkType === 'xuat') {
+                a.item.qty -= a.sl; ghiLog(a.item.sku, a.item.name, "Xuất (Lô)", a.sl, "var(--warning)", a.note); sCount++;
+            } else if (currentBulkType === 'muon') {
+                a.item.qty -= a.sl; a.item.borrowedQty = (a.item.borrowedQty || 0) + a.sl;
+                a.item.borrowList.push({ id: Date.now()+"_"+Math.random().toString(36).substr(2,4), qty: a.sl, note: a.note || "Mượn theo lô", time: getFormatedDate() });
+                ghiLog(a.item.sku, a.item.name, "Mượn (Lô)", a.sl, "#fd7e14", a.note); sCount++;
+            }
+        });
+
+        if (sCount > 0) { luuDuLieu(); searchProduct(); closeBulkModal(); }
+        if (fails.length > 0) alert(`✅ Đã thực hiện thành công trên ${sCount} sản phẩm!\n\n⚠️ TỪ CHỐI ${fails.length} SẢN PHẨM (Do thiếu tồn kho):\n${fails.join("\n")}`);
+    }
+
+    function xuatFileKiemKho() {
+        let now = new Date();
+        let html = `<html><head><meta charset="utf-8"><style>table{border-collapse:collapse;} th,td{border:1px solid #000;padding:6px;font-family:Arial;}</style></head><body><h2>BẢNG KIỂM KHO SẢN PHẨM HI SPORTS</h2><table>`;
+        html += `<thead><tr><th>STT</th><th>Mã SKU</th><th>Tên Sản Phẩm</th><th>Tồn Kho Hệ Thống</th><th>Thực Tế (Đếm tay)</th><th>Chênh Lệch</th><th>Ghi Chú</th></tr></thead><tbody>`;
+        inventory.forEach((item, index) => { 
+            let r = index + 3; 
+            html += `<tr><td align="center">${index + 1}</td><td align="center"><b>${item.sku || ''}</b></td><td>${item.name}</td><td align="right">${item.qty}</td><td></td><td align="right">=IF(E${r}="","",E${r}-D${r})</td><td></td></tr>`; 
+        });
+        let start = 3, end = 2 + inventory.length;
+        html += `<tr style="font-weight:bold; background:#f1f5f9;"><td></td><td></td><td align="right">TỔNG CỘNG TỒN:</td><td align="right">=SUM(D${start}:D${end})</td><td align="right">=SUM(E${start}:E${end})</td><td align="right">=SUM(F${start}:F${end})</td><td></td></tr></tbody></table></body></html>`;
+        
+        let blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+        let a = document.createElement('a'); a.href = URL.createObjectURL(blob); 
+        a.download = 'HiSports_KiemKho_' + now.toISOString().slice(0,10) + '.xls';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
+
+    // KHỞI CHẠY HỆ THỐNG
+    if (inventory.length === 0 && GOOGLE_SHEET_URL) { khoiPhucTuGoogleSheet(true); } else { renderTable(); renderHistory(); }
+</script>
+
+</body>
+</html>
