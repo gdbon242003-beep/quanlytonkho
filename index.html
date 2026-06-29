@@ -44,8 +44,13 @@
         }
 
         .container { 
-            max-width: 1500px; margin: 20px auto; background: var(--card-bg); 
-            padding: 30px; border-radius: 16px; box-shadow: var(--shadow-lg); box-sizing: border-box;
+            max-width: 1500px; 
+            margin: 20px auto; 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 16px; 
+            box-shadow: var(--shadow-lg); 
+            box-sizing: border-box;
         }
 
         @media (max-width: 767px) {
@@ -58,19 +63,29 @@
         .header p { margin: 8px 0 0; color: var(--slate-600); font-size: 14px; font-weight: 500; }
         
         form { 
-            display: grid; grid-template-columns: 1.2fr 2fr 1fr 1.5fr auto; gap: 12px; 
-            background: var(--slate-50); padding: 20px; border-radius: 12px; margin-bottom: 30px; 
-            border: 1px solid var(--slate-200); align-items: center;
+            display: grid; 
+            grid-template-columns: 1.2fr 2fr 1fr 1.5fr auto; 
+            gap: 12px; 
+            background: var(--slate-50); 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 30px; 
+            border: 1px solid var(--slate-200); 
+            align-items: center;
         }
+        
         @media (max-width: 1024px) { form { grid-template-columns: 1fr 1fr; } .form-full { grid-column: span 2; } }
         @media (max-width: 600px) { form { grid-template-columns: 1fr; padding: 15px; } .form-full { grid-column: span 1; } }
         
         input, select, textarea { 
             width: 100%; box-sizing: border-box; padding: 12px 16px; border: 1px solid var(--slate-200); 
             border-radius: 10px; font-size: 15px; background-color: var(--card-bg); 
-            transition: all 0.25s ease; color: var(--dark); font-weight: 500; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); 
+            transition: all 0.25s ease; color: var(--dark); font-weight: 500; 
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); -webkit-appearance: none; 
         }
+        
         @media (max-width: 991px) { input, select, textarea { font-size: 16px !important; } }
+        
         input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
         input[type="file"] { padding: 9px; background: #fff; cursor: pointer; }
         
@@ -93,8 +108,121 @@
             .search-box { width: 100%; box-sizing: border-box; }
         }
 
-        .table-responsive { overflow-x: auto; margin-bottom: 30px; border-radius: 12px; border: 1px solid var(--slate-200); box-shadow: var(--shadow-sm); -webkit-overflow-scrolling: touch; }
-        table { width: 100%; border-collapse: collapse; background: white; min-width: 1000px; }
+        /* --- STYLE CHO KHU VỰC SÚNG QUÉT MÃ VẠCH PHẦN CỨNG --- */
+        .hardware-scanner-panel {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        .hardware-scanner-panel:focus-within {
+            border-color: var(--primary);
+            background: #f5f3ff;
+            box-shadow: var(--shadow-md);
+        }
+        .hw-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .hw-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .hw-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .pulse-indicator {
+            width: 10px;
+            height: 10px;
+            background-color: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse-green 1.6s infinite;
+        }
+        @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        .hw-body-grid {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr;
+            gap: 15px;
+            align-items: center;
+        }
+        @media (max-width: 768px) {
+            .hw-body-grid { grid-template-columns: 1fr; }
+        }
+        .hw-mode-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            background: var(--slate-100);
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid var(--slate-200);
+        }
+        .hw-tab-btn {
+            padding: 10px 4px;
+            font-size: 12px;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: var(--slate-600);
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .hw-tab-btn.active[data-hwmode="nhap"] { background: var(--success); color: white; }
+        .hw-tab-btn.active[data-hwmode="xuat"] { background: var(--warning); color: white; }
+        .hw-tab-btn.active[data-hwmode="muon"] { background: #fd7e14; color: white; }
+        .hw-tab-btn.active[data-hwmode="tim"] { background: var(--primary); color: white; }
+
+        .hw-input-group {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .hw-main-input {
+            border: 2px solid var(--slate-300);
+            font-weight: 700;
+            font-size: 16px !important;
+            letter-spacing: 1px;
+            padding-right: 40px;
+            background: white !important;
+        }
+        .hw-main-input:focus {
+            border-color: var(--primary);
+        }
+        .hw-feedback-status {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--slate-600);
+            margin-top: 2px;
+            display: block;
+            transition: color 0.2s;
+        }
+
+        .table-responsive { 
+            overflow-x: auto; margin-bottom: 30px; border-radius: 12px; border: 1px solid var(--slate-200); 
+            box-shadow: var(--shadow-sm); -webkit-overflow-scrolling: touch; 
+        }
+        table { width: 100%; border-collapse: collapse; background: white; min-width: 900px; }
         th { background-color: #f8fafc; color: var(--slate-600); font-weight: 700; font-size: 12px; text-transform: uppercase; padding: 14px; border-bottom: 2px solid var(--slate-200); white-space: nowrap; }
         td { padding: 12px 10px; border-bottom: 1px solid var(--slate-100); vertical-align: middle; }
 
@@ -109,24 +237,16 @@
         .name-text { font-weight: 600; color: var(--dark); font-size: 13px; line-height: 1.4; } 
         .edit-icon { background: none; border: none; font-size: 13px; opacity: 0.4; cursor: pointer; margin-left: 4px; padding: 4px; }
         .edit-icon:hover { opacity: 1; }
+        
         .btn-edit-sku { margin-left: 6px; padding: 3px 6px; font-size: 12px; background: #e2e8f0; color: #475569; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer; transition: 0.2s; }
         .btn-edit-sku:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
         .qty-badge { font-size: 16px; font-weight: 800; }
 
-        /* --- GIAO DIỆN CHI TIẾT MƯỢN MỚI --- */
-        .borrow-summary { font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: #f1f5f9; border-radius: 8px; }
-        .borrow-summary.has-borrow { color: #7c3aed; background: #f5f3ff; border: 1px solid #ede9fe; }
-        .borrow-list { display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto; padding-right: 4px; }
-        .borrow-list::-webkit-scrollbar { width: 4px; }
-        .borrow-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .borrow-item { display: flex; justify-content: space-between; align-items: center; background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #8b5cf6; padding: 8px 10px; border-radius: 8px; font-size: 12px; gap: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.2s ease; }
-        .borrow-item:hover { border-color: #8b5cf6; box-shadow: 0 3px 6px rgba(139, 92, 246, 0.15); transform: translateY(-1px); }
-        .borrow-info { display: flex; flex-direction: column; gap: 3px; overflow: hidden; flex: 1; }
-        .borrow-note { font-weight: 700; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 13px; }
-        .borrow-qty { font-size: 11px; color: #64748b; font-weight: 600; }
-        .btn-return-mini { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-        .btn-return-mini:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .borrow-list { display: flex; flex-direction: column; gap: 5px; min-width: 140px; }
+        .borrow-item { display: flex; justify-content: space-between; align-items: center; background: #fffbeb; border: 1px solid #fde68a; padding: 5px 8px; border-radius: 6px; font-size: 12px; gap: 6px; }
+        .borrow-item .truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
+        .btn-return-mini { background: #8b5cf6; color: white; border: none; border-radius: 4px; padding: 3px 6px; font-size: 11px; font-weight: 700; cursor: pointer; }
 
         .action-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 130px; margin: 0 auto; }
         .btn-compact { padding: 6px 4px; border-radius: 6px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; text-align: center; width: 100%; box-sizing: border-box; }
@@ -140,70 +260,76 @@
         .section-title::before { content: ''; display: inline-block; width: 5px; height: 18px; background: var(--primary-gradient); border-radius: 4px; }
         .text-note-log { font-size: 13px; padding: 6px; border-bottom: 1px dashed #cbd5e1; }
         
-        /* Modal Hệ Thống */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
             background: rgba(15, 23, 42, 0.65); z-index: 9999; 
             align-items: center; justify-content: center; padding: 15px;
             backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
         }
-        @media (max-width: 767px) { .modal-overlay { align-items: flex-start; padding: 5dvh 10px 15px 10px; } }
-        .modal-content { background: var(--card-bg); width: 100%; border-radius: 16px; padding: 20px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; box-sizing: border-box; max-height: 90vh; }
+        
+        @media (max-width: 767px) {
+            .modal-overlay { align-items: flex-start; padding: 5dvh 10px 15px 10px; }
+        }
+        
+        .modal-content { 
+            background: var(--card-bg); width: 100%; max-width: 650px; 
+            border-radius: 16px; padding: 20px; box-shadow: var(--shadow-lg); 
+            display: flex; flex-direction: column; box-sizing: border-box;
+            max-height: 90vh; 
+        }
+        
         .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--slate-200); padding-bottom: 12px; margin-bottom: 15px; }
         .modal-title { font-size: 18px; font-weight: 800; color: var(--dark); text-transform: uppercase; }
         .close-btn { background: none; border: none; font-size: 26px; cursor: pointer; color: var(--slate-600); padding: 0 5px; line-height: 1; }
+        
         .modal-body { overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 4px; margin-bottom: 15px; flex-grow: 1; }
         
-        /* Thao tác Hàng loạt */
-        .bulk-item-row { display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--slate-200); background: var(--slate-50); margin-bottom: 10px; border-radius: 10px; gap: 15px; }
+        .bulk-item-row { 
+            display: flex; flex-direction: row; align-items: center; justify-content: space-between;
+            padding: 12px; border-bottom: 1px solid var(--slate-200); background: var(--slate-50); 
+            margin-bottom: 10px; border-radius: 10px; gap: 15px; 
+        }
+        
         .bulk-item-name { font-weight: 600; font-size: 13px; line-height: 1.4; flex: 1; min-width: 0; }
         .bulk-item-qty-container { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-        @media (max-width: 550px) { .bulk-item-row { flex-direction: column; align-items: stretch; gap: 10px; } .bulk-item-qty-container { width: 100%; justify-content: flex-start; } }
+        
+        @media (max-width: 550px) {
+            .bulk-item-row { flex-direction: column; align-items: stretch; gap: 10px; }
+            .bulk-item-qty-container { width: 100%; justify-content: flex-start; }
+        }
+        
         .bulk-item-qty { width: 70px; padding: 10px; text-align: center; border: 2px solid var(--primary); font-weight: 700; font-size: 16px !important; border-radius: 8px; color: var(--dark); }
         .bulk-item-note { flex: 1; min-width: 0; padding: 10px 12px; border: 1px solid var(--slate-300); border-radius: 8px; font-size: 16px !important; }
         
         .modal-footer { border-top: 1px solid var(--slate-200); padding-top: 15px; display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; }
         .bulk-note-input { width: 100%; font-size: 16px !important; padding: 12px; border-radius: 8px; border: 1px solid var(--primary); }
         .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
-        @media (max-width: 550px) { .modal-actions { display: grid; grid-template-columns: 1fr 1.5fr; } .modal-actions .btn-icon { padding: 14px 10px; width: 100%; } }
+        
+        @media (max-width: 550px) {
+            .modal-actions { display: grid; grid-template-columns: 1fr 1.5fr; }
+            .modal-actions .btn-icon { padding: 14px 10px; width: 100%; }
+        }
 
-        /* Custom cho Popup Thao tác Riêng Lẻ */
-        .action-input-group { margin-bottom: 15px; text-align: left; }
-        .action-input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--slate-600); margin-bottom: 6px; }
-        .action-input-group input { width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--slate-300); font-size: 15px; }
-        .action-input-group input[type="number"] { font-size: 20px; font-weight: bold; text-align: center; color: var(--primary); background: #f8fafc; }
-
-        /* Máy quét Scanner */
         .btn-scan-trigger {
             background: linear-gradient(135deg, #0f172a 0%, #334155 100%); color: white; cursor: pointer; 
             font-weight: 700; border: none; padding: 11px 14px; border-radius: 10px; font-size: 13px; 
-            display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-shadow: var(--shadow-sm); transition: all 0.2s;
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-shadow: var(--shadow-sm); 
+            transition: all 0.2s;
         }
         .btn-scan-trigger:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: var(--shadow-md); }
-
-        #scannerModal .modal-content { border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); animation: modalZoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes modalZoomIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-
-        .scan-mode-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 15px; background: var(--slate-100); padding: 6px; border-radius: 12px; }
-        @media (max-width: 600px) { .scan-mode-tabs { grid-template-columns: repeat(3, 1fr); } .scan-mode-tabs button:nth-child(4), .scan-mode-tabs button:nth-child(5) { grid-column: span 1.5; } }
-        .scan-mode-btn { padding: 10px 4px; border-radius: 8px; border: none; background: transparent; color: var(--slate-600); font-weight: 700; font-size: 11px; cursor: pointer; text-align: center; transition: all 0.25s ease; white-space: nowrap; }
-        .scan-mode-btn.active { box-shadow: var(--shadow-sm); transform: translateY(-1px); }
-        .scan-mode-btn.active[data-mode="nhap"] { background: var(--success); color: white; }
-        .scan-mode-btn.active[data-mode="xuat"] { background: var(--warning); color: white; }
-        .scan-mode-btn.active[data-mode="muon"] { background: #fd7e14; color: white; }
-        .scan-mode-btn.active[data-mode="edit_sku"] { background: var(--primary); color: white; }
-        .scan-mode-btn.active[data-mode="pos"] { background: #e11d48; color: white; }
         
-        #scanner-wrapper { position: relative; width: 100%; border-radius: 16px; overflow: hidden; background: #000; box-shadow: inset 0 0 0 2px var(--slate-300), var(--shadow-md); margin-bottom: 12px; }
+        .scan-mode-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 15px; }
+        .scan-mode-btn { 
+            padding: 10px 4px; border-radius: 8px; border: 1px solid var(--slate-200); background: var(--slate-100); 
+            color: var(--slate-600); font-weight: 700; font-size: 12px; cursor: pointer; text-align: center; transition: all 0.2s; 
+        }
+        .scan-mode-btn.active[data-mode="nhap"] { background: var(--success); color: white; border-color: var(--success); }
+        .scan-mode-btn.active[data-mode="xuat"] { background: var(--warning); color: white; border-color: var(--warning); }
+        .scan-mode-btn.active[data-mode="muon"] { background: #fd7e14; color: white; border-color: #fd7e14; }
+        .scan-mode-btn.active[data-mode="edit_sku"] { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        #scanner-container { width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid var(--slate-300); background: #000; position: relative;}
         #scanner-view { width: 100%; min-height: 250px; }
-        .scanner-laser { position: absolute; left: 5%; width: 90%; height: 2px; background: #22d3ee; box-shadow: 0 0 12px 2px rgba(34, 211, 238, 0.8); z-index: 10; animation: scanningLaser 2s infinite alternate ease-in-out; border-radius: 50%; display: none; }
-        @keyframes scanningLaser { 0% { top: 10%; } 100% { top: 90%; } }
-        .viewfinder-corner { position: absolute; width: 35px; height: 35px; border-color: rgba(255, 255, 255, 0.9); border-style: solid; z-index: 10; }
-        .viewfinder-tl { top: 15px; left: 15px; border-width: 4px 0 0 4px; border-top-left-radius: 12px; }
-        .viewfinder-tr { top: 15px; right: 15px; border-width: 4px 4px 0 0; border-top-right-radius: 12px; }
-        .viewfinder-bl { bottom: 15px; left: 15px; border-width: 0 0 4px 4px; border-bottom-left-radius: 12px; }
-        .viewfinder-br { bottom: 15px; right: 15px; border-width: 0 4px 4px 0; border-bottom-right-radius: 12px; }
-        #qr-status { font-size: 14px; font-weight: 700; text-align: center; margin-top: 15px; line-height: 1.5; padding: 12px 15px; border-radius: 12px; width: 100%; box-sizing: border-box; background: #f8fafc; color: var(--primary); display: none; transition: 0.3s; box-shadow: 0 2px 8px -2px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
     </style>
 </head>
 <body>
@@ -211,7 +337,7 @@
 <div class="container">
     <div class="header">
         <h2>HỆ THỐNG QUẢN LÝ KHO</h2>
-        <p>Bản nâng cấp tối ưu hóa Hybrid (Tích hợp Modal Chuyên Nghiệp & Scanner)</p>
+        <p>Bản nâng cấp tối ưu hóa Hybrid (Tích hợp Máy Quét Cầm Tay Chuyên Nghiệp)</p>
     </div>
     
     <form id="inventoryForm">
@@ -233,6 +359,30 @@
         <input type="text" id="searchInput" class="search-box" placeholder="🔍 Tìm kiếm sản phẩm..." onkeyup="searchProduct()">
     </div>
 
+    <div class="hardware-scanner-panel">
+        <div class="hw-header">
+            <div class="hw-title-wrapper">
+                <span class="pulse-indicator"></span>
+                <span class="hw-title">🔌 CHẾ ĐỘ SÚNG QUÉT MÃ VẠCH CẦM TAY (SIÊU TỐC)</span>
+            </div>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--slate-600); cursor: pointer;">
+                <input type="checkbox" id="hwFastMode" checked style="width:15px; height:15px; margin:0;"> Tự động thay đổi (+1/-1) không hiện hộp thoại hỏi
+            </label>
+        </div>
+        <div class="hw-body-grid">
+            <div class="hw-mode-tabs">
+                <button type="button" class="hw-tab-btn active" data-hwmode="nhap" onclick="setHardwareMode('nhap')">📥 NHẬP KHO</button>
+                <button type="button" class="hw-tab-btn" data-hwmode="xuat" onclick="setHardwareMode('xuat')">📤 XUẤT KHO</button>
+                <button type="button" class="hw-tab-btn" data-hwmode="muon" onclick="setHardwareMode('muon')">📦 MƯỢN</button>
+                <button type="button" class="hw-tab-btn" data-hwmode="tim" onclick="setHardwareMode('tim')">🔍 TÌM KIẾM</button>
+            </div>
+            <div class="hw-input-group">
+                <input type="text" id="hwScanInput" class="hw-main-input" placeholder="Đặt chuột vào đây rồi bóp cò súng quét..." onkeydown="handleHardwareGunScan(event)">
+                <span id="hwStatusText" class="hw-feedback-status">🟢 Hệ thống đang chờ tín hiệu đầu đọc phần cứng...</span>
+            </div>
+        </div>
+    </div>
+
     <div id="bulkActions" style="display: none; flex-direction: column; align-items: stretch; margin-bottom: 20px; padding: 15px; background: #fffbeb; border: 1px dashed #f59e0b; border-radius: 12px; gap: 12px;">
         <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
             <span style="font-weight: 700; color: #d97706; font-size: 15px;">☑ Đã chọn <span id="selectedCount" style="font-size: 18px;">0</span> mặt hàng</span>
@@ -249,12 +399,14 @@
         <table id="inventoryTable">
             <thead>
                 <tr>
-                    <th class="cell-center" style="width: 40px;"><input type="checkbox" id="selectAll" onclick="toggleSelectAll()" style="width: 18px; height: 18px; cursor:pointer;"></th>
+                    <th class="cell-center" style="width: 40px;">
+                        <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" style="width: 18px; height: 18px; cursor:pointer;">
+                    </th>
                     <th class="cell-center" style="width: 80px;">Ảnh</th>
                     <th class="cell-center" style="width: 150px;">SKU</th>
                     <th class="cell-left">Tên Sản Phẩm</th>
                     <th class="cell-center" style="width: 90px;">Tồn Kho</th>
-                    <th class="cell-left" style="min-width: 220px;">Chi Tiết Mượn</th>
+                    <th class="cell-left" style="min-width: 180px;">Chi Tiết Mượn</th>
                     <th class="cell-center" style="width: 150px;">Thao Tác</th>
                 </tr>
             </thead>
@@ -284,40 +436,15 @@
     </div>
 </div>
 
-<div id="actionModal" class="modal-overlay">
-    <div class="modal-content" style="max-width: 400px;">
-        <div class="modal-header">
-            <div class="modal-title" id="actionModalTitle">Thao Tác</div>
-            <button class="close-btn" onclick="closeActionModal()">&times;</button>
-        </div>
-        <div class="modal-body" style="text-align: center;">
-            <div id="actionModalProductName" style="font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 20px; line-height: 1.4; padding: 10px; background: var(--slate-50); border-radius: 8px;"></div>
-            
-            <div class="action-input-group">
-                <label id="actionModalQtyLabel">Số lượng:</label>
-                <input type="number" id="actionModalQty" min="1" value="1">
-                <div id="actionModalMaxQty" style="font-size: 12px; color: var(--danger); text-align: right; margin-top: 4px; font-weight: 600;"></div>
-            </div>
-            
-            <div class="action-input-group">
-                <label id="actionModalNoteLabel">Lý do / Ghi chú:</label>
-                <input type="text" id="actionModalNote" placeholder="Nhập ghi chú hoặc tên người liên quan...">
-            </div>
-        </div>
-        <div class="modal-footer" style="display: flex; flex-direction: row; gap: 10px; padding-top: 5px;">
-            <button type="button" class="btn-icon" style="background: var(--slate-200); color: var(--slate-700); flex: 1; box-shadow: none;" onclick="closeActionModal()">Hủy Bỏ</button>
-            <button type="button" class="btn-icon" id="actionModalConfirmBtn" style="background: var(--primary-gradient); flex: 1;" onclick="submitActionModal()">Xác Nhận</button>
-        </div>
-    </div>
-</div>
-
 <div id="bulkModal" class="modal-overlay">
-    <div class="modal-content" style="max-width: 650px;">
+    <div class="modal-content">
         <div class="modal-header">
             <div class="modal-title" id="bulkModalTitle">Thao Tác Hàng Loạt</div>
             <button class="close-btn" onclick="closeBulkModal()">&times;</button>
         </div>
+        
         <div class="modal-body" id="bulkModalBody"></div>
+        
         <div class="modal-footer">
             <input type="text" id="bulkModalNote" class="bulk-note-input" placeholder="Nhập lý do/ghi chú chung (Không bắt buộc)...">
             <div class="modal-actions">
@@ -329,76 +456,168 @@
 </div>
 
 <div id="scannerModal" class="modal-overlay">
-    <div class="modal-content" style="max-width: 500px;">
-        <div class="modal-header" style="border-bottom: none; padding-bottom: 5px;">
-            <div class="modal-title" style="display: flex; align-items: center; gap: 8px;">
-                <span style="background: var(--slate-100); padding: 8px; border-radius: 10px; font-size: 18px;">📷</span> QUÉT MÃ ĐIỀU PHỐI
-            </div>
-            <button type="button" class="close-btn" onclick="closeScannerModal()" style="background: var(--slate-100); width: 36px; height: 36px; border-radius: 50%; font-size: 20px; display: flex; align-items: center; justify-content: center;">&times;</button>
+    <div class="modal-content" style="max-width: 480px;">
+        <div class="modal-header">
+            <div class="modal-title">📷 QUÉT MÃ ĐIỀU PHỐI KHO</div>
+            <button type="button" class="close-btn" onclick="closeScannerModal()">&times;</button>
         </div>
-        <div class="modal-body" style="padding-bottom: 5px;">
+        <div class="modal-body" style="padding-bottom: 0;">
             <div class="scan-mode-tabs">
                 <button type="button" class="scan-mode-btn active" data-mode="nhap" onclick="setScanMode('nhap')">📥 NHẬP</button>
                 <button type="button" class="scan-mode-btn" data-mode="xuat" onclick="setScanMode('xuat')">📤 XUẤT</button>
                 <button type="button" class="scan-mode-btn" data-mode="muon" onclick="setScanMode('muon')">📦 MƯỢN</button>
                 <button type="button" class="scan-mode-btn" data-mode="edit_sku" onclick="setScanMode('edit_sku')">✏️ SỬA SKU</button>
-                <button type="button" class="scan-mode-btn" data-mode="pos" onclick="setScanMode('pos')">🛒 POS XUẤT</button>
             </div>
-            <input type="text" id="scanNoteInput" placeholder="Nhập tên người giao/nhận hoặc lý do..." style="width: 100%; padding: 14px 16px; margin-bottom: 15px; border-radius: 10px; border: 1px solid var(--slate-200); background: var(--slate-50); font-size: 14px; box-sizing: border-box; outline: none; transition: all 0.2s; font-weight: 500;">
-            <div id="scanner-wrapper">
-                <div class="viewfinder-corner viewfinder-tl"></div>
-                <div class="viewfinder-corner viewfinder-tr"></div>
-                <div class="viewfinder-corner viewfinder-bl"></div>
-                <div class="viewfinder-corner viewfinder-br"></div>
-                <div id="scanner-laser" class="scanner-laser"></div>
+            
+            <div id="scanner-container">
                 <div id="scanner-view"></div>
             </div>
-            <div id="scanner-hint" style="text-align: center; color: var(--slate-600); font-size: 13px; font-weight: 600; margin-top: 5px;">Đưa mã vạch hoặc mã QR vào vùng camera.</div>
-            <div id="qr-status">Sẵn sàng quét mã...</div>
+            
+            <p id="scanner-hint" style="text-align: center; color: var(--slate-600); font-size: 13px; font-weight: 500; margin-top: 12px; margin-bottom: 5px;">
+                Đưa mã vạch hoặc mã QR vào vùng camera.
+            </p>
         </div>
     </div>
 </div>
 
 <script>
-    // Link Web App Apps Script của bạn
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwKhAKh-3Im8h5Pcu9A2QDYgwCO-PSUx6iXHifbhl4_no8VeWrFLJemYu0Yyz_WJeSyCw/exec"; 
-    
     const DEFAULT_IMAGE = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 24 24' fill='%23cbd5e1'%3E%3Cpath d='M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9M12 4.15L5.46 7.82l6.54 3.67 6.54-3.67L12 4.15z'/%3E%3C/svg%3E";
 
     let inventory = JSON.parse(localStorage.getItem('khoHangPro')) || [];
     let historyLog = JSON.parse(localStorage.getItem('khoHangHistory')) || [];
+    let currentHardwareMode = 'nhap';
 
     // ====================================================================
-    // HỆ THỐNG ÂM THANH WEB AUDIO API (Dùng cho máy quét)
+    // HỆ THỐNG PHẢN HỒI ÂM THANH BẰNG THUẬT TOÁN (CHUYÊN NGHIỆP & KHÔNG LỖI)
     // ====================================================================
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    let audioCtx;
-    function playBeep(type) {
+    function playBeepSound(isSuccess = true) {
         try {
-            if (!audioCtx) audioCtx = new AudioContextClass();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            oscillator.connect(gainNode); gainNode.connect(audioCtx.destination);
-            if (type === 'success') {
-                oscillator.type = 'sine'; oscillator.frequency.setValueAtTime(900, audioCtx.currentTime); 
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.15);
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const ctx = new AudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            if (isSuccess) {
+                osc.frequency.setValueAtTime(1400, ctx.currentTime);
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.07);
             } else {
-                oscillator.type = 'sawtooth'; oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.35);
+                osc.frequency.setValueAtTime(280, ctx.currentTime);
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.25);
             }
-        } catch(e) {}
+        } catch (e) { console.warn("Trình duyệt chặn âm thanh tự động:", e); }
     }
 
     // ====================================================================
-    // HỆ THỐNG ĐỒNG BỘ AUTO-SAVE ĐÁM MÂY
+    // LOGIC XỬ LÝ ĐẦU ĐỌC MÃ VẠCH / SÚNG QUÉT PHẦN CỨNG
+    // ====================================================================
+    function setHardwareMode(mode) {
+        currentHardwareMode = mode;
+        document.querySelectorAll('.hw-tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-hwmode') === mode) btn.classList.add('active');
+        });
+        const inp = document.getElementById('hwScanInput');
+        inp.focus();
+        document.getElementById('hwStatusText').innerHTML = `🟢 Đã chuyển chế độ. Hãy bóp cò súng quét...`;
+        document.getElementById('hwStatusText').style.color = "var(--slate-600)";
+    }
+
+    function handleHardwareGunScan(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Chống submit form gốc ngầm định
+            const barcode = event.target.value.trim().toUpperCase();
+            event.target.value = ''; // Xóa sạch ngay lập tức để nhận mã tiếp theo
+            event.target.focus();   // Giữ chuột liên tục tại đây
+            
+            if (!barcode) return;
+            processHardwareBarcode(barcode);
+        }
+    }
+
+    function processHardwareBarcode(sku) {
+        const statusEl = document.getElementById('hwStatusText');
+        const fastMode = document.getElementById('hwFastMode').checked;
+        const realIdx = inventory.findIndex(item => item.sku && item.sku.toUpperCase() === sku);
+
+        if (realIdx === -1) {
+            playBeepSound(false);
+            statusEl.innerHTML = `❌ Mã SKU [${sku}] không tồn tại trong hệ thống!`;
+            statusEl.style.color = "var(--danger)";
+            
+            if (confirm(`Mã SKU [${sku}] chưa có.\nBạn có muốn điền mã này vào Form tạo sản phẩm mới không?`)) {
+                document.getElementById('productSKU').value = sku;
+                document.getElementById('productName').focus();
+            }
+            return;
+        }
+
+        let item = inventory[realIdx];
+
+        // 1. CHẾ ĐỘ NHẬP KHO
+        if (currentHardwareMode === 'nhap') {
+            if (fastMode) {
+                item.qty += 1;
+                luuDuLieu();
+                ghiLog(item.sku, item.name, "Nhập kho (+)", 1, "var(--success)", "Quét nhanh bằng súng quét");
+                searchProduct();
+                playBeepSound(true);
+                statusEl.innerHTML = `✅ Đã NHẬP +1 cho sản phẩm: <b>${item.name}</b> (Tồn: ${item.qty})`;
+                statusEl.style.color = "var(--success)";
+            } else {
+                nhapHang(realIdx);
+            }
+        } 
+        // 2. CHẾ ĐỘ XUẤT KHO
+        else if (currentHardwareMode === 'xuat') {
+            if (fastMode) {
+                if (item.qty < 1) {
+                    playBeepSound(false);
+                    statusEl.innerHTML = `⚠️ Thất bại: Sản phẩm [${item.name}] đã HẾT HÀNG không thể xuất!`;
+                    statusEl.style.color = "var(--danger)";
+                } else {
+                    item.qty -= 1;
+                    luuDuLieu();
+                    ghiLog(item.sku, item.name, "Xuất kho (-)", 1, "var(--warning)", "Quét nhanh bằng súng quét");
+                    searchProduct();
+                    playBeepSound(true);
+                    statusEl.innerHTML = `✅ Đã XUẤT -1 cho sản phẩm: <b>${item.name}</b> (Tồn: ${item.qty})`;
+                    statusEl.style.color = "var(--warning)";
+                }
+            } else {
+                xuatHang(realIdx);
+            }
+        } 
+        // 3. CHẾ ĐỘ CHO MƯỢN
+        else if (currentHardwareMode === 'muon') {
+            muonHang(realIdx);
+        } 
+        // 4. CHẾ ĐỘ TÌM KIẾM NHANH
+        else if (currentHardwareMode === 'tim') {
+            document.getElementById('searchInput').value = sku;
+            searchProduct();
+            playBeepSound(true);
+            statusEl.innerHTML = `🔍 Đã tìm thấy mặt hàng: <b>${item.name}</b>`;
+            statusEl.style.color = "var(--primary)";
+        }
+    }
+
+    // ====================================================================
+    // HỆ THỐNG LƯU ĐỒNG BỘ AUTO-SAVE CLOUD
     // ====================================================================
     let autoSaveTimeout = null;
     function triggerAutoSave() {
         let btn = document.getElementById('btnSync'); 
-        btn.innerHTML = "🔄 Đang chờ..."; btn.style.background = "linear-gradient(135deg, var(--warning) 0%, #d97706 100%)";
+        btn.innerHTML = "🔄 Đang chờ..."; 
+        btn.style.background = "linear-gradient(135deg, var(--warning) 0%, #d97706 100%)";
         clearTimeout(autoSaveTimeout); 
         autoSaveTimeout = setTimeout(() => { dongBoLenGoogleSheet(true); }, 2500); 
     }
@@ -406,15 +625,23 @@
     function dongBoLenGoogleSheet(isAuto = false) {
         if(!GOOGLE_SHEET_URL) { if(!isAuto) alert("Chưa kết nối App Script URL!"); return; }
         if (inventory.length === 0) return;
-        let btn = document.getElementById('btnSync'); btn.innerHTML = "⏳ Đang đẩy mây...";
+        let btn = document.getElementById('btnSync'); 
+        btn.innerHTML = "⏳ Đang đẩy mây...";
         
         let payload = { thoi_gian: getFormatedDate(), ton_kho: inventory, nhat_ky: historyLog };
-        fetch(GOOGLE_SHEET_URL, { method: "POST", body: JSON.stringify(payload) })
+        
+        fetch(GOOGLE_SHEET_URL, { 
+            method: "POST", 
+            body: JSON.stringify(payload) 
+        })
         .then(() => { 
-            btn.innerHTML = "☁️ Đã lưu Cloud"; btn.style.background = "var(--success-gradient)";
+            btn.innerHTML = "☁️ Đã lưu Cloud"; 
+            btn.style.background = "var(--success-gradient)";
             setTimeout(() => { btn.innerHTML = "☁️ Đẩy Cloud"; }, 3000); 
         }).catch(e => { 
-            btn.innerHTML = "⚠️ Lỗi Đồng Bộ"; btn.style.background = "linear-gradient(135deg, var(--danger) 0%, #b91c1c 100%)";
+            btn.innerHTML = "⚠️ Lỗi Đồng Bộ"; 
+            btn.style.background = "linear-gradient(135deg, var(--danger) 0%, #b91c1c 100%)";
+            console.error("Lỗi Push Cloud:", e);
         });
     }
 
@@ -422,11 +649,16 @@
         if(!GOOGLE_SHEET_URL) return;
         if(!isAuto && !confirm("⚠️ Tải và ghi đè dữ liệu từ Cloud Google Sheet xuống thiết bị?")) return;
 
-        let btn = document.getElementById('btnRestore'); let oldText = btn.innerHTML; 
-        btn.innerHTML = "⏳ Đang tải..."; btn.style.opacity = "0.7";
+        let btn = document.getElementById('btnRestore'); 
+        let oldText = btn.innerHTML; 
+        btn.innerHTML = "⏳ Đang tải..."; 
+        btn.style.opacity = "0.7";
 
         fetch(GOOGLE_SHEET_URL)
-        .then(response => { if (!response.ok) throw new Error("Network error."); return response.text(); })
+        .then(response => {
+            if (!response.ok) throw new Error("Mạng bị gián đoạn.");
+            return response.text(); 
+        })
         .then(text => {
             try {
                 let data = JSON.parse(text); 
@@ -434,23 +666,34 @@
                     inventory = data.ton_kho.map(item => { item.image = item.image || DEFAULT_IMAGE; if(!item.borrowList) item.borrowList = []; return item; });
                     if(data.nhat_ky && data.nhat_ky.length > 0) historyLog = data.nhat_ky;
                     luuDuLieu(false); renderTable(); renderHistory();
-                    if(!isAuto) {
-                        ghiLog("HỆ THỐNG", "Tải dữ liệu", "Cloud ➔ Máy", inventory.length, "var(--primary)", "Đồng bộ hóa");
-                        alert(`✅ Đồng bộ thành công ${inventory.length} sản phẩm từ Cloud!`);
-                    }
-                } else { if(!isAuto) alert("❌ Dữ liệu trên Google Sheet hiện đang rỗng."); }
-            } catch (err) { if(!isAuto) alert("❌ Lỗi Cấu Hình App Script."); }
+                    ghiLog("HỆ THỐNG", "Tải dữ liệu", "Cloud ➔ Máy", inventory.length, "var(--primary)", "Đồng bộ hóa");
+                    if(!isAuto) alert(`✅ Đồng bộ thành công ${inventory.length} sản phẩm từ Cloud!`);
+                } else { 
+                    if(!isAuto) alert("❌ Dữ liệu trên Google Sheet hiện đang rỗng."); 
+                }
+            } catch (err) {
+                console.error("Lỗi Parse JSON:", err);
+                if(!isAuto) alert("❌ Lỗi Cấu Hình App Script: Vui lòng Deploy App Script chọn 'Who has access: ANYONE'.");
+            }
         })
-        .catch(e => { if(!isAuto) alert("❌ Không có kết nối mạng."); })
-        .finally(() => { btn.innerHTML = oldText; btn.style.opacity = "1"; });
+        .catch(e => { 
+            console.error("Fetch Error:", e);
+            if(!isAuto) alert("❌ Không có kết nối mạng hoặc lỗi bảo mật CORS."); 
+        })
+        .finally(() => { 
+            btn.innerHTML = oldText; 
+            btn.style.opacity = "1"; 
+        });
     }
 
     // ====================================================================
-    // CÁC HÀM TIỆN ÍCH & RENDER DỮ LIỆU
+    // CÁC HÀM TIỆN ÍCH CORE
     // ====================================================================
     function compressImage(file, callback) {
-        const r = new FileReader(); r.onload = function(e) {
-            const img = new Image(); img.onload = function() {
+        const r = new FileReader();
+        r.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
                 const canvas = document.createElement('canvas'); const MAX = 150; 
                 let w = img.width, h = img.height;
                 if (w > h) { if (w > MAX) { h *= MAX / w; w = MAX; } } else { if (h > MAX) { w *= MAX / h; h = MAX; } }
@@ -460,19 +703,22 @@
         }; r.readAsDataURL(file);
     }
 
+    function chuanHoaDuLieu() { inventory.forEach(item => { if (!item.borrowList) { item.borrowList = []; if (item.borrowedQty > 0) item.borrowList.push({ id: "old_"+Date.now(), qty: item.borrowedQty, note: "Mượn cũ", time: "" }); } if (!item.image) item.image = DEFAULT_IMAGE; }); luuDuLieu(false); }
+    chuanHoaDuLieu();
+
     function getFormatedDate() { return new Date().toLocaleString('vi-VN', { hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
-    function luuDuLieu(isSync = true) { try { localStorage.setItem('khoHangPro', JSON.stringify(inventory)); if(isSync) triggerAutoSave(); } catch(e) { alert("⚠️ Bộ nhớ cache của trình duyệt đã đầy!"); } }
+    function luuDuLieu(isSync = true) { try { localStorage.setItem('khoHangPro', JSON.stringify(inventory)); if(isSync) triggerAutoSave(); } catch(e) { alert("⚠️ Bộ nhớ cache đầy!"); } }
     function luuLichSu() { try { if (historyLog.length > 300) historyLog = historyLog.slice(0, 300); localStorage.setItem('khoHangHistory', JSON.stringify(historyLog)); } catch(e) {} }
     function ghiLog(sku, name, type, qty, color, noteText) { historyLog.unshift({ time: getFormatedDate(), sku: sku, name: name, type: type, qty: qty, color: color, note: noteText ? noteText.trim() : "Không có", returnedQty: 0 }); luuLichSu(); renderHistory(); }
 
     function suaThongTin(index, field) {
         const item = inventory[index];
         if (field === 'sku') {
-            let n = prompt(`Nhập mã SKU bằng phím cho [${item.sku || 'Trống'}]:`, item.sku || '');
+            let n = prompt(`Nhập mã bằng phím cho [${item.sku || 'Trống'}]:`, item.sku || '');
             if (n !== null) { 
                 let decodedText = n.trim().toUpperCase();
                 let isDuplicate = inventory.some(i => i.sku === decodedText && i.id !== item.id);
-                if (isDuplicate) { alert(`⚠️ LỖI: Mã SKU [${decodedText}] đã tồn tại ở sản phẩm khác!`); return; }
+                if (isDuplicate) { alert(`⚠️ LỖI: Mã SKU [${decodedText}] đã tồn tại!`); return; }
                 let o = item.sku||'Trống'; item.sku = decodedText; luuDuLieu(); ghiLog(item.sku, item.name, "Sửa SKU", "-", "var(--primary)", `[${o}] ➔ [${item.sku}]`); searchProduct(); 
             }
         } else if (field === 'name') {
@@ -499,24 +745,12 @@
             if (item.qty === 0) qtyDisplay = `<span style="background: #fee2e2; color: #dc2626; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight:bold;">HẾT HÀNG</span>`;
             else if (item.qty <= 5) qtyDisplay = `<span class="qty-badge" style="color: var(--danger);">${item.qty}</span>`;
 
-            // Giao diện Chi tiết mượn mới
             let listMuon = '';
             if (item.borrowList && item.borrowList.length > 0) {
-                listMuon += `<div class="borrow-summary has-borrow">📦 Tổng đang mượn: <b>${item.borrowedQty||0}</b></div><div class="borrow-list">`;
-                item.borrowList.forEach((muc, bIdx) => { 
-                    listMuon += `
-                        <div class="borrow-item">
-                            <div class="borrow-info" title="${muc.note}">
-                                <span class="borrow-note">${muc.note}</span>
-                                <span class="borrow-qty">Số lượng: <b style="color:var(--primary); font-size:13px;">${muc.qty}</b></span>
-                            </div>
-                            <button class="btn-return-mini" onclick="traHang(${realIdx}, ${bIdx})">↩ Nhận lại</button>
-                        </div>`; 
-                });
+                listMuon += `<div class="borrow-list">`;
+                item.borrowList.forEach((muc, bIdx) => { listMuon += `<div class="borrow-item"><span class="truncate" title="${muc.note}">📦 <b>${muc.qty}</b> - ${muc.note}</span><button class="btn-return-mini" onclick="traHang(${realIdx}, ${bIdx})">Trả</button></div>`; });
                 listMuon += `</div>`;
-            } else {
-                listMuon = `<div class="borrow-summary">✔️ Không có ai mượn</div>`;
-            }
+            } else listMuon = `<span style="color: #cbd5e1;">—</span>`;
 
             tbody.innerHTML += `
                 <tr>
@@ -531,7 +765,7 @@
                     </td>
                     <td class="cell-left"><div class="flex-left"><span class="name-text">${item.name}</span><button class="edit-icon" onclick="suaThongTin(${realIdx}, 'name')">✏️</button></div></td>
                     <td class="cell-center">${qtyDisplay}</td>
-                    <td class="cell-left" style="min-width: 220px; vertical-align: top;">${listMuon}</td>
+                    <td class="cell-left"><div style="font-size: 11px; color: var(--purple); font-weight: 700; margin-bottom: 4px;">Tổng đang mượn: ${item.borrowedQty||0}</div>${listMuon}</td>
                     <td class="cell-center">
                         <div class="action-group">
                             <button class="btn-compact add" onclick="nhapHang(${realIdx})">➕ Nhập</button>
@@ -547,9 +781,10 @@
     function renderHistory() {
         const tbody = document.querySelector('#historyTable tbody'); tbody.innerHTML = '';
         if (historyLog.length === 0) { tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--slate-600);">Lịch sử giao dịch trống.</td></tr>`; return; }
+
         historyLog.forEach((log, idx) => {
             let hd = `<span class="log-tag" style="background-color: ${log.color};">${log.type}</span>`;
-            if (log.type === "Xuất kho (-)" || log.type === "Xuất (Lô)" || log.type === "POS Xuất" || log.type === "Xuất 📤") {
+            if (log.type === "Xuất hàng (-)" || log.type === "Xuất (Lô)") {
                 let max = log.qty - (log.returnedQty || 0);
                 if (max > 0) hd += `<br><button class="btn-return-mini" style="background: var(--success); margin-top: 5px; padding: 4px 8px;" onclick="nhapLai(${idx})">↩ Hoàn nhập (${max})</button>`;
                 else hd += `<br><span style="color: var(--success); font-size: 10px; font-weight: bold;">✓ Hoàn tất</span>`;
@@ -559,10 +794,10 @@
     }
 
     function nhapLai(idx) {
-        const log = historyLog[idx]; const pIdx = inventory.findIndex(i => i.sku === log.sku); if (pIdx === -1) return alert("Không tìm thấy sản phẩm có SKU này trong hệ thống!");
+        const log = historyLog[idx]; const pIdx = inventory.findIndex(i => i.sku === log.sku); if (pIdx === -1) return alert("Không tìm thấy sản phẩm!");
         let max = log.qty - (log.returnedQty || 0);
         let sl = parseInt(prompt(`Hoàn lại hàng lỗi/hủy đơn cho mã ${log.sku}\nTối đa khả dụng: ${max}\nNhập số lượng thực tế:`, max)); if (isNaN(sl) || sl <= 0 || sl > max) return;
-        let nt = prompt("Nhập lý do hoàn nhập:", `Khách trả lại (từ GD ${log.time})`); if (nt === null) return;
+        let nt = prompt("Nhập lý do hoàn nhập:", `Khách hủy/trả từ đơn xuất lúc ${log.time}`); if (nt === null) return;
         inventory[pIdx].qty += sl; log.returnedQty = (log.returnedQty || 0) + sl; luuDuLieu();
         ghiLog(log.sku, log.name, "Nhập lại (↩)", sl, "var(--success)", nt || 'Hoàn nhập từ lịch sử'); searchProduct();
     }
@@ -575,6 +810,7 @@
         const qty = parseInt(document.getElementById('productQty').value); const file = document.getElementById('productImage').files[0];
         let exIdx = sku !== "" ? inventory.findIndex(i => i.sku === sku) : inventory.findIndex(i => i.name.toLowerCase() === name.toLowerCase());
         const fSku = sku !== "" ? sku : (exIdx !== -1 ? inventory[exIdx].sku : "SP" + Math.floor(1000 + Math.random() * 9000));
+
         if (exIdx !== -1) {
             inventory[exIdx].qty += qty;
             if (file) compressImage(file, data => { inventory[exIdx].image = data; doneFormCu(exIdx, fSku, qty); }); else doneFormCu(exIdx, fSku, qty);
@@ -584,114 +820,29 @@
     });
 
     function taoMoi(sku, name, qty, img) { inventory.unshift({ id: Date.now().toString(), sku: sku, name: name, qty: qty, borrowedQty: 0, borrowList: [], image: img }); luuDuLieu(); ghiLog(sku, name, "Khởi tạo mã", qty, "var(--primary)", "Khởi tạo mã hàng mới"); renderTable(); document.getElementById('inventoryForm').reset(); }
-    function doneFormCu(idx, sku, qty) { luuDuLieu(); ghiLog(sku, inventory[idx].name, "Nhập kho (+)", qty, "var(--success)", "Cộng dồn số lượng qua form chính"); alert(`Sản phẩm đã tồn tại. Đã tự động cộng dồn +${qty} vào kho!`); renderTable(); document.getElementById('inventoryForm').reset(); }
+    function doneFormCu(idx, sku, qty) { luuDuLieu(); ghiLog(sku, inventory[idx].name, "Nhập (+)", qty, "var(--success)", "Cộng dồn số lượng qua form chính"); alert(`Sản phẩm đã tồn tại. Đã tự động cộng dồn +${qty} vào kho!`); renderTable(); document.getElementById('inventoryForm').reset(); }
+
+    function nhapHang(idx) { let i = inventory[idx]; let s = parseInt(prompt(`Nhập thêm số lượng cho [${i.name}]:`, "1")); if(s>0){ let n=prompt("Lý do / Ghi chú nhập kho:"); if(n !== null){ i.qty+=s; luuDuLieu(); ghiLog(i.sku, i.name, "Nhập kho (+)", s, "var(--success)", n); searchProduct(); } } }
+    function xuatHang(idx) { let i = inventory[idx]; let s = parseInt(prompt(`Nhập số lượng xuất kho cho [${i.name}]:`, "1")); if(s>0 && s<=i.qty){ let n=prompt("Lý do xuất kho (Bán lẻ / Trả hàng...):"); if(n !== null){ i.qty-=s; luuDuLieu(); ghiLog(i.sku, i.name, "Xuất kho (-)", s, "var(--warning)", n); searchProduct(); } } else if(s>i.qty) alert("Số lượng xuất vượt quá tồn kho hiện tại!"); }
+    function muonHang(idx) { let i = inventory[idx]; let s = parseInt(prompt(`Số lượng cho mượn của [${i.name}]:`, "1")); if(s>0 && s<=i.qty){ let n=prompt("Tên đơn vị / Người mượn hàng:"); if(n){ i.qty-=s; i.borrowedQty=(i.borrowedQty||0)+s; i.borrowList.push({id:Date.now().toString(), qty:s, note:n.trim(), time:getFormatedDate()}); luuDuLieu(); ghiLog(i.sku, i.name, "Cho mượn (➔)", s, "#fd7e14", n); searchProduct(); } } }
+    function traHang(pIdx, bIdx) { let i = inventory[pIdx], m = i.borrowList[bIdx]; let s = parseInt(prompt(`Nhận lại hàng từ: ${m.note}\nSố lượng nhập trả:`, m.qty)); if(s>0 && s<=m.qty){ i.qty+=s; m.qty-=s; i.borrowedQty-=s; if(m.qty===0) i.borrowList.splice(bIdx, 1); luuDuLieu(); ghiLog(i.sku, i.name, "Nhận trả (🔀)", s, "var(--purple)", `Hoàn trả từ danh mục mượn của [${m.note}]`); searchProduct(); } }
     function xoaHang(idx) { if (confirm(`Bạn chắc chắn muốn xóa vĩnh viễn sản phẩm: ${inventory[idx].name}?`)) { let n=prompt("Nhập lý do xóa mã hàng:"); if(n !== null){ ghiLog(inventory[idx].sku, inventory[idx].name, "Xóa 🗑️", "-", "var(--dark)", n); inventory.splice(idx, 1); luuDuLieu(); searchProduct(); } } }
     function searchProduct() { const k = document.getElementById('searchInput').value.toLowerCase(); renderTable(inventory.filter(i => i.name.toLowerCase().includes(k) || (i.sku && i.sku.toLowerCase().includes(k)))); }
     function xoaLichSu() { if(confirm("Xóa vĩnh viễn toàn bộ nhật ký?")) { historyLog = []; luuLichSu(); renderHistory(); triggerAutoSave(); } }
 
-    // ====================================================================
-    // HỆ THỐNG POPUP XỬ LÝ CHUYÊN NGHIỆP (NHẬP / XUẤT / MƯỢN / TRẢ)
-    // ====================================================================
-    let pendingAction = { type: '', itemIdx: -1, borrowIdx: -1 };
-
-    function openActionModal(type, itemIdx, borrowIdx = -1) {
-        pendingAction = { type, itemIdx, borrowIdx };
-        const item = inventory[itemIdx];
-        
-        const titleEl = document.getElementById('actionModalTitle');
-        const nameEl = document.getElementById('actionModalProductName');
-        const qtyEl = document.getElementById('actionModalQty');
-        const noteLabelEl = document.getElementById('actionModalNoteLabel');
-        const noteEl = document.getElementById('actionModalNote');
-        const maxQtyEl = document.getElementById('actionModalMaxQty');
-        const btnEl = document.getElementById('actionModalConfirmBtn');
-
-        nameEl.innerText = item.name;
-        qtyEl.value = 1;
-        noteEl.value = '';
-        maxQtyEl.innerText = '';
-        
-        if (type === 'nhap') {
-            titleEl.innerHTML = "📥 NHẬP HÀNG KHO"; titleEl.style.color = "var(--success)";
-            noteLabelEl.innerText = "Lý do / Người giao hàng (Tùy chọn):";
-            btnEl.style.background = "var(--success-gradient)"; btnEl.innerText = "Xác Nhận Cộng (+)";
-        } else if (type === 'xuat') {
-            titleEl.innerHTML = "📤 XUẤT HÀNG KHO"; titleEl.style.color = "var(--warning)";
-            noteLabelEl.innerText = "Lý do / Người nhận hàng (Bắt buộc):";
-            maxQtyEl.innerText = `Kho hiện có: ${item.qty}`; qtyEl.max = item.qty;
-            btnEl.style.background = "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"; btnEl.innerText = "Xác Nhận Trừ (-)";
-        } else if (type === 'muon') {
-            titleEl.innerHTML = "📦 CHO MƯỢN HÀNG"; titleEl.style.color = "var(--purple)";
-            noteLabelEl.innerText = "Người mượn / Đơn vị (Bắt buộc):";
-            maxQtyEl.innerText = `Kho có thể cho mượn: ${item.qty}`; qtyEl.max = item.qty;
-            btnEl.style.background = "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)"; btnEl.innerText = "Xác Nhận Mượn";
-        } else if (type === 'tra') {
-            const borrowData = item.borrowList[borrowIdx];
-            titleEl.innerHTML = "↩️ NHẬN TRẢ HÀNG"; titleEl.style.color = "var(--primary)";
-            nameEl.innerText = `${item.name}\n(Hoàn trả từ: ${borrowData.note})`;
-            noteLabelEl.innerText = "Ghi chú thêm (Tùy chọn):";
-            qtyEl.value = borrowData.qty; qtyEl.max = borrowData.qty;
-            maxQtyEl.innerText = `Tối đa cần trả: ${borrowData.qty}`;
-            btnEl.style.background = "var(--primary-gradient)"; btnEl.innerText = "Nhận Lại Hàng";
-        }
-
-        document.getElementById('actionModal').style.display = 'flex';
-        setTimeout(() => { document.getElementById('actionModalQty').focus(); document.getElementById('actionModalQty').select(); }, 100);
+    function boChonTatCa() {
+        let sa = document.getElementById('selectAll'); if (sa) sa.checked = false;
+        document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = false);
+        updateBulkUI();
     }
 
-    function closeActionModal() { document.getElementById('actionModal').style.display = 'none'; }
-
-    function submitActionModal() {
-        const qty = parseInt(document.getElementById('actionModalQty').value);
-        const note = document.getElementById('actionModalNote').value.trim();
-        const { type, itemIdx, borrowIdx } = pendingAction;
-        const item = inventory[itemIdx];
-
-        if (isNaN(qty) || qty <= 0) return alert("Vui lòng nhập số lượng hợp lệ (lớn hơn 0)!");
-
-        if (type === 'nhap') {
-            item.qty += qty;
-            luuDuLieu(); ghiLog(item.sku, item.name, "Nhập kho (+)", qty, "var(--success)", note || "Giao dịch không ghi chú");
-        } 
-        else if (type === 'xuat') {
-            if (qty > item.qty) return alert("❌ Số lượng xuất vượt quá tồn kho hiện tại!");
-            if (!note) return alert("⚠️ Vui lòng nhập lý do hoặc người nhận hàng!");
-            item.qty -= qty;
-            luuDuLieu(); ghiLog(item.sku, item.name, "Xuất kho (-)", qty, "var(--warning)", note);
-        } 
-        else if (type === 'muon') {
-            if (qty > item.qty) return alert("❌ Số lượng cho mượn vượt quá tồn kho hiện tại!");
-            if (!note) return alert("⚠️ Vui lòng nhập Tên người / Đơn vị mượn hàng!");
-            item.qty -= qty; item.borrowedQty = (item.borrowedQty || 0) + qty;
-            item.borrowList.push({ id: Date.now().toString(), qty: qty, note: note, time: getFormatedDate() });
-            luuDuLieu(); ghiLog(item.sku, item.name, "Cho mượn (➔)", qty, "#fd7e14", note);
-        } 
-        else if (type === 'tra') {
-            const borrowData = item.borrowList[borrowIdx];
-            if (qty > borrowData.qty) return alert("❌ Số lượng nhập lại lớn hơn số lượng khách đã mượn!");
-            item.qty += qty; borrowData.qty -= qty; item.borrowedQty -= qty;
-            if (borrowData.qty === 0) item.borrowList.splice(borrowIdx, 1);
-            luuDuLieu(); ghiLog(item.sku, item.name, "Nhận trả (🔀)", qty, "var(--purple)", `Hoàn trả từ [${borrowData.note}]` + (note ? ` - ${note}` : ''));
-        }
-
-        searchProduct();
-        closeActionModal();
+    function toggleSelectAll() {
+        let st = document.getElementById('selectAll').checked;
+        document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = st);
+        updateBulkUI();
     }
 
-    document.getElementById("actionModalQty").addEventListener("keypress", function(e) { if (e.key === "Enter") submitActionModal(); });
-    document.getElementById("actionModalNote").addEventListener("keypress", function(e) { if (e.key === "Enter") submitActionModal(); });
-
-    function nhapHang(idx) { openActionModal('nhap', idx); }
-    function xuatHang(idx) { openActionModal('xuat', idx); }
-    function muonHang(idx) { openActionModal('muon', idx); }
-    function traHang(pIdx, bIdx) { openActionModal('tra', pIdx, bIdx); }
-
-    // ====================================================================
-    // THAO TÁC HÀNG LOẠT LÔ & EXCEL
-    // ====================================================================
-    function boChonTatCa() { let sa = document.getElementById('selectAll'); if (sa) sa.checked = false; document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = false); updateBulkUI(); }
-    function toggleSelectAll() { let st = document.getElementById('selectAll').checked; document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = st); updateBulkUI(); }
-    document.addEventListener('keydown', function(e) { if(e.key === 'Escape') { closeBulkModal(); closeScannerModal(); closeActionModal(); } });
+    document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeBulkModal(); });
 
     function updateBulkUI() {
         const cks = document.querySelectorAll('.item-checkbox:checked');
@@ -700,22 +851,41 @@
     }
 
     let currentBulkType = ''; let currentBulkItems = [];
+
     function openBulkModal(loai) {
         const cks = document.querySelectorAll('.item-checkbox:checked'); if (cks.length === 0) return;
         currentBulkType = loai; currentBulkItems = Array.from(cks).map(cb => parseInt(cb.value));
+
         let an = loai === 'nhap' ? 'NHẬP HÀNG LOẠT' : (loai === 'xuat' ? 'XUẤT HÀNG LOẠT' : 'CHO MƯỢN HÀNG LOẠT');
         let cl = loai === 'nhap' ? 'var(--success)' : (loai === 'xuat' ? 'var(--warning)' : 'var(--purple)');
         let bc = loai === 'nhap' ? 'var(--success-gradient)' : (loai === 'xuat' ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)');
+        
         document.getElementById('bulkModalTitle').innerText = `${an} (${currentBulkItems.length} MÓN)`;
         document.getElementById('bulkModalTitle').style.color = cl;
         document.getElementById('bulkModalConfirmBtn').style.background = bc;
         document.getElementById('bulkModalNote').value = '';
+
         const tbody = document.getElementById('bulkModalBody'); tbody.innerHTML = '';
+
         currentBulkItems.forEach(idx => {
             const item = inventory[idx];
             const max = (loai === 'xuat' || loai === 'muon') ? `<span style="font-size:12px; color:var(--danger); font-weight:700; white-space:nowrap;">Tồn: ${item.qty}</span>` : '';
-            tbody.innerHTML += `<div class="bulk-item-row"><div class="bulk-item-name"><span style="color:var(--primary); font-size:11px; font-weight:700; letter-spacing:0.5px;">${item.sku || '---'}</span><br>${item.name}</div><div class="bulk-item-qty-container">${max}<input type="number" class="bulk-item-qty" id="bulk_qty_${idx}" min="1" value="1" placeholder="SL"><input type="text" class="bulk-item-note" id="bulk_note_${idx}" placeholder="Ghi chú riêng lẻ (nếu có)..."></div></div>`;
+            
+            tbody.innerHTML += `
+                <div class="bulk-item-row">
+                    <div class="bulk-item-name">
+                        <span style="color:var(--primary); font-size:11px; font-weight:700; letter-spacing:0.5px;">${item.sku || '---'}</span><br>
+                        ${item.name}
+                    </div>
+                    <div class="bulk-item-qty-container">
+                        ${max}
+                        <input type="number" class="bulk-item-qty" id="bulk_qty_${idx}" min="1" value="1" placeholder="SL">
+                        <input type="text" class="bulk-item-note" id="bulk_note_${idx}" placeholder="Ghi chú riêng lẻ (nếu có)...">
+                    </div>
+                </div>
+            `;
         });
+
         document.getElementById('bulkModal').style.display = 'flex';
     }
 
@@ -724,208 +894,185 @@
     function confirmBulkAction() {
         let gNote = document.getElementById('bulkModalNote').value.trim();
         let sCount = 0; let fails = []; let acts = [];
+
         for (let idx of currentBulkItems) {
             let iEl = document.getElementById(`bulk_qty_${idx}`); let nEl = document.getElementById(`bulk_note_${idx}`);
             let sl = parseInt(iEl.value); let iNote = nEl ? nEl.value.trim() : ''; let item = inventory[idx];
+
             if (isNaN(sl) || sl <= 0) { alert(`Vui lòng nhập đúng số lượng cho sản phẩm: "${item.name}"`); iEl.focus(); return; }
             if ((currentBulkType === 'xuat' || currentBulkType === 'muon') && sl > item.qty) { fails.push(`- ${item.name} (Cần: ${sl} / Hiện có: ${item.qty})`); continue; }
-            let fn = ""; if (gNote && iNote) fn = `${gNote} (${iNote})`; else if (gNote) fn = gNote; else if (iNote) fn = iNote;
+
+            let fn = "";
+            if (gNote && iNote) fn = `${gNote} (${iNote})`; else if (gNote) fn = gNote; else if (iNote) fn = iNote;
+
             acts.push({ item: item, sl: sl, note: fn });
         }
+
         acts.forEach(a => {
-            if (currentBulkType === 'nhap') { a.item.qty += a.sl; ghiLog(a.item.sku, a.item.name, "Nhập (Lô)", a.sl, "var(--success)", a.note); sCount++; } 
-            else if (currentBulkType === 'xuat') { a.item.qty -= a.sl; ghiLog(a.item.sku, a.item.name, "Xuất (Lô)", a.sl, "var(--warning)", a.note); sCount++; } 
-            else if (currentBulkType === 'muon') {
+            if (currentBulkType === 'nhap') {
+                a.item.qty += a.sl; ghiLog(a.item.sku, a.item.name, "Nhập (Lô)", a.sl, "var(--success)", a.note); sCount++;
+            } else if (currentBulkType === 'xuat') {
+                a.item.qty -= a.sl; ghiLog(a.item.sku, a.item.name, "Xuất (Lô)", a.sl, "var(--warning)", a.note); sCount++;
+            } else if (currentBulkType === 'muon') {
                 a.item.qty -= a.sl; a.item.borrowedQty = (a.item.borrowedQty || 0) + a.sl;
                 a.item.borrowList.push({ id: Date.now()+"_"+Math.random().toString(36).substr(2,4), qty: a.sl, note: a.note || "Mượn theo lô", time: getFormatedDate() });
                 ghiLog(a.item.sku, a.item.name, "Mượn (Lô)", a.sl, "#fd7e14", a.note); sCount++;
             }
         });
-        if (sCount > 0) { luuDuLieu(); searchProduct(); closeBulkModal(); boChonTatCa(); }
+
+        if (sCount > 0) { luuDuLieu(); searchProduct(); closeBulkModal(); }
         if (fails.length > 0) alert(`✅ Đã thực hiện thành công trên ${sCount} sản phẩm!\n\n⚠️ TỪ CHỐI ${fails.length} SẢN PHẨM (Do thiếu tồn kho):\n${fails.join("\n")}`);
     }
 
     function xuatFileKiemKho() {
-        let currentInventory = [];
-        try {
-            let localData = localStorage.getItem('khoHangPro');
-            if (localData) currentInventory = JSON.parse(localData);
-            else currentInventory = typeof inventory !== 'undefined' ? inventory : [];
-        } catch (e) { currentInventory = typeof inventory !== 'undefined' ? inventory : []; }
-
-        let date = new Date();
-        let dateStr = date.toLocaleDateString('vi-VN') + " " + date.toLocaleTimeString('vi-VN');
-        let fileNameDate = dateStr.replace(/[\/ :]/g, "_");
-
-        let html = `
-        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-        <head>
-            <meta charset="utf-8">
-            <style>
-                table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; }
-                th, td { border: 1px solid #000000; padding: 8px; }
-                th { background-color: #EAEEF3; font-weight: bold; text-align: center; }
-                .title { font-size: 18px; font-weight: bold; text-align: center; background-color: #d1d5db; }
-                .total-row { font-weight: bold; background-color: #f1f5f9; }
-            </style>
-        </head>
-        <body>
-            <table>
-                <tr><td colspan="9" class="title">Hi SPORTS - DANH SÁCH KIỂM KHO VẬN (CẬP NHẬT LIÊN TỤC)</td></tr>
-                <tr><td colspan="9">Ngày xuất báo cáo: ${dateStr}</td></tr>
-                <tr><td colspan="9"></td></tr>
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Mã SKU</th>
-                        <th>Tên Sản Phẩm</th>
-                        <th>Tồn Sẵn Sàng</th>
-                        <th>Đang Cho Mượn</th>
-                        <th>Tổng Kho Hệ Thống</th>
-                        <th>Thực Tế (Đếm tay)</th>
-                        <th>Chênh Lệch</th>
-                        <th>Ghi Chú</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
-        currentInventory.forEach((item, index) => { 
-            let r = index + 6; 
-            let readyQty = item.qty || 0;
-            let borrowedQty = item.borrowedQty || 0;
-            let totalSysQty = readyQty + borrowedQty;
-            html += `
-                    <tr>
-                        <td align="center">${index + 1}</td>
-                        <td align="center"><b>${item.sku || ''}</b></td>
-                        <td>${item.name}</td>
-                        <td align="right">${readyQty}</td>
-                        <td align="right">${borrowedQty}</td>
-                        <td align="right" style="color: #4f46e5;"><b>${totalSysQty}</b></td>
-                        <td></td>
-                        <td align="right">=IF(G${r}="","",G${r}-F${r})</td>
-                        <td></td>
-                    </tr>
-            `; 
+        let now = new Date();
+        let html = `<html><head><meta charset="utf-8"><style>table{border-collapse:collapse;} th,td{border:1px solid #000;padding:6px;font-family:Arial;}</style></head><body><h2>BẢNG KIỂM KHO SẢN PHẨM HI SPORTS</h2><table>`;
+        html += `<thead><tr><th>STT</th><th>Mã SKU</th><th>Tên Sản Phẩm</th><th>Tồn Kho Hệ Thống</th><th>Thực Tế (Đếm tay)</th><th>Chênh Lệch</th><th>Ghi Chú</th></tr></thead><tbody>`;
+        inventory.forEach((item, index) => { 
+            let r = index + 3; 
+            html += `<tr><td align="center">${index + 1}</td><td align="center"><b>${item.sku || ''}</b></td><td>${item.name}</td><td align="right">${item.qty}</td><td></td><td align="right">=IF(E${r}="","",E${r}-D${r})</td><td></td></tr>`; 
         });
-        
-        let start = 6, end = 5 + currentInventory.length;
-        html += `
-                <tr class="total-row">
-                    <td colspan="3" align="right">TỔNG CỘNG:</td>
-                    <td align="right">=SUM(D${start}:D${end})</td>
-                    <td align="right">=SUM(E${start}:E${end})</td>
-                    <td align="right">=SUM(F${start}:F${end})</td>
-                    <td></td>
-                    <td align="right">=SUM(H${start}:H${end})</td>
-                    <td></td>
-                </tr>
-                </tbody>
-            </table>
-        </body>
-        </html>
-        `;
+        let start = 3, end = 2 + inventory.length;
+        html += `<tr style="font-weight:bold; background:#f1f5f9;"><td></td><td></td><td align="right">TỔNG CỘNG TỒN:</td><td align="right">=SUM(D${start}:D${end})</td><td align="right">=SUM(E${start}:E${end})</td><td align="right">=SUM(F${start}:F${end})</td><td></td></tr></tbody></table></body></html>`;
         
         let blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
         let a = document.createElement('a'); a.href = URL.createObjectURL(blob); 
-        a.download = `KiemKho_HiSports_${fileNameDate}.xls`;
+        a.download = 'HiSports_KiemKho_' + now.toISOString().slice(0,10) + '.xls';
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
 
     // ====================================================================
-    // HỆ THỐNG QUÉT MÃ CAMERA
+    // HỆ THỐNG QUÉT MÃ CAMERA (HTML5-QRCODE)
     // ====================================================================
-    let html5QrCode = null; let editingSkuProductId = null; let currentScanMode = 'nhap'; let isScanningPaused = false; 
+    let html5QrCode = null;
+    let editingSkuProductId = null;
 
     function openScannerModal(mode = 'nhap', productId = null) {
-        if (!audioCtx) audioCtx = new AudioContextClass();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
         document.getElementById('scannerModal').style.display = 'flex';
         setScanMode(mode, productId); 
         setTimeout(() => { startCameraScanner(); }, 300);
     }
-    function closeScannerModal() { document.getElementById('scannerModal').style.display = 'none'; stopCameraScanner(); }
+
+    function closeScannerModal() {
+        document.getElementById('scannerModal').style.display = 'none';
+        stopCameraScanner();
+    }
 
     function setScanMode(mode, productId = null) {
-        currentScanMode = mode; editingSkuProductId = productId; isScanningPaused = false;
-        document.querySelectorAll('.scan-mode-btn').forEach(btn => { btn.classList.remove('active'); if (btn.getAttribute('data-mode') === mode) btn.classList.add('active'); });
-        let hint = document.getElementById('scanner-hint'), statusEl = document.getElementById('qr-status'), noteInput = document.getElementById('scanNoteInput'), laser = document.getElementById('scanner-laser'); 
-        statusEl.style.display = 'block'; statusEl.innerText = "Sẵn sàng quét mã..."; statusEl.style.backgroundColor = "#f8fafc"; statusEl.style.color = "var(--primary)";
-        if(noteInput) { noteInput.style.display = 'block'; noteInput.value = ''; }
+        currentScanMode = mode;
+        editingSkuProductId = productId;
+        
+        document.querySelectorAll('.scan-mode-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-mode') === mode) btn.classList.add('active');
+        });
 
-        if (mode === 'edit_sku') { hint.innerText = "Đưa mã vạch vào khung camera để thay thế SKU."; hint.style.color = "var(--primary)"; laser.style.background = "var(--primary)"; laser.style.boxShadow = "0 0 12px 2px rgba(79, 70, 229, 0.8)"; statusEl.style.display = 'none'; if(noteInput) noteInput.style.display = 'none'; } 
-        else if (mode === 'pos') { hint.innerText = "Quét đến đâu tự động trừ kho đến đó (POS)."; hint.style.color = "#e11d48"; laser.style.background = "#e11d48"; laser.style.boxShadow = "0 0 12px 2px rgba(225, 29, 72, 0.8)"; if(noteInput) noteInput.placeholder = "Ghi chú POS (tuỳ chọn)..."; } 
-        else if (mode === 'nhap') { hint.innerText = "Quét mã để tự động CỘNG (+1) vào kho."; hint.style.color = "var(--success)"; laser.style.background = "#22c55e"; laser.style.boxShadow = "0 0 12px 2px rgba(34, 197, 94, 0.8)"; if(noteInput) noteInput.placeholder = "Tên người giao hoặc lý do nhập (tuỳ chọn)..."; } 
-        else if (mode === 'xuat') { hint.innerText = "Quét mã để tự động TRỪ (-1) khỏi kho."; hint.style.color = "var(--warning)"; laser.style.background = "#f59e0b"; laser.style.boxShadow = "0 0 12px 2px rgba(245, 158, 11, 0.8)"; if(noteInput) noteInput.placeholder = "Tên người nhận hoặc lý do xuất (tuỳ chọn)..."; } 
-        else if (mode === 'muon') { hint.innerText = "Quét mã để tự động ghi nhận MƯỢN (-1) khỏi kho."; hint.style.color = "#fd7e14"; laser.style.background = "#fd7e14"; laser.style.boxShadow = "0 0 12px 2px rgba(253, 126, 20, 0.8)"; if(noteInput) noteInput.placeholder = "Tên người mượn (Khuyên dùng để dễ quản lý)..."; }
+        let hint = document.getElementById('scanner-hint');
+        if (mode === 'edit_sku') {
+            hint.innerText = "Đưa mã vạch vào vùng camera để thay thế SKU cho sản phẩm.";
+            hint.style.color = "var(--primary)";
+        } else {
+            hint.innerText = "Đưa mã vạch hoặc mã QR vào vùng camera để hệ thống tự nhận diện SKU.";
+            hint.style.color = "var(--slate-600)";
+        }
     }
 
     function startCameraScanner() {
         if (html5QrCode && html5QrCode.isScanning) return;
         html5QrCode = new Html5Qrcode("scanner-view");
-        const config = { fps: 15, qrbox: function(width, height) { return { width: Math.floor(width * 0.85), height: Math.floor(height * 0.6) }; }, aspectRatio: 1.0 };
-        html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure).then(() => { document.getElementById('scanner-laser').style.display = 'block'; }).catch(err => { alert("⚠️ Không thể mở Camera!\nLưu ý: Bạn phải cấp quyền truy cập Camera cho trình duyệt."); closeScannerModal(); });
+        const config = { 
+            fps: 15, 
+            qrbox: function(width, height) { return { width: Math.floor(width * 0.85), height: Math.floor(height * 0.5) }; },
+            aspectRatio: 1.0
+        };
+        html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
+        .catch(err => {
+            console.error(err);
+            alert("⚠️ Không thể mở Camera! Vui lòng cấp quyền camera và đảm bảo chạy trên giao thức HTTPS bảo mật.");
+            closeScannerModal();
+        });
     }
 
-    function stopCameraScanner() { if (html5QrCode) { html5QrCode.stop().then(() => { html5QrCode = null; }).catch(err => console.error(err)); } document.getElementById('scanner-laser').style.display = 'none'; }
+    function stopCameraScanner() {
+        if (html5QrCode) {
+            html5QrCode.stop().then(() => { html5QrCode = null; }).catch(err => console.error(err));
+        }
+    }
 
     function onScanSuccess(decodedText, decodedResult) {
-        if (isScanningPaused) return; 
+        if (html5QrCode) html5QrCode.pause(true);
         const skuScanned = decodedText.trim().toUpperCase();
-        let statusEl = document.getElementById('qr-status'); let scanNote = document.getElementById('scanNoteInput') ? document.getElementById('scanNoteInput').value.trim() : "";
-        if (!scanNote) scanNote = "Quét mã tự động";
-
+        
         if (currentScanMode === 'edit_sku') {
-            if (html5QrCode) html5QrCode.pause(true);
             let itemIndex = inventory.findIndex(i => i.id === editingSkuProductId);
             if (itemIndex !== -1) {
                 let item = inventory[itemIndex];
                 let isDuplicate = inventory.some(i => i.sku === skuScanned && i.id !== editingSkuProductId);
-                if (isDuplicate) { playBeep('error'); alert(`⚠️ LỖI: Mã SKU [${skuScanned}] đã được sử dụng cho một sản phẩm khác!`); if (html5QrCode) html5QrCode.resume(); return; }
-                playBeep('success'); let oldSku = item.sku || 'Trống'; item.sku = skuScanned; luuDuLieu(); ghiLog(item.sku, item.name, "Sửa SKU", "-", "var(--primary)", `[${oldSku}] ➔ [${item.sku}]`);
-                searchProduct(); alert(`✅ Đã cập nhật SKU thành công!`); closeScannerModal();
+                if (isDuplicate) {
+                    alert(`⚠️ LỖI: Mã SKU [${skuScanned}] đã được sử dụng cho một sản phẩm khác!`);
+                    if (html5QrCode) html5QrCode.resume();
+                    return;
+                }
+                let oldSku = item.sku || 'Trống';
+                item.sku = skuScanned; luuDuLieu();
+                ghiLog(item.sku, item.name, "Sửa SKU", "-", "var(--primary)", `Quét mã: [${oldSku}] ➔ [${item.sku}]`);
+                searchProduct(); closeScannerModal();
             }
-            return; 
+            return;
         }
 
-        isScanningPaused = true; statusEl.style.display = 'block';
-        let idx = inventory.findIndex(i => (i.sku && i.sku.toUpperCase() === skuScanned));
-
-        if (idx !== -1) {
-            let item = inventory[idx];
-            if (currentScanMode === 'nhap') {
-                playBeep('success'); item.qty += 1; luuDuLieu(true); ghiLog(item.sku, item.name, "Nhập 📥", 1, "var(--success)", scanNote);
-                statusEl.innerHTML = `✅ Đã nhập 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho: ${item.qty})</span>`; statusEl.style.backgroundColor = "#dcfce7"; statusEl.style.color = "#166534";
-            } 
-            else if (currentScanMode === 'xuat' || currentScanMode === 'pos') {
-                if (item.qty > 0) {
-                    playBeep('success'); item.qty -= 1; luuDuLieu(true); 
-                    let type = currentScanMode === 'pos' ? "POS Xuất" : "Xuất 📤"; let color = currentScanMode === 'pos' ? "#e11d48" : "var(--warning)";
-                    ghiLog(item.sku, item.name, type, 1, color, scanNote);
-                    statusEl.innerHTML = `✅ Đã xuất 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho: ${item.qty})</span>`; statusEl.style.backgroundColor = "#fef3c7"; statusEl.style.color = "#b45309";
-                } else { playBeep('error'); statusEl.innerHTML = `❌ <b>${item.name}</b> ĐÃ HẾT HÀNG!`; statusEl.style.backgroundColor = "#fee2e2"; statusEl.style.color = "#991b1b"; }
-            } 
-            else if (currentScanMode === 'muon') {
-                if (item.qty > 0) {
-                    playBeep('success'); item.qty -= 1; item.borrowedQty = (item.borrowedQty || 0) + 1;
-                    if (!item.borrowList) item.borrowList = [];
-                    let exB = item.borrowList.find(b => b.note === scanNote); if (exB && scanNote !== "Quét mã tự động") { exB.qty += 1; } else { item.borrowList.push({ id: Date.now().toString(), qty: 1, note: scanNote, time: getFormatedDate() }); }
-                    luuDuLieu(true); ghiLog(item.sku, item.name, "Mượn 📦 ➔", 1, "#fd7e14", scanNote);
-                    statusEl.innerHTML = `✅ Đã cho mượn 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho: ${item.qty})</span>`; statusEl.style.backgroundColor = "#ffedd5"; statusEl.style.color = "#c2410c";
-                } else { playBeep('error'); statusEl.innerHTML = `❌ <b>${item.name}</b> ĐÃ HẾT HÀNG!`; statusEl.style.backgroundColor = "#fee2e2"; statusEl.style.color = "#991b1b"; }
-            }
-            searchProduct();
-            setTimeout(() => { isScanningPaused = false; statusEl.innerText = "Sẵn sàng quét mã tiếp theo..."; statusEl.style.backgroundColor = "#f8fafc"; statusEl.style.color = "var(--primary)"; }, 1200);
-        } else {
-            playBeep('error'); if (html5QrCode) html5QrCode.pause(true);
-            statusEl.innerHTML = `⚠️ Mã <b>${skuScanned}</b> chưa có trong hệ thống!`; statusEl.style.backgroundColor = "#ffedd5"; statusEl.style.color = "#9a3412";
-            setTimeout(() => {
-                if (confirm(`⚠️ Mã SKU [${skuScanned}] chưa có trong kho.\nBạn có muốn tự động điền mã này vào Form tạo sản phẩm mới không?`)) {
-                    document.getElementById('productSKU').value = skuScanned; closeScannerModal(); document.getElementById('productName').focus();
-                } else { if (html5QrCode) html5QrCode.resume(); isScanningPaused = false; statusEl.innerText = "Sẵn sàng quét mã tiếp theo..."; statusEl.style.backgroundColor = "#f8fafc"; statusEl.style.color = "var(--primary)"; }
-            }, 150); 
+        let exIdx = inventory.findIndex(item => item.sku && item.sku.toUpperCase() === skuScanned);
+        if (exIdx === -1) {
+            if (confirm(`⚠️ Mã SKU [${skuScanned}] chưa có trong kho.\n\nBạn có muốn tự động điền mã vào Form tạo sản phẩm mới không?`)) {
+                document.getElementById('productSKU').value = skuScanned;
+                closeScannerModal(); document.getElementById('productName').focus();
+            } else { if (html5QrCode) html5QrCode.resume(); }
+            return;
         }
+        
+        let item = inventory[exIdx];
+        if (currentScanMode === 'nhap') {
+            let slStr = prompt(`📥 [NHẬP KHO]\nSản phẩm: ${item.name}\nTồn hiện tại: ${item.qty}\n\nNhập số lượng thêm:`, "1");
+            if (slStr) {
+                let sl = parseInt(slStr);
+                if (sl > 0) {
+                    let note = prompt("Ghi chú nhập kho:", "Quét mã nhập kho");
+                    item.qty += sl; luuDuLieu(); 
+                    ghiLog(item.sku, item.name, "Nhập 📥", sl, "var(--success)", note || "Quét mã nhập kho"); 
+                    searchProduct(); alert(`✅ Đã thêm +${sl} vào kho [${item.name}]!`);
+                }
+            }
+        } else if (currentScanMode === 'xuat') {
+            let slStr = prompt(`📤 [XUẤT KHO]\nSản phẩm: ${item.name}\nTồn hiện tại: ${item.qty}\n\nNhập số lượng xuất:`, "1");
+            if (slStr) {
+                let sl = parseInt(slStr);
+                if (sl > 0) {
+                    if (item.qty < sl) { alert(`⚠️ Không đủ hàng tồn!`); } else {
+                        let note = prompt("Ghi chú xuất kho:", "Quét mã xuất kho");
+                        item.qty -= sl; luuDuLieu();
+                        ghiLog(item.sku, item.name, "Xuất 📤", sl, "var(--warning)", note || "Quét mã xuất kho");
+                        searchProduct(); alert(`✅ Đã xuất -${sl} [${item.name}] thành công!`);
+                    }
+                }
+            }
+        } else if (currentScanMode === 'muon') {
+            let slStr = prompt(`📦 [CHO MƯỢN]\nSản phẩm: ${item.name}\nTồn hiện tại: ${item.qty}\n\nNhập số lượng cho mượn:`, "1");
+            if (slStr) {
+                let sl = parseInt(slStr);
+                if (sl > 0) {
+                    if (item.qty < sl) { alert(`⚠️ Không đủ hàng!`); } else {
+                        let note = prompt("Nhập tên người mượn:");
+                        if (note) {
+                            item.qty -= sl; item.borrowedQty = (item.borrowedQty || 0) + sl;
+                            item.borrowList.push({ id: Date.now().toString(), qty: sl, note: note.trim(), time: getFormatedDate() });
+                            luuDuLieu(); ghiLog(item.sku, item.name, "Mượn 📦 ➔", sl, "#fd7e14", note.trim());
+                            searchProduct(); alert(`✅ Đã ghi nhận [${note.trim()}] mượn thành công!`);
+                        }
+                    }
+                }
+            }
+        }
+        if (html5QrCode) html5QrCode.resume();
     }
 
     function onScanFailure(error) {}
