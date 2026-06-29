@@ -207,26 +207,89 @@
             transition: all 0.2s;
         }
         .btn-scan-trigger:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: var(--shadow-md); }
-        
-        .scan-mode-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
-        .scan-mode-btn { 
-            flex: 1 1 22%; padding: 10px 4px; border-radius: 8px; border: 1px solid var(--slate-200); 
-            background: var(--slate-100); color: var(--slate-600); font-weight: 700; font-size: 11px; 
-            cursor: pointer; text-align: center; transition: all 0.2s; white-space: nowrap;
+
+        /* =========================================
+           TỐI ƯU HÓA GIAO DIỆN SCANNER MODAL (MỚI)
+           ========================================= */
+        #scannerModal .modal-content {
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: modalZoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .scan-mode-btn.active[data-mode="nhap"] { background: var(--success); color: white; border-color: var(--success); }
-        .scan-mode-btn.active[data-mode="xuat"] { background: var(--warning); color: white; border-color: var(--warning); }
-        .scan-mode-btn.active[data-mode="muon"] { background: #fd7e14; color: white; border-color: #fd7e14; }
-        .scan-mode-btn.active[data-mode="edit_sku"] { background: var(--primary); color: white; border-color: var(--primary); }
-        .scan-mode-btn.active[data-mode="pos"] { background: #e11d48; color: white; border-color: #e11d48; }
+
+        @keyframes modalZoomIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .scan-mode-tabs { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 6px; 
+            margin-bottom: 15px; 
+            background: var(--slate-100);
+            padding: 6px;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .scan-mode-tabs { grid-template-columns: repeat(3, 1fr); }
+            .scan-mode-tabs button:nth-child(4), .scan-mode-tabs button:nth-child(5) { grid-column: span 1.5; }
+        }
+
+        .scan-mode-btn { 
+            padding: 10px 4px; border-radius: 8px; border: none; 
+            background: transparent; color: var(--slate-600); font-weight: 700; font-size: 11px; 
+            cursor: pointer; text-align: center; transition: all 0.25s ease; white-space: nowrap;
+        }
         
-        #scanner-container { width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid var(--slate-300); background: #000; position: relative;}
+        .scan-mode-btn.active { box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+        .scan-mode-btn.active[data-mode="nhap"] { background: var(--success); color: white; }
+        .scan-mode-btn.active[data-mode="xuat"] { background: var(--warning); color: white; }
+        .scan-mode-btn.active[data-mode="muon"] { background: #fd7e14; color: white; }
+        .scan-mode-btn.active[data-mode="edit_sku"] { background: var(--primary); color: white; }
+        .scan-mode-btn.active[data-mode="pos"] { background: #e11d48; color: white; }
+        
+        #scanner-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: inset 0 0 0 2px var(--slate-300), var(--shadow-md);
+            margin-bottom: 12px;
+        }
+
         #scanner-view { width: 100%; min-height: 250px; }
-        
+
+        .scanner-laser {
+            position: absolute;
+            left: 5%; width: 90%; height: 2px;
+            background: #22d3ee;
+            box-shadow: 0 0 12px 2px rgba(34, 211, 238, 0.8);
+            z-index: 10;
+            animation: scanningLaser 2s infinite alternate ease-in-out;
+            border-radius: 50%;
+            display: none; 
+        }
+
+        @keyframes scanningLaser {
+            0% { top: 10%; }
+            100% { top: 90%; }
+        }
+
+        .viewfinder-corner { position: absolute; width: 35px; height: 35px; border-color: rgba(255, 255, 255, 0.9); border-style: solid; z-index: 10; }
+        .viewfinder-tl { top: 15px; left: 15px; border-width: 4px 0 0 4px; border-top-left-radius: 12px; }
+        .viewfinder-tr { top: 15px; right: 15px; border-width: 4px 4px 0 0; border-top-right-radius: 12px; }
+        .viewfinder-bl { bottom: 15px; left: 15px; border-width: 0 0 4px 4px; border-bottom-left-radius: 12px; }
+        .viewfinder-br { bottom: 15px; right: 15px; border-width: 0 4px 4px 0; border-bottom-right-radius: 12px; }
+
         #qr-status {
-            font-size: 14px; font-weight: 700; text-align: center; margin-top: 10px; line-height: 1.4;
-            padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box;
+            font-size: 14px; font-weight: 700; text-align: center; margin-top: 15px; line-height: 1.5;
+            padding: 12px 15px; border-radius: 12px; width: 100%; box-sizing: border-box;
             background: #f8fafc; color: var(--primary); display: none; transition: 0.3s;
+            box-shadow: 0 2px 8px -2px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
         }
     </style>
 </head>
@@ -328,12 +391,16 @@
 </div>
 
 <div id="scannerModal" class="modal-overlay">
-    <div class="modal-content" style="max-width: 480px;">
-        <div class="modal-header">
-            <div class="modal-title">📷 QUÉT MÃ ĐIỀU PHỐI KHO</div>
-            <button type="button" class="close-btn" onclick="closeScannerModal()">&times;</button>
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header" style="border-bottom: none; padding-bottom: 5px;">
+            <div class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+                <span style="background: var(--slate-100); padding: 8px; border-radius: 10px; font-size: 18px;">📷</span> 
+                QUÉT MÃ ĐIỀU PHỐI
+            </div>
+            <button type="button" class="close-btn" onclick="closeScannerModal()" style="background: var(--slate-100); width: 36px; height: 36px; border-radius: 50%; font-size: 20px; display: flex; align-items: center; justify-content: center;">&times;</button>
         </div>
-        <div class="modal-body" style="padding-bottom: 0;">
+        
+        <div class="modal-body" style="padding-bottom: 5px;">
             <div class="scan-mode-tabs">
                 <button type="button" class="scan-mode-btn active" data-mode="nhap" onclick="setScanMode('nhap')">📥 NHẬP</button>
                 <button type="button" class="scan-mode-btn" data-mode="xuat" onclick="setScanMode('xuat')">📤 XUẤT</button>
@@ -342,15 +409,20 @@
                 <button type="button" class="scan-mode-btn" data-mode="pos" onclick="setScanMode('pos')">🛒 POS XUẤT</button>
             </div>
             
-            <input type="text" id="scanNoteInput" placeholder="Nhập tên người giao/nhận hoặc lý do..." style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--primary); font-size: 14px; box-sizing: border-box; outline: none; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); font-weight: 600;">
+            <input type="text" id="scanNoteInput" placeholder="Nhập tên người giao/nhận hoặc lý do..." style="width: 100%; padding: 14px 16px; margin-bottom: 15px; border-radius: 10px; border: 1px solid var(--slate-200); background: var(--slate-50); font-size: 14px; box-sizing: border-box; outline: none; transition: all 0.2s; font-weight: 500;">
             
-            <div id="scanner-container">
+            <div id="scanner-wrapper">
+                <div class="viewfinder-corner viewfinder-tl"></div>
+                <div class="viewfinder-corner viewfinder-tr"></div>
+                <div class="viewfinder-corner viewfinder-bl"></div>
+                <div class="viewfinder-corner viewfinder-br"></div>
+                <div id="scanner-laser" class="scanner-laser"></div>
                 <div id="scanner-view"></div>
             </div>
             
-            <p id="scanner-hint" style="text-align: center; color: var(--slate-600); font-size: 13px; font-weight: 500; margin-top: 12px; margin-bottom: 5px;">
+            <div id="scanner-hint" style="text-align: center; color: var(--slate-600); font-size: 13px; font-weight: 600; margin-top: 5px;">
                 Đưa mã vạch hoặc mã QR vào vùng camera.
-            </p>
+            </div>
             
             <div id="qr-status">Sẵn sàng quét mã...</div>
         </div>
@@ -365,7 +437,7 @@
     let historyLog = JSON.parse(localStorage.getItem('khoHangHistory')) || [];
 
     // ====================================================================
-    // HỆ THỐNG ÂM THANH WEB AUDIO API (TÍCH HỢP MỚI)
+    // HỆ THỐNG ÂM THANH WEB AUDIO API
     // ====================================================================
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     let audioCtx;
@@ -502,9 +574,6 @@
         fi.onchange = function(e) { if (e.target.files[0]) compressImage(e.target.files[0], function(data) { inventory[index].image = data; luuDuLieu(); ghiLog(inventory[index].sku, inventory[index].name, "Sửa Ảnh", "-", "#8b5cf6", `Cập nhật ảnh hiển thị`); searchProduct(); }); }; fi.click(); 
     }
 
-    // ====================================================================
-    // RENDER BẢNG
-    // ====================================================================
     function renderTable(data = inventory) {
         const tbody = document.querySelector('#inventoryTable tbody'); tbody.innerHTML = '';
         let selAll = document.getElementById('selectAll'); if(selAll) selAll.checked = false;
@@ -713,6 +782,7 @@
         let hint = document.getElementById('scanner-hint');
         let statusEl = document.getElementById('qr-status');
         let noteInput = document.getElementById('scanNoteInput'); 
+        let laser = document.getElementById('scanner-laser'); // Tia Laser
         
         // Đặt mặc định trạng thái
         statusEl.style.display = 'block';
@@ -722,25 +792,30 @@
         if(noteInput) { noteInput.style.display = 'block'; noteInput.value = ''; }
 
         if (mode === 'edit_sku') {
-            hint.innerText = "Đưa mã vạch vào vùng camera để thay thế SKU.";
+            hint.innerText = "Đưa mã vạch vào khung camera để thay thế SKU.";
             hint.style.color = "var(--primary)";
+            laser.style.background = "var(--primary)"; laser.style.boxShadow = "0 0 12px 2px rgba(79, 70, 229, 0.8)";
             statusEl.style.display = 'none';
-            if(noteInput) noteInput.style.display = 'none'; // Ẩn ô ghi chú khi sửa SKU
+            if(noteInput) noteInput.style.display = 'none'; 
         } else if (mode === 'pos') {
             hint.innerText = "Quét đến đâu tự động trừ kho đến đó (POS).";
             hint.style.color = "#e11d48";
+            laser.style.background = "#e11d48"; laser.style.boxShadow = "0 0 12px 2px rgba(225, 29, 72, 0.8)";
             if(noteInput) noteInput.placeholder = "Ghi chú POS (tuỳ chọn)...";
         } else if (mode === 'nhap') {
             hint.innerText = "Quét mã để tự động CỘNG (+1) vào kho.";
             hint.style.color = "var(--success)";
+            laser.style.background = "#22c55e"; laser.style.boxShadow = "0 0 12px 2px rgba(34, 197, 94, 0.8)";
             if(noteInput) noteInput.placeholder = "Tên người giao hoặc lý do nhập (tuỳ chọn)...";
         } else if (mode === 'xuat') {
             hint.innerText = "Quét mã để tự động TRỪ (-1) khỏi kho.";
             hint.style.color = "var(--warning)";
+            laser.style.background = "#f59e0b"; laser.style.boxShadow = "0 0 12px 2px rgba(245, 158, 11, 0.8)";
             if(noteInput) noteInput.placeholder = "Tên người nhận hoặc lý do xuất (tuỳ chọn)...";
         } else if (mode === 'muon') {
             hint.innerText = "Quét mã để tự động ghi nhận MƯỢN (-1) khỏi kho.";
             hint.style.color = "#fd7e14";
+            laser.style.background = "#fd7e14"; laser.style.boxShadow = "0 0 12px 2px rgba(253, 126, 20, 0.8)";
             if(noteInput) noteInput.placeholder = "Tên người mượn (Khuyên dùng để dễ quản lý)...";
         }
     }
@@ -751,11 +826,15 @@
         
         const config = { 
             fps: 15, 
-            qrbox: function(width, height) { return { width: Math.floor(width * 0.85), height: Math.floor(height * 0.5) }; },
+            qrbox: function(width, height) { return { width: Math.floor(width * 0.85), height: Math.floor(height * 0.6) }; },
             aspectRatio: 1.0
         };
         
         html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
+        .then(() => {
+            // BẬT TIA LASER KHI CAMERA ĐÃ SẴN SÀNG
+            document.getElementById('scanner-laser').style.display = 'block'; 
+        })
         .catch(err => {
             console.error("Camera Error:", err);
             alert("⚠️ Không thể mở Camera!\nLưu ý: Bạn phải cấp quyền truy cập Camera cho trình duyệt.");
@@ -767,6 +846,7 @@
         if (html5QrCode) {
             html5QrCode.stop().then(() => { html5QrCode = null; }).catch(err => console.error(err));
         }
+        document.getElementById('scanner-laser').style.display = 'none';
     }
 
     function onScanSuccess(decodedText, decodedResult) {
@@ -838,7 +918,6 @@
                     item.borrowedQty = (item.borrowedQty || 0) + 1;
                     if (!item.borrowList) item.borrowList = [];
                     
-                    // Gộp chung người mượn nếu quét liên tục nhiều lần với cùng 1 nội dung Ghi chú
                     let exB = item.borrowList.find(b => b.note === scanNote);
                     if (exB && scanNote !== "Quét mã tự động") {
                         exB.qty += 1;
@@ -859,7 +938,6 @@
             
             searchProduct();
             
-            // Nghỉ 1.2s trước khi cho phép quét mã tiếp theo (chống nhảy mã liên tục)
             setTimeout(() => {
                 isScanningPaused = false;
                 statusEl.innerText = "Sẵn sàng quét mã tiếp theo...";
@@ -874,7 +952,6 @@
             statusEl.innerHTML = `⚠️ Mã <b>${skuScanned}</b> chưa có trong hệ thống!`;
             statusEl.style.backgroundColor = "#ffedd5"; statusEl.style.color = "#9a3412";
             
-            // Nghỉ 1 nhịp nhẹ trước khi hiện bảng confirm để UI không bị treo
             setTimeout(() => {
                 if (confirm(`⚠️ Mã SKU [${skuScanned}] chưa có trong kho.\nBạn có muốn tự động điền mã này vào Form tạo sản phẩm mới không?`)) {
                     document.getElementById('productSKU').value = skuScanned;
