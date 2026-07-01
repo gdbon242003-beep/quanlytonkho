@@ -72,6 +72,7 @@
 
         .qty-badge { font-size: 16px; font-weight: 800; }
 
+        /* GIAO DIỆN CHI TIẾT MƯỢN */
         .borrow-summary { font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: #f1f5f9; border-radius: 8px; }
         .borrow-summary.has-borrow { color: #7c3aed; background: #f5f3ff; border: 1px solid #ede9fe; }
         .borrow-list { display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto; padding-right: 4px; }
@@ -121,7 +122,7 @@
         .action-input-group input { width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--slate-300); font-size: 15px; }
         .action-input-group input[type="number"] { font-size: 20px; font-weight: bold; text-align: center; color: var(--primary); background: #f8fafc; }
 
-        /* Điện Thoại Scanner */
+        /* ĐIỆN THOẠI CAMERA SCANNER */
         .btn-scan-trigger { background: linear-gradient(135deg, #0f172a 0%, #334155 100%); color: white; cursor: pointer; font-weight: 700; border: none; padding: 11px 14px; border-radius: 10px; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-shadow: var(--shadow-sm); transition: all 0.2s; }
         .btn-scan-trigger:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: var(--shadow-md); }
         #scannerModal .modal-content { border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); animation: modalZoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -142,38 +143,46 @@
         .viewfinder-bl { bottom: 15px; left: 15px; border-width: 0 0 4px 4px; border-bottom-left-radius: 12px; } .viewfinder-br { bottom: 15px; right: 15px; border-width: 0 4px 4px 0; border-bottom-right-radius: 12px; }
         #qr-status { font-size: 14px; font-weight: 700; text-align: center; margin-top: 15px; line-height: 1.5; padding: 12px 15px; border-radius: 12px; width: 100%; box-sizing: border-box; background: #f8fafc; color: var(--primary); display: none; transition: 0.3s; box-shadow: 0 2px 8px -2px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
 
-        /* Hardware Scanner Terminal */
+        /* ==========================================================================
+           PHẦN QUÉT MÃ VẠCH (SÚNG QUÉT PHẦN CỨNG) ĐÃ FIX LỖI RESPONSIVE CO GIÃN
+           ========================================================================== */
         .hardware-scanner-card { background: #0f172a; color: #f8fafc; border-radius: 16px; padding: 24px; margin-bottom: 30px; border: 1px solid #1e293b; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
         .scanner-card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 14px; margin-bottom: 20px; }
         .scanner-title { font-size: 14px; font-weight: 800; letter-spacing: 0.05em; color: #38bdf8; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
-        .pulse-icon { width: 10px; height: 10px; background-color: #4ade80; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); animation: pulseScanner 1.6s infinite; }
-        @keyframes pulseScanner { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); } }
         .scanner-status { font-size: 12px; color: #34d399; background: #1e293b; padding: 6px 14px; border-radius: 30px; border: 1px solid #334155; font-weight: 600; }
-        .scanner-card-body { display: grid; grid-template-columns: 1.2fr 1.8fr; gap: 20px; align-items: center; }
-        @media (max-width: 768px) { .scanner-card-body { grid-template-columns: 1fr; gap: 15px; } }
-        .scanner-input-wrapper { position: relative; }
-        #hwScannerInput { width: 100%; background: #1e293b !important; border: 2px solid #334155 !important; color: #38bdf8 !important; font-family: 'Courier New', Courier, monospace; font-size: 18px !important; font-weight: 800 !important; padding: 14px 16px !important; border-radius: 12px !important; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3) !important; box-sizing: border-box; letter-spacing: 1px; }
+        
+        .scanner-input-wrapper { margin-bottom: 15px; position: relative; }
+        #hwScannerInput { width: 100%; background: #1e293b !important; border: 2px solid #334155 !important; color: #38bdf8 !important; font-family: 'Courier New', Courier, monospace; font-size: 16px !important; font-weight: 800 !important; padding: 14px 16px !important; border-radius: 12px !important; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3) !important; box-sizing: border-box; letter-spacing: 1px; }
         #hwScannerInput:focus { border-color: #38bdf8 !important; box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.25) !important; outline: none; }
-        #hwScannerInput::placeholder { color: #475569; font-style: italic; font-size: 14px; font-family: 'Inter', sans-serif; letter-spacing: 0; }
+        #hwScannerInput::placeholder { color: #475569; font-style: italic; font-family: 'Inter', sans-serif; letter-spacing: 0; }
         .scanner-hint { display: block; font-size: 12px; color: #64748b; margin-top: 6px; padding-left: 2px; }
-        .scanner-actions-selector { display: flex; gap: 12px; width: 100%; }
-        .action-radio-label { flex: 1; cursor: pointer; }
-        .action-radio-label input[type="radio"] { display: none; }
-        .action-custom-radio { padding: 14px 8px; border-radius: 12px; text-align: center; font-size: 14px; font-weight: 700; background: #1e293b; border: 1px solid #334155; color: #94a3b8; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .action-radio-label:hover .action-custom-radio { border-color: #475569; color: #cbd5e1; }
-        .action-radio-label input[type="radio"]:checked + .action-custom-radio.info { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff; border-color: #38bdf8; box-shadow: 0 0 15px rgba(56, 189, 248, 0.3); }
-        .action-radio-label input[type="radio"]:checked + .action-custom-radio.nhap { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: #fff; border-color: #34d399; box-shadow: 0 0 15px rgba(52, 211, 153, 0.3); }
-        .action-radio-label input[type="radio"]:checked + .action-custom-radio.xuat { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: #fff; border-color: #f87171; box-shadow: 0 0 15px rgba(248, 113, 113, 0.3); }
-        .scanner-result-box { margin-top: 20px; background: #1e293b; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 20px; border-left: 6px solid #38bdf8; animation: fadeInHwResult 0.25s ease-out; }
+
+        /* SỬ DỤNG CSS GRID CHO CÁC NÚT ĐỂ TỰ ĐỘNG DÀN ĐỀU VÀ RỚT DÒNG TRÊN MOBILE */
+        .scanner-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .btn-scan {
+            padding: 12px 6px; border: none; border-radius: 8px; font-weight: 600; font-size: 14px;
+            cursor: pointer; transition: all 0.2s; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px;
+            background-color: #1e293b; color: #94a3b8; border: 1px solid #334155;
+        }
+        .btn-scan.active { color: white; border-color: transparent; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2); }
+        .btn-scan.active.btn-info { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); }
+        .btn-scan.active.btn-nhap { background: linear-gradient(135deg, #059669 0%, #047857 100%); }
+        .btn-scan.active.btn-xuat { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); }
+        .btn-scan.active.btn-muon { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); } /* Nút Mượn Hàng */
+
+        .scanner-result-box { margin-top: 20px; background: #1e293b; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 20px; border-left: 6px solid #38bdf8; }
         .scanner-result-box.success { border-left-color: #4ade80; background: #14251c; border: 1px solid #14532d; border-left-width: 6px; }
         .scanner-result-box.error { border-left-color: #f87171; background: #2c1617; border: 1px solid #7f1d1d; border-left-width: 6px; }
         .scanner-result-box.hidden { display: none !important; }
-        .result-icon { font-size: 28px; display: flex; align-items: center; justify-content: center; }
-        .result-details { flex-grow: 1; }
+        .result-icon { font-size: 28px; } .result-details { flex-grow: 1; }
         .result-title { font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: 800; letter-spacing: 0.08em; }
         .result-text { font-size: 16px; font-weight: 700; color: #fff; margin: 4px 0; }
         .result-subtext { font-size: 13px; color: #cbd5e1; font-weight: 500; }
-        @keyframes fadeInHwResult { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -181,7 +190,7 @@
 <div class="container">
     <div class="header">
         <h2>HỆ THỐNG QUẢN LÝ KHO</h2>
-        <p>Phiên bản Ultimate — Cloud Sync, Auto-Save & Hardware Terminal</p>
+        <p>Phiên bản Ultimate — Cloud Sync & Trạm Máy Quét Vật Lý</p>
     </div>
     
     <form id="inventoryForm">
@@ -194,29 +203,22 @@
 
     <div class="hardware-scanner-card">
         <div class="scanner-card-header">
-            <div class="scanner-title"><span class="pulse-icon"></span>TRẠM QUÉT MÃ VẠCH (ĐẦU ĐỌC CẦM TAY)</div>
+            <div class="scanner-title">🔍 QUÉT MÃ VẠCH (ĐẦU ĐỌC CẦM TAY)</div>
             <div class="scanner-status" id="hwScannerStatus">HỆ THỐNG SẴN SÀNG</div>
         </div>
-        <div class="scanner-card-body">
-            <div class="scanner-input-wrapper">
-                <input type="text" id="hwScannerInput" placeholder="Đặt con trỏ vào đây rồi bóp cò máy quét..." autocomplete="off">
-                <span class="scanner-hint">💡 Tự động thực thi lệnh ngay khi nhận mã và phím Enter</span>
-            </div>
-            <div class="scanner-actions-selector">
-                <label class="action-radio-label">
-                    <input type="radio" name="hwScanMode" value="info" checked>
-                    <div class="action-custom-radio info">🔍 Xem Thông Tin</div>
-                </label>
-                <label class="action-radio-label">
-                    <input type="radio" name="hwScanMode" value="nhap">
-                    <div class="action-custom-radio nhap">📥 Nhập Kho (+1)</div>
-                </label>
-                <label class="action-radio-label">
-                    <input type="radio" name="hwScanMode" value="xuat">
-                    <div class="action-custom-radio xuat">📤 Xuất Kho (-1)</div>
-                </label>
-            </div>
+        
+        <div class="scanner-input-wrapper">
+            <input type="text" id="hwScannerInput" placeholder="Đặt con trỏ vào đây rồi bóp cò máy quét..." autocomplete="off">
+            <span class="scanner-hint">💡 Tự động thực thi lệnh ngay khi nhận mã và phím Enter</span>
         </div>
+        
+        <div class="scanner-actions">
+            <button id="btnHwInfo" class="btn-scan btn-info active" onclick="setHwScanMode('info')">🔍 Thông Tin</button>
+            <button id="btnHwNhap" class="btn-scan btn-nhap" onclick="setHwScanMode('nhap')">📥 Nhập (+1)</button>
+            <button id="btnHwXuat" class="btn-scan btn-xuat" onclick="setHwScanMode('xuat')">📤 Xuất (-1)</button>
+            <button id="btnHwMuon" class="btn-scan btn-muon" onclick="setHwScanMode('muon')">📦 Mượn (-1)</button>
+        </div>
+        
         <div id="hwScanResultBox" class="scanner-result-box hidden">
             <div class="result-icon" id="hwResultIcon">✅</div>
             <div class="result-details">
@@ -367,7 +369,7 @@
     let historyLog = JSON.parse(localStorage.getItem('khoHangHistory')) || [];
 
     // ====================================================================
-    // HỆ THỐNG ÂM THANH WEB AUDIO API CHUNG (Máy quét & Điện thoại)
+    // HỆ THỐNG ÂM THANH BEEP THÔNG MINH
     // ====================================================================
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     let audioCtx;
@@ -395,37 +397,29 @@
     }
 
     // ====================================================================
-    // HỆ THỐNG ĐỒNG BỘ AUTO-SAVE ĐÁM MÂY
+    // AUTO-SAVE ĐÁM MÂY (GOOGLE SHEETS)
     // ====================================================================
     let autoSaveTimeout = null;
     function triggerAutoSave() {
         let btn = document.getElementById('btnSync'); 
         btn.innerHTML = "🔄 Đang chờ..."; btn.style.background = "linear-gradient(135deg, var(--warning) 0%, #d97706 100%)";
-        clearTimeout(autoSaveTimeout); 
-        autoSaveTimeout = setTimeout(() => { dongBoLenGoogleSheet(true); }, 2500); 
+        clearTimeout(autoSaveTimeout); autoSaveTimeout = setTimeout(() => { dongBoLenGoogleSheet(true); }, 2500); 
     }
 
     function dongBoLenGoogleSheet(isAuto = false) {
         if(!GOOGLE_SHEET_URL) { if(!isAuto) alert("Chưa kết nối App Script URL!"); return; }
         if (inventory.length === 0) return;
         let btn = document.getElementById('btnSync'); btn.innerHTML = "⏳ Đang đẩy mây...";
-        
         let payload = { thoi_gian: getFormatedDate(), ton_kho: inventory, nhat_ky: historyLog };
         fetch(GOOGLE_SHEET_URL, { method: "POST", body: JSON.stringify(payload) })
-        .then(() => { 
-            btn.innerHTML = "☁️ Đã lưu Cloud"; btn.style.background = "var(--success-gradient)";
-            setTimeout(() => { btn.innerHTML = "☁️ Đẩy Cloud"; }, 3000); 
-        }).catch(e => { 
-            btn.innerHTML = "⚠️ Lỗi Đồng Bộ"; btn.style.background = "linear-gradient(135deg, var(--danger) 0%, #b91c1c 100%)";
-        });
+        .then(() => { btn.innerHTML = "☁️ Đã lưu Cloud"; btn.style.background = "var(--success-gradient)"; setTimeout(() => { btn.innerHTML = "☁️ Đẩy Cloud"; }, 3000); })
+        .catch(e => { btn.innerHTML = "⚠️ Lỗi Đồng Bộ"; btn.style.background = "linear-gradient(135deg, var(--danger) 0%, #b91c1c 100%)"; });
     }
 
     function khoiPhucTuGoogleSheet(isAuto = false) {
         if(!GOOGLE_SHEET_URL) return;
         if(!isAuto && !confirm("⚠️ Tải và ghi đè dữ liệu từ Cloud Google Sheet xuống thiết bị?")) return;
-
         let btn = document.getElementById('btnRestore'); let oldText = btn.innerHTML; btn.innerHTML = "⏳ Đang tải..."; btn.style.opacity = "0.7";
-
         fetch(GOOGLE_SHEET_URL)
         .then(response => { if (!response.ok) throw new Error("Network error."); return response.text(); })
         .then(text => {
@@ -439,24 +433,19 @@
                 } else { if(!isAuto) alert("❌ Dữ liệu trên Google Sheet hiện đang rỗng."); }
             } catch (err) { if(!isAuto) alert("❌ Lỗi Cấu Hình App Script."); }
         })
-        .catch(e => { if(!isAuto) alert("❌ Không có kết nối mạng."); })
-        .finally(() => { btn.innerHTML = oldText; btn.style.opacity = "1"; });
+        .catch(e => { if(!isAuto) alert("❌ Không có kết nối mạng."); }).finally(() => { btn.innerHTML = oldText; btn.style.opacity = "1"; });
     }
 
     // ====================================================================
-    // CÁC HÀM TIỆN ÍCH & RENDER DỮ LIỆU BẢNG CHÍNH
+    // CÁC HÀM TIỆN ÍCH, LƯU TRỮ VÀ RENDER BẢNG TỒN KHO CHÍNH
     // ====================================================================
     function compressImage(file, callback) {
-        const r = new FileReader(); r.onload = function(e) {
-            const img = new Image(); img.onload = function() {
-                const canvas = document.createElement('canvas'); const MAX = 150; 
-                let w = img.width, h = img.height;
-                if (w > h) { if (w > MAX) { h *= MAX / w; w = MAX; } } else { if (h > MAX) { w *= MAX / h; h = MAX; } }
-                canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h); callback(canvas.toDataURL('image/jpeg', 0.6));
-            }; img.src = e.target.result;
-        }; r.readAsDataURL(file);
+        const r = new FileReader(); r.onload = function(e) { const img = new Image(); img.onload = function() {
+            const canvas = document.createElement('canvas'); const MAX = 150; let w = img.width, h = img.height;
+            if (w > h) { if (w > MAX) { h *= MAX / w; w = MAX; } } else { if (h > MAX) { w *= MAX / h; h = MAX; } }
+            canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h); callback(canvas.toDataURL('image/jpeg', 0.6));
+        }; img.src = e.target.result; }; r.readAsDataURL(file);
     }
-
     function getFormatedDate() { return new Date().toLocaleString('vi-VN', { hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
     function luuDuLieu(isSync = true) { try { localStorage.setItem('khoHangPro', JSON.stringify(inventory)); if(isSync) triggerAutoSave(); } catch(e) { alert("⚠️ Bộ nhớ cache của trình duyệt đã đầy!"); } }
     function luuLichSu() { try { if (historyLog.length > 300) historyLog = historyLog.slice(0, 300); localStorage.setItem('khoHangHistory', JSON.stringify(historyLog)); } catch(e) {} }
@@ -467,8 +456,7 @@
         if (field === 'sku') {
             let n = prompt(`Nhập mã SKU bằng phím cho [${item.sku || 'Trống'}]:`, item.sku || '');
             if (n !== null) { 
-                let decodedText = n.trim().toUpperCase();
-                let isDuplicate = inventory.some(i => i.sku === decodedText && i.id !== item.id);
+                let decodedText = n.trim().toUpperCase(); let isDuplicate = inventory.some(i => i.sku === decodedText && i.id !== item.id);
                 if (isDuplicate) { playBeep('error'); alert(`⚠️ LỖI: Mã SKU [${decodedText}] đã tồn tại ở sản phẩm khác!`); return; }
                 let o = item.sku||'Trống'; item.sku = decodedText; luuDuLieu(); ghiLog(item.sku, item.name, "Sửa SKU", "-", "var(--primary)", `[${o}] ➔ [${item.sku}]`); searchProduct(); 
             }
@@ -485,9 +473,7 @@
 
     function renderTable(data = inventory) {
         const tbody = document.querySelector('#inventoryTable tbody'); tbody.innerHTML = '';
-        let selAll = document.getElementById('selectAll'); if(selAll) selAll.checked = false;
-        updateBulkUI(); 
-
+        let selAll = document.getElementById('selectAll'); if(selAll) selAll.checked = false; updateBulkUI(); 
         if (data.length === 0) { tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:35px; color:var(--slate-600); font-weight:500;">Chưa có sản phẩm nào trong hệ thống.</td></tr>`; return; }
 
         data.forEach((item) => {
@@ -553,7 +539,6 @@
         inventory[pIdx].qty += sl; log.returnedQty = (log.returnedQty || 0) + sl; luuDuLieu();
         ghiLog(log.sku, log.name, "Nhập lại (↩)", sl, "var(--success)", nt || 'Hoàn nhập từ lịch sử'); searchProduct();
     }
-
     function capNhatGhiChu(idx, txt) { historyLog[idx].note = txt.trim() || "Không có"; luuLichSu(); renderHistory(); }
 
     document.getElementById('inventoryForm').addEventListener('submit', function(e) {
@@ -562,14 +547,9 @@
         const qty = parseInt(document.getElementById('productQty').value); const file = document.getElementById('productImage').files[0];
         let exIdx = sku !== "" ? inventory.findIndex(i => i.sku === sku) : inventory.findIndex(i => i.name.toLowerCase() === name.toLowerCase());
         const fSku = sku !== "" ? sku : (exIdx !== -1 ? inventory[exIdx].sku : "SP" + Math.floor(1000 + Math.random() * 9000));
-        if (exIdx !== -1) {
-            inventory[exIdx].qty += qty;
-            if (file) compressImage(file, data => { inventory[exIdx].image = data; doneFormCu(exIdx, fSku, qty); }); else doneFormCu(exIdx, fSku, qty);
-        } else {
-            if (file) compressImage(file, data => { taoMoi(fSku, name, qty, data); }); else taoMoi(fSku, name, qty, DEFAULT_IMAGE);
-        }
+        if (exIdx !== -1) { inventory[exIdx].qty += qty; if (file) compressImage(file, data => { inventory[exIdx].image = data; doneFormCu(exIdx, fSku, qty); }); else doneFormCu(exIdx, fSku, qty); } 
+        else { if (file) compressImage(file, data => { taoMoi(fSku, name, qty, data); }); else taoMoi(fSku, name, qty, DEFAULT_IMAGE); }
     });
-
     function taoMoi(sku, name, qty, img) { inventory.unshift({ id: Date.now().toString(), sku: sku, name: name, qty: qty, borrowedQty: 0, borrowList: [], image: img }); luuDuLieu(); ghiLog(sku, name, "Khởi tạo mã", qty, "var(--primary)", "Khởi tạo mã hàng mới"); renderTable(); document.getElementById('inventoryForm').reset(); }
     function doneFormCu(idx, sku, qty) { luuDuLieu(); ghiLog(sku, inventory[idx].name, "Nhập kho (+)", qty, "var(--success)", "Cộng dồn số lượng qua form chính"); alert(`Sản phẩm đã tồn tại. Đã tự động cộng dồn +${qty} vào kho!`); renderTable(); document.getElementById('inventoryForm').reset(); }
     function xoaHang(idx) { if (confirm(`Bạn chắc chắn muốn xóa vĩnh viễn sản phẩm: ${inventory[idx].name}?`)) { let n=prompt("Nhập lý do xóa mã hàng:"); if(n !== null){ ghiLog(inventory[idx].sku, inventory[idx].name, "Xóa 🗑️", "-", "var(--dark)", n); inventory.splice(idx, 1); luuDuLieu(); searchProduct(); } } }
@@ -577,89 +557,131 @@
     function xoaLichSu() { if(confirm("Xóa vĩnh viễn toàn bộ nhật ký?")) { historyLog = []; luuLichSu(); renderHistory(); triggerAutoSave(); } }
 
     // ====================================================================
-    // HỆ THỐNG POPUP XỬ LÝ CHUYÊN NGHIỆP (NHẬP / XUẤT / MƯỢN / TRẢ CÁ NHÂN)
+    // HỆ THỐNG QUÉT MÃ VẠCH PHẦN CỨNG (ĐẦU ĐỌC CẦM TAY USB/WIRELESS)
+    // ====================================================================
+    let currentHwScanMode = 'info';
+
+    function setHwScanMode(mode) {
+        currentHwScanMode = mode;
+        // Bật tắt hiệu ứng màu nền cho các nút chọn
+        document.querySelectorAll('.hardware-scanner-card .btn-scan').forEach(btn => btn.classList.remove('active'));
+        if (mode === 'info') document.getElementById('btnHwInfo')?.classList.add('active');
+        if (mode === 'nhap') document.getElementById('btnHwNhap')?.classList.add('active');
+        if (mode === 'xuat') document.getElementById('btnHwXuat')?.classList.add('active');
+        if (mode === 'muon') document.getElementById('btnHwMuon')?.classList.add('active');
+        
+        // Đảm bảo súng luôn ở thế sẵn sàng
+        document.getElementById('hwScannerInput')?.focus();
+    }
+
+    document.getElementById('hwScannerInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            let skuScanned = this.value.trim();
+            if (skuScanned === '') return;
+            xuLyQuetMaPhanCung(skuScanned);
+            this.value = '';
+            this.focus();
+        }
+    });
+
+    function xuLyQuetMaPhanCung(sku) {
+        let sanPham = inventory.find(item => item.sku && item.sku.trim().toLowerCase() === sku.trim().toLowerCase());
+        let resultBox = document.getElementById('hwScanResultBox');
+        let resIcon = document.getElementById('hwResultIcon');
+        let resTitle = document.getElementById('hwResultTitle');
+        let resText = document.getElementById('hwResultText');
+        let resSubtext = document.getElementById('hwResultSubtext');
+        let statusEl = document.getElementById('hwScannerStatus');
+
+        resultBox.classList.remove('hidden', 'success', 'error');
+
+        if (sanPham) {
+            playBeep('success'); 
+            resultBox.classList.add('success'); resIcon.innerText = "✅";
+            let tonCu = sanPham.qty;
+
+            if (currentHwScanMode === 'info') {
+                resTitle.innerText = "🔍 THÔNG TIN SẢN PHẨM"; resText.innerText = `${sanPham.name}`;
+                resSubtext.innerText = `Mã SKU: ${sanPham.sku} ❖ Số lượng tồn kho hiện tại: ${sanPham.qty}`; statusEl.innerText = `VỪA XEM: ${sanPham.sku}`;
+            } else if (currentHwScanMode === 'nhap') {
+                sanPham.qty += 1; luuDuLieu(true); ghiLog(sanPham.sku, sanPham.name, "Nhập kho 📥", 1, "var(--success)", "Quét súng cầm tay (+1)"); searchProduct();
+                resTitle.innerText = "📥 ĐÃ TỰ ĐỘNG NHẬP KHO (+1)"; resText.innerText = `${sanPham.name}`;
+                resSubtext.innerText = `Biến động: Tồn cũ ${tonCu} ➔ Tồn thực tế mới: ${sanPham.qty}`; statusEl.innerText = `ĐÃ NHẬP KHO: ${sanPham.sku}`;
+            } else if (currentHwScanMode === 'xuat') {
+                if (sanPham.qty < 1) {
+                    playBeep('error'); resultBox.classList.remove('success'); resultBox.classList.add('error'); resIcon.innerText = "⚠️"; resTitle.innerText = "❌ XUẤT KHO THẤT BẠI (HẾT HÀNG)";
+                    resText.innerText = `${sanPham.name}`; resSubtext.innerText = `Lỗi: Số lượng tồn kho hiện bằng 0, không thể thực hiện lệnh xuất!`; statusEl.innerText = `LỖI HẾT HÀNG: ${sanPham.sku}`; return;
+                }
+                sanPham.qty -= 1; luuDuLieu(true); ghiLog(sanPham.sku, sanPham.name, "Xuất kho 📤", 1, "var(--danger)", "Quét súng cầm tay (-1)"); searchProduct();
+                resTitle.innerText = "📤 ĐÃ TỰ ĐỘNG XUẤT KHO (-1)"; resText.innerText = `${sanPham.name}`;
+                resSubtext.innerText = `Biến động: Tồn cũ ${tonCu} ➔ Tồn thực tế mới: ${sanPham.qty}`; statusEl.innerText = `ĐÃ XUẤT KHO: ${sanPham.sku}`;
+            } else if (currentHwScanMode === 'muon') {
+                if (sanPham.qty < 1) {
+                    playBeep('error'); resultBox.classList.remove('success'); resultBox.classList.add('error'); resIcon.innerText = "⚠️"; resTitle.innerText = "❌ MƯỢN HÀNG THẤT BẠI (HẾT HÀNG)";
+                    resText.innerText = `${sanPham.name}`; resSubtext.innerText = `Lỗi: Số lượng tồn kho hiện bằng 0, không thể thực hiện lệnh mượn!`; statusEl.innerText = `LỖI HẾT HÀNG: ${sanPham.sku}`; return;
+                }
+                sanPham.qty -= 1; sanPham.borrowedQty = (sanPham.borrowedQty || 0) + 1;
+                if (!sanPham.borrowList) sanPham.borrowList = [];
+                let exB = sanPham.borrowList.find(b => b.note === "Mượn qua súng quét"); 
+                if (exB) { exB.qty += 1; } else { sanPham.borrowList.push({ id: Date.now().toString(), qty: 1, note: "Mượn qua súng quét", time: getFormatedDate() }); }
+                
+                luuDuLieu(true); ghiLog(sanPham.sku, sanPham.name, "Mượn 📦 ➔", 1, "#fd7e14", "Quét súng cầm tay (-1)"); searchProduct();
+                resTitle.innerText = "📦 ĐÃ CHO MƯỢN HÀNG (-1)"; resText.innerText = `${sanPham.name}`;
+                resSubtext.innerText = `Biến động: Tồn sẵn sàng cũ ${tonCu} ➔ Tồn thực tế mới: ${sanPham.qty}`; statusEl.innerText = `ĐÃ CHO MƯỢN: ${sanPham.sku}`;
+            }
+        } else {
+            playBeep('error'); resultBox.classList.add('error'); resIcon.innerText = "❓";
+            resTitle.innerText = "⚠️ MÃ SKU CHƯA TỒN TẠI TRÊN HỆ THỐNG"; resText.innerText = `Mã vừa quét: ${sku}`;
+            resSubtext.innerText = "Hệ thống đã tự gán mã này vào Form thêm mới ở trên. Vui lòng nhập tên sản phẩm để lưu trữ."; statusEl.innerText = `MÃ CHƯA CÓ: ${sku}`;
+            let formInputSKU = document.getElementById('productSKU');
+            if (formInputSKU) { formInputSKU.value = sku; let formInputName = document.getElementById('productName'); if (formInputName) formInputName.focus(); }
+        }
+    }
+
+    // Tự động giữ tiêu điểm con trỏ (Smart Focus Lock)
+    window.addEventListener('keydown', function(e) {
+        let isModalOpen = Array.from(document.querySelectorAll('.modal-overlay')).some(modal => modal.style.display === 'flex');
+        if (isModalOpen) return;
+        let focusElement = document.activeElement;
+        let dangGoFormKhac = focusElement && (focusElement.tagName === 'INPUT' || focusElement.tagName === 'TEXTAREA' || focusElement.tagName === 'SELECT');
+        if (!dangGoFormKhac) { let terminalInput = document.getElementById('hwScannerInput'); if (terminalInput && document.activeElement !== terminalInput) { terminalInput.focus(); } }
+    });
+
+    // ====================================================================
+    // HỆ THỐNG POPUP XỬ LÝ CHUYÊN NGHIỆP BẢNG CHÍNH (NHẬP/XUẤT/MƯỢN/TRẢ)
     // ====================================================================
     let pendingAction = { type: '', itemIdx: -1, borrowIdx: -1 };
-
     function openActionModal(type, itemIdx, borrowIdx = -1) {
-        pendingAction = { type, itemIdx, borrowIdx };
-        const item = inventory[itemIdx];
-        
-        const titleEl = document.getElementById('actionModalTitle');
-        const nameEl = document.getElementById('actionModalProductName');
-        const qtyEl = document.getElementById('actionModalQty');
-        const noteLabelEl = document.getElementById('actionModalNoteLabel');
-        const noteEl = document.getElementById('actionModalNote');
-        const maxQtyEl = document.getElementById('actionModalMaxQty');
+        pendingAction = { type, itemIdx, borrowIdx }; const item = inventory[itemIdx];
+        const titleEl = document.getElementById('actionModalTitle'); const nameEl = document.getElementById('actionModalProductName');
+        const qtyEl = document.getElementById('actionModalQty'); const noteLabelEl = document.getElementById('actionModalNoteLabel');
+        const noteEl = document.getElementById('actionModalNote'); const maxQtyEl = document.getElementById('actionModalMaxQty');
         const btnEl = document.getElementById('actionModalConfirmBtn');
 
         nameEl.innerText = item.name; qtyEl.value = 1; noteEl.value = ''; maxQtyEl.innerText = '';
-        
-        if (type === 'nhap') {
-            titleEl.innerHTML = "📥 NHẬP HÀNG KHO"; titleEl.style.color = "var(--success)";
-            noteLabelEl.innerText = "Lý do / Người giao hàng (Tùy chọn):";
-            btnEl.style.background = "var(--success-gradient)"; btnEl.innerText = "Xác Nhận Cộng (+)";
-        } else if (type === 'xuat') {
-            titleEl.innerHTML = "📤 XUẤT HÀNG KHO"; titleEl.style.color = "var(--warning)";
-            noteLabelEl.innerText = "Lý do / Người nhận hàng (Bắt buộc):";
-            maxQtyEl.innerText = `Kho hiện có: ${item.qty}`; qtyEl.max = item.qty;
-            btnEl.style.background = "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"; btnEl.innerText = "Xác Nhận Trừ (-)";
-        } else if (type === 'muon') {
-            titleEl.innerHTML = "📦 CHO MƯỢN HÀNG"; titleEl.style.color = "var(--purple)";
-            noteLabelEl.innerText = "Người mượn / Đơn vị (Bắt buộc):";
-            maxQtyEl.innerText = `Kho có thể cho mượn: ${item.qty}`; qtyEl.max = item.qty;
-            btnEl.style.background = "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)"; btnEl.innerText = "Xác Nhận Mượn";
-        } else if (type === 'tra') {
-            const borrowData = item.borrowList[borrowIdx];
-            titleEl.innerHTML = "↩️ NHẬN TRẢ HÀNG"; titleEl.style.color = "var(--primary)";
-            nameEl.innerText = `${item.name}\n(Hoàn trả từ: ${borrowData.note})`;
-            noteLabelEl.innerText = "Ghi chú thêm (Tùy chọn):";
-            qtyEl.value = borrowData.qty; qtyEl.max = borrowData.qty; maxQtyEl.innerText = `Tối đa cần trả: ${borrowData.qty}`;
-            btnEl.style.background = "var(--primary-gradient)"; btnEl.innerText = "Nhận Lại Hàng";
-        }
-        document.getElementById('actionModal').style.display = 'flex';
-        setTimeout(() => { document.getElementById('actionModalQty').focus(); document.getElementById('actionModalQty').select(); }, 100);
+        if (type === 'nhap') { titleEl.innerHTML = "📥 NHẬP HÀNG KHO"; titleEl.style.color = "var(--success)"; noteLabelEl.innerText = "Lý do / Người giao hàng (Tùy chọn):"; btnEl.style.background = "var(--success-gradient)"; btnEl.innerText = "Xác Nhận Cộng (+)"; } 
+        else if (type === 'xuat') { titleEl.innerHTML = "📤 XUẤT HÀNG KHO"; titleEl.style.color = "var(--warning)"; noteLabelEl.innerText = "Lý do / Người nhận hàng (Bắt buộc):"; maxQtyEl.innerText = `Kho hiện có: ${item.qty}`; qtyEl.max = item.qty; btnEl.style.background = "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"; btnEl.innerText = "Xác Nhận Trừ (-)"; } 
+        else if (type === 'muon') { titleEl.innerHTML = "📦 CHO MƯỢN HÀNG"; titleEl.style.color = "var(--purple)"; noteLabelEl.innerText = "Người mượn / Đơn vị (Bắt buộc):"; maxQtyEl.innerText = `Kho có thể cho mượn: ${item.qty}`; qtyEl.max = item.qty; btnEl.style.background = "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)"; btnEl.innerText = "Xác Nhận Mượn"; } 
+        else if (type === 'tra') { const borrowData = item.borrowList[borrowIdx]; titleEl.innerHTML = "↩️ NHẬN TRẢ HÀNG"; titleEl.style.color = "var(--primary)"; nameEl.innerText = `${item.name}\n(Hoàn trả từ: ${borrowData.note})`; noteLabelEl.innerText = "Ghi chú thêm (Tùy chọn):"; qtyEl.value = borrowData.qty; qtyEl.max = borrowData.qty; maxQtyEl.innerText = `Tối đa cần trả: ${borrowData.qty}`; btnEl.style.background = "var(--primary-gradient)"; btnEl.innerText = "Nhận Lại Hàng"; }
+        document.getElementById('actionModal').style.display = 'flex'; setTimeout(() => { document.getElementById('actionModalQty').focus(); document.getElementById('actionModalQty').select(); }, 100);
     }
 
     function closeActionModal() { document.getElementById('actionModal').style.display = 'none'; }
 
     function submitActionModal() {
-        const qty = parseInt(document.getElementById('actionModalQty').value);
-        const note = document.getElementById('actionModalNote').value.trim();
+        const qty = parseInt(document.getElementById('actionModalQty').value); const note = document.getElementById('actionModalNote').value.trim();
         const { type, itemIdx, borrowIdx } = pendingAction; const item = inventory[itemIdx];
-
         if (isNaN(qty) || qty <= 0) return alert("Vui lòng nhập số lượng hợp lệ (lớn hơn 0)!");
-
         if (type === 'nhap') { item.qty += qty; luuDuLieu(); ghiLog(item.sku, item.name, "Nhập kho (+)", qty, "var(--success)", note || "Giao dịch không ghi chú"); } 
-        else if (type === 'xuat') {
-            if (qty > item.qty) return alert("❌ Số lượng xuất vượt quá tồn kho hiện tại!");
-            if (!note) return alert("⚠️ Vui lòng nhập lý do hoặc người nhận hàng!");
-            item.qty -= qty; luuDuLieu(); ghiLog(item.sku, item.name, "Xuất kho (-)", qty, "var(--warning)", note);
-        } 
-        else if (type === 'muon') {
-            if (qty > item.qty) return alert("❌ Số lượng cho mượn vượt quá tồn kho hiện tại!");
-            if (!note) return alert("⚠️ Vui lòng nhập Tên người / Đơn vị mượn hàng!");
-            item.qty -= qty; item.borrowedQty = (item.borrowedQty || 0) + qty;
-            item.borrowList.push({ id: Date.now().toString(), qty: qty, note: note, time: getFormatedDate() });
-            luuDuLieu(); ghiLog(item.sku, item.name, "Cho mượn (➔)", qty, "#fd7e14", note);
-        } 
-        else if (type === 'tra') {
-            const borrowData = item.borrowList[borrowIdx];
-            if (qty > borrowData.qty) return alert("❌ Số lượng nhập lại lớn hơn số lượng khách đã mượn!");
-            item.qty += qty; borrowData.qty -= qty; item.borrowedQty -= qty;
-            if (borrowData.qty === 0) item.borrowList.splice(borrowIdx, 1);
-            luuDuLieu(); ghiLog(item.sku, item.name, "Nhận trả (🔀)", qty, "var(--purple)", `Hoàn trả từ [${borrowData.note}]` + (note ? ` - ${note}` : ''));
-        }
+        else if (type === 'xuat') { if (qty > item.qty) return alert("❌ Số lượng xuất vượt quá tồn kho hiện tại!"); if (!note) return alert("⚠️ Vui lòng nhập lý do hoặc người nhận hàng!"); item.qty -= qty; luuDuLieu(); ghiLog(item.sku, item.name, "Xuất kho (-)", qty, "var(--warning)", note); } 
+        else if (type === 'muon') { if (qty > item.qty) return alert("❌ Số lượng cho mượn vượt quá tồn kho hiện tại!"); if (!note) return alert("⚠️ Vui lòng nhập Tên người / Đơn vị mượn hàng!"); item.qty -= qty; item.borrowedQty = (item.borrowedQty || 0) + qty; item.borrowList.push({ id: Date.now().toString(), qty: qty, note: note, time: getFormatedDate() }); luuDuLieu(); ghiLog(item.sku, item.name, "Cho mượn (➔)", qty, "#fd7e14", note); } 
+        else if (type === 'tra') { const borrowData = item.borrowList[borrowIdx]; if (qty > borrowData.qty) return alert("❌ Số lượng nhập lại lớn hơn số lượng khách đã mượn!"); item.qty += qty; borrowData.qty -= qty; item.borrowedQty -= qty; if (borrowData.qty === 0) item.borrowList.splice(borrowIdx, 1); luuDuLieu(); ghiLog(item.sku, item.name, "Nhận trả (🔀)", qty, "var(--purple)", `Hoàn trả từ [${borrowData.note}]` + (note ? ` - ${note}` : '')); }
         searchProduct(); closeActionModal();
     }
 
-    document.getElementById("actionModalQty").addEventListener("keypress", function(e) { if (e.key === "Enter") submitActionModal(); });
-    document.getElementById("actionModalNote").addEventListener("keypress", function(e) { if (e.key === "Enter") submitActionModal(); });
-
-    function nhapHang(idx) { openActionModal('nhap', idx); }
-    function xuatHang(idx) { openActionModal('xuat', idx); }
-    function muonHang(idx) { openActionModal('muon', idx); }
-    function traHang(pIdx, bIdx) { openActionModal('tra', pIdx, bIdx); }
+    document.getElementById("actionModalQty").addEventListener("keypress", function(e) { if (e.key === "Enter") submitActionModal(); }); document.getElementById("actionModalNote").addEventListener("keypress", function(e) { if (e.key === "Enter") submitActionModal(); });
+    function nhapHang(idx) { openActionModal('nhap', idx); } function xuatHang(idx) { openActionModal('xuat', idx); } function muonHang(idx) { openActionModal('muon', idx); } function traHang(pIdx, bIdx) { openActionModal('tra', pIdx, bIdx); }
 
     // ====================================================================
     // THAO TÁC HÀNG LOẠT (BULK ACTIONS)
@@ -681,240 +703,94 @@
         let an = loai === 'nhap' ? 'NHẬP HÀNG LOẠT' : (loai === 'xuat' ? 'XUẤT HÀNG LOẠT' : 'CHO MƯỢN HÀNG LOẠT');
         let cl = loai === 'nhap' ? 'var(--success)' : (loai === 'xuat' ? 'var(--warning)' : 'var(--purple)');
         let bc = loai === 'nhap' ? 'var(--success-gradient)' : (loai === 'xuat' ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)');
-        
-        document.getElementById('bulkModalTitle').innerText = `${an} (${currentBulkItems.length} MÓN)`;
-        document.getElementById('bulkModalTitle').style.color = cl;
-        document.getElementById('bulkModalConfirmBtn').style.background = bc;
-        document.getElementById('bulkModalNote').value = '';
-
+        document.getElementById('bulkModalTitle').innerText = `${an} (${currentBulkItems.length} MÓN)`; document.getElementById('bulkModalTitle').style.color = cl; document.getElementById('bulkModalConfirmBtn').style.background = bc; document.getElementById('bulkModalNote').value = '';
         const tbody = document.getElementById('bulkModalBody'); tbody.innerHTML = '';
         currentBulkItems.forEach(idx => {
-            const item = inventory[idx];
-            const max = (loai === 'xuat' || loai === 'muon') ? `<span style="font-size:12px; color:var(--danger); font-weight:700; white-space:nowrap;">Tồn: ${item.qty}</span>` : '';
+            const item = inventory[idx]; const max = (loai === 'xuat' || loai === 'muon') ? `<span style="font-size:12px; color:var(--danger); font-weight:700; white-space:nowrap;">Tồn: ${item.qty}</span>` : '';
             tbody.innerHTML += `<div class="bulk-item-row"><div class="bulk-item-name"><span style="color:var(--primary); font-size:11px; font-weight:700; letter-spacing:0.5px;">${item.sku || '---'}</span><br>${item.name}</div><div class="bulk-item-qty-container">${max}<input type="number" class="bulk-item-qty" id="bulk_qty_${idx}" min="1" value="1" placeholder="SL"><input type="text" class="bulk-item-note" id="bulk_note_${idx}" placeholder="Ghi chú riêng lẻ (nếu có)..."></div></div>`;
-        });
-        document.getElementById('bulkModal').style.display = 'flex';
+        }); document.getElementById('bulkModal').style.display = 'flex';
     }
-
     function closeBulkModal() { document.getElementById('bulkModal').style.display = 'none'; }
 
     function confirmBulkAction() {
-        let gNote = document.getElementById('bulkModalNote').value.trim();
-        let sCount = 0; let fails = []; let acts = [];
+        let gNote = document.getElementById('bulkModalNote').value.trim(); let sCount = 0; let fails = []; let acts = [];
         for (let idx of currentBulkItems) {
-            let iEl = document.getElementById(`bulk_qty_${idx}`); let nEl = document.getElementById(`bulk_note_${idx}`);
-            let sl = parseInt(iEl.value); let iNote = nEl ? nEl.value.trim() : ''; let item = inventory[idx];
-
+            let iEl = document.getElementById(`bulk_qty_${idx}`); let nEl = document.getElementById(`bulk_note_${idx}`); let sl = parseInt(iEl.value); let iNote = nEl ? nEl.value.trim() : ''; let item = inventory[idx];
             if (isNaN(sl) || sl <= 0) { alert(`Vui lòng nhập đúng số lượng cho sản phẩm: "${item.name}"`); iEl.focus(); return; }
             if ((currentBulkType === 'xuat' || currentBulkType === 'muon') && sl > item.qty) { fails.push(`- ${item.name} (Cần: ${sl} / Hiện có: ${item.qty})`); continue; }
-
-            let fn = ""; if (gNote && iNote) fn = `${gNote} (${iNote})`; else if (gNote) fn = gNote; else if (iNote) fn = iNote;
-            acts.push({ item: item, sl: sl, note: fn });
+            let fn = ""; if (gNote && iNote) fn = `${gNote} (${iNote})`; else if (gNote) fn = gNote; else if (iNote) fn = iNote; acts.push({ item: item, sl: sl, note: fn });
         }
-
         acts.forEach(a => {
             if (currentBulkType === 'nhap') { a.item.qty += a.sl; ghiLog(a.item.sku, a.item.name, "Nhập (Lô)", a.sl, "var(--success)", a.note); sCount++; } 
             else if (currentBulkType === 'xuat') { a.item.qty -= a.sl; ghiLog(a.item.sku, a.item.name, "Xuất (Lô)", a.sl, "var(--warning)", a.note); sCount++; } 
-            else if (currentBulkType === 'muon') {
-                a.item.qty -= a.sl; a.item.borrowedQty = (a.item.borrowedQty || 0) + a.sl;
-                a.item.borrowList.push({ id: Date.now()+"_"+Math.random().toString(36).substr(2,4), qty: a.sl, note: a.note || "Mượn theo lô", time: getFormatedDate() });
-                ghiLog(a.item.sku, a.item.name, "Mượn (Lô)", a.sl, "#fd7e14", a.note); sCount++;
-            }
+            else if (currentBulkType === 'muon') { a.item.qty -= a.sl; a.item.borrowedQty = (a.item.borrowedQty || 0) + a.sl; a.item.borrowList.push({ id: Date.now()+"_"+Math.random().toString(36).substr(2,4), qty: a.sl, note: a.note || "Mượn theo lô", time: getFormatedDate() }); ghiLog(a.item.sku, a.item.name, "Mượn (Lô)", a.sl, "#fd7e14", a.note); sCount++; }
         });
         if (sCount > 0) { luuDuLieu(); searchProduct(); closeBulkModal(); boChonTatCa(); }
         if (fails.length > 0) alert(`✅ Đã thực hiện thành công trên ${sCount} sản phẩm!\n\n⚠️ TỪ CHỐI ${fails.length} SẢN PHẨM (Do thiếu tồn kho):\n${fails.join("\n")}`);
     }
 
     // ====================================================================
-    // BÁO CÁO EXCEL THÔNG MINH (CẬP NHẬT LIÊN TỤC TRƯỚC KHI TẢI)
+    // BÁO CÁO EXCEL
     // ====================================================================
     function xuatFileKiemKho() {
-        let currentInventory = [];
-        try { let localData = localStorage.getItem('khoHangPro'); if (localData) currentInventory = JSON.parse(localData); else currentInventory = typeof inventory !== 'undefined' ? inventory : []; } 
-        catch (e) { currentInventory = typeof inventory !== 'undefined' ? inventory : []; }
-
-        let date = new Date(); let dateStr = date.toLocaleDateString('vi-VN') + " " + date.toLocaleTimeString('vi-VN');
-        let fileNameDate = dateStr.replace(/[\/ :]/g, "_");
-
-        let html = `
-        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-        <head><meta charset="utf-8"><style>table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; } th, td { border: 1px solid #000000; padding: 8px; } th { background-color: #EAEEF3; font-weight: bold; text-align: center; } .title { font-size: 18px; font-weight: bold; text-align: center; background-color: #d1d5db; } .total-row { font-weight: bold; background-color: #f1f5f9; }</style></head>
-        <body><table><tr><td colspan="9" class="title">Hi SPORTS - DANH SÁCH KIỂM KHO VẬN (CẬP NHẬT LIÊN TỤC)</td></tr><tr><td colspan="9">Ngày xuất báo cáo: ${dateStr}</td></tr><tr><td colspan="9"></td></tr>
-        <thead><tr><th>STT</th><th>Mã SKU</th><th>Tên Sản Phẩm</th><th>Tồn Sẵn Sàng</th><th>Đang Cho Mượn</th><th>Tổng Kho Hệ Thống</th><th>Thực Tế (Đếm tay)</th><th>Chênh Lệch</th><th>Ghi Chú</th></tr></thead><tbody>`;
-
-        currentInventory.forEach((item, index) => { 
-            let r = index + 6; let readyQty = item.qty || 0; let borrowedQty = item.borrowedQty || 0; let totalSysQty = readyQty + borrowedQty;
-            html += `<tr><td align="center">${index + 1}</td><td align="center"><b>${item.sku || ''}</b></td><td>${item.name}</td><td align="right">${readyQty}</td><td align="right">${borrowedQty}</td><td align="right" style="color: #4f46e5;"><b>${totalSysQty}</b></td><td></td><td align="right">=IF(G${r}="","",G${r}-F${r})</td><td></td></tr>`; 
-        });
-        
-        let start = 6, end = 5 + currentInventory.length;
-        html += `<tr class="total-row"><td colspan="3" align="right">TỔNG CỘNG:</td><td align="right">=SUM(D${start}:D${end})</td><td align="right">=SUM(E${start}:E${end})</td><td align="right">=SUM(F${start}:F${end})</td><td></td><td align="right">=SUM(H${start}:H${end})</td><td></td></tr></tbody></table></body></html>`;
-        
-        let blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' }); let a = document.createElement('a'); a.href = URL.createObjectURL(blob); 
-        a.download = `KiemKho_HiSports_${fileNameDate}.xls`; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        let currentInventory = []; try { let localData = localStorage.getItem('khoHangPro'); if (localData) currentInventory = JSON.parse(localData); else currentInventory = typeof inventory !== 'undefined' ? inventory : []; } catch (e) { currentInventory = typeof inventory !== 'undefined' ? inventory : []; }
+        let date = new Date(); let dateStr = date.toLocaleDateString('vi-VN') + " " + date.toLocaleTimeString('vi-VN'); let fileNameDate = dateStr.replace(/[\/ :]/g, "_");
+        let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; } th, td { border: 1px solid #000000; padding: 8px; } th { background-color: #EAEEF3; font-weight: bold; text-align: center; } .title { font-size: 18px; font-weight: bold; text-align: center; background-color: #d1d5db; } .total-row { font-weight: bold; background-color: #f1f5f9; }</style></head><body><table><tr><td colspan="9" class="title">Hi SPORTS - DANH SÁCH KIỂM KHO VẬN (CẬP NHẬT LIÊN TỤC)</td></tr><tr><td colspan="9">Ngày xuất báo cáo: ${dateStr}</td></tr><tr><td colspan="9"></td></tr><thead><tr><th>STT</th><th>Mã SKU</th><th>Tên Sản Phẩm</th><th>Tồn Sẵn Sàng</th><th>Đang Cho Mượn</th><th>Tổng Kho Hệ Thống</th><th>Thực Tế (Đếm tay)</th><th>Chênh Lệch</th><th>Ghi Chú</th></tr></thead><tbody>`;
+        currentInventory.forEach((item, index) => { let r = index + 6; let readyQty = item.qty || 0; let borrowedQty = item.borrowedQty || 0; let totalSysQty = readyQty + borrowedQty; html += `<tr><td align="center">${index + 1}</td><td align="center"><b>${item.sku || ''}</b></td><td>${item.name}</td><td align="right">${readyQty}</td><td align="right">${borrowedQty}</td><td align="right" style="color: #4f46e5;"><b>${totalSysQty}</b></td><td></td><td align="right">=IF(G${r}="","",G${r}-F${r})</td><td></td></tr>`; });
+        let start = 6, end = 5 + currentInventory.length; html += `<tr class="total-row"><td colspan="3" align="right">TỔNG CỘNG:</td><td align="right">=SUM(D${start}:D${end})</td><td align="right">=SUM(E${start}:E${end})</td><td align="right">=SUM(F${start}:F${end})</td><td></td><td align="right">=SUM(H${start}:H${end})</td><td></td></tr></tbody></table></body></html>`;
+        let blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' }); let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `KiemKho_HiSports_${fileNameDate}.xls`; document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
 
     // ====================================================================
-    // TRẠM QUÉT MÃ VẠCH PHẦN CỨNG (ĐẦU ĐỌC CẦM TAY USB/WIRELESS)
-    // ====================================================================
-    document.getElementById('hwScannerInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            let skuScanned = this.value.trim();
-            if (skuScanned === '') return;
-            xuLyQuetMaPhanCung(skuScanned);
-            this.value = '';
-            this.focus();
-        }
-    });
-
-    function xuLyQuetMaPhanCung(sku) {
-        let sanPham = inventory.find(item => item.sku && item.sku.trim().toLowerCase() === sku.trim().toLowerCase());
-        let cheDo = document.querySelector('input[name="hwScanMode"]:checked').value;
-        let resultBox = document.getElementById('hwScanResultBox');
-        let resIcon = document.getElementById('hwResultIcon');
-        let resTitle = document.getElementById('hwResultTitle');
-        let resText = document.getElementById('hwResultText');
-        let resSubtext = document.getElementById('hwResultSubtext');
-        let statusEl = document.getElementById('hwScannerStatus');
-
-        resultBox.classList.remove('hidden', 'success', 'error');
-
-        if (sanPham) {
-            playBeep('success'); resultBox.classList.add('success'); resIcon.innerText = "✅";
-            let tonCu = sanPham.qty;
-
-            if (cheDo === 'info') {
-                resTitle.innerText = "🔍 THÔNG TIN SẢN PHẨM"; resText.innerText = `${sanPham.name}`;
-                resSubtext.innerText = `Mã SKU: ${sanPham.sku} ❖ Số lượng tồn kho hiện tại: ${sanPham.qty}`; statusEl.innerText = `VỪA XEM: ${sanPham.sku}`;
-            } else if (cheDo === 'nhap') {
-                sanPham.qty += 1; luuDuLieu(true); ghiLog(sanPham.sku, sanPham.name, "Nhập kho 📥", 1, "var(--success)", "Quét bằng máy đọc phần cứng (+1)"); searchProduct();
-                resTitle.innerText = "📥 ĐÃ TỰ ĐỘNG NHẬP KHO (+1)"; resText.innerText = `${sanPham.name}`;
-                resSubtext.innerText = `Biến động: Tồn cũ ${tonCu} ➔ Tồn thực tế mới: ${sanPham.qty}`; statusEl.innerText = `ĐÃ NHẬP KHO: ${sanPham.sku}`;
-            } else if (cheDo === 'xuat') {
-                if (sanPham.qty < 1) {
-                    playBeep('error'); resultBox.classList.add('error'); resIcon.innerText = "⚠️"; resTitle.innerText = "❌ XUẤT KHO THẤT BẠI (HẾT HÀNG)";
-                    resText.innerText = `${sanPham.name}`; resSubtext.innerText = `Lỗi: Số lượng tồn kho hiện bằng 0, không thể thực hiện lệnh xuất!`; statusEl.innerText = `LỖI HẾT HÀNG: ${sanPham.sku}`; return;
-                }
-                sanPham.qty -= 1; luuDuLieu(true); ghiLog(sanPham.sku, sanPham.name, "Xuất kho 📤", 1, "var(--danger)", "Quét bằng máy đọc phần cứng (-1)"); searchProduct();
-                resTitle.innerText = "📤 ĐÃ TỰ ĐỘNG XUẤT KHO (-1)"; resText.innerText = `${sanPham.name}`;
-                resSubtext.innerText = `Biến động: Tồn cũ ${tonCu} ➔ Tồn thực tế mới: ${sanPham.qty}`; statusEl.innerText = `ĐÃ XUẤT KHO: ${sanPham.sku}`;
-            }
-        } else {
-            playBeep('error'); resultBox.classList.add('error'); resIcon.innerText = "❓";
-            resTitle.innerText = "⚠️ MÃ SKU CHƯA TỒN TẠI TRÊN HỆ THỐNG"; resText.innerText = `Mã vừa quét: ${sku}`;
-            resSubtext.innerText = "Hệ thống đã tự gán mã này vào Form thêm mới ở trên. Vui lòng nhập tên sản phẩm để lưu trữ."; statusEl.innerText = `MÃ CHƯA CÓ: ${sku}`;
-            let formInputSKU = document.getElementById('productSKU');
-            if (formInputSKU) { formInputSKU.value = sku; let formInputName = document.getElementById('productName'); if (formInputName) formInputName.focus(); }
-        }
-    }
-
-    // Smart Focus Lock (Giữ con trỏ luôn ở ô input máy quét trừ khi đang điền form hoặc mở modal)
-    window.addEventListener('keydown', function(e) {
-        let isModalOpen = Array.from(document.querySelectorAll('.modal-overlay')).some(modal => modal.style.display === 'flex');
-        if (isModalOpen) return;
-
-        let focusElement = document.activeElement;
-        let dangGoFormKhac = focusElement && (focusElement.tagName === 'INPUT' || focusElement.tagName === 'TEXTAREA' || focusElement.tagName === 'SELECT');
-        if (!dangGoFormKhac) { let terminalInput = document.getElementById('hwScannerInput'); if (terminalInput && document.activeElement !== terminalInput) { terminalInput.focus(); } }
-    });
-    document.querySelector('.scanner-card-body').addEventListener('click', function() { document.getElementById('hwScannerInput').focus(); });
-
-
-    // ====================================================================
-    // HỆ THỐNG QUÉT MÃ CAMERA ĐIỆN THOẠI IOS (HTML5-QRCODE)
+    // HỆ THỐNG CAMERA ĐIỆN THOẠI IOS (HTML5-QRCODE)
     // ====================================================================
     let html5QrCode = null; let editingSkuProductId = null; let currentScanMode = 'nhap'; let isScanningPaused = false; 
-
-    function openScannerModal(mode = 'nhap', productId = null) {
-        if (!audioCtx) audioCtx = new AudioContextClass();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        document.getElementById('scannerModal').style.display = 'flex';
-        setScanMode(mode, productId); setTimeout(() => { startCameraScanner(); }, 300);
-    }
+    function openScannerModal(mode = 'nhap', productId = null) { if (!audioCtx) audioCtx = new AudioContextClass(); if (audioCtx.state === 'suspended') audioCtx.resume(); document.getElementById('scannerModal').style.display = 'flex'; setScanMode(mode, productId); setTimeout(() => { startCameraScanner(); }, 300); }
     function closeScannerModal() { document.getElementById('scannerModal').style.display = 'none'; stopCameraScanner(); }
-
     function setScanMode(mode, productId = null) {
         currentScanMode = mode; editingSkuProductId = productId; isScanningPaused = false;
         document.querySelectorAll('.scan-mode-btn').forEach(btn => { btn.classList.remove('active'); if (btn.getAttribute('data-mode') === mode) btn.classList.add('active'); });
         let hint = document.getElementById('scanner-hint'), statusEl = document.getElementById('qr-status'), noteInput = document.getElementById('scanNoteInput'), laser = document.getElementById('scanner-laser'); 
         statusEl.style.display = 'block'; statusEl.innerText = "Sẵn sàng quét mã..."; statusEl.style.backgroundColor = "#f8fafc"; statusEl.style.color = "var(--primary)";
         if(noteInput) { noteInput.style.display = 'block'; noteInput.value = ''; }
-
         if (mode === 'edit_sku') { hint.innerText = "Đưa mã vạch vào khung camera để thay thế SKU."; hint.style.color = "var(--primary)"; laser.style.background = "var(--primary)"; laser.style.boxShadow = "0 0 12px 2px rgba(79, 70, 229, 0.8)"; statusEl.style.display = 'none'; if(noteInput) noteInput.style.display = 'none'; } 
         else if (mode === 'pos') { hint.innerText = "Quét đến đâu tự động trừ kho đến đó (POS)."; hint.style.color = "#e11d48"; laser.style.background = "#e11d48"; laser.style.boxShadow = "0 0 12px 2px rgba(225, 29, 72, 0.8)"; if(noteInput) noteInput.placeholder = "Ghi chú POS (tuỳ chọn)..."; } 
         else if (mode === 'nhap') { hint.innerText = "Quét mã để tự động CỘNG (+1) vào kho."; hint.style.color = "var(--success)"; laser.style.background = "#22c55e"; laser.style.boxShadow = "0 0 12px 2px rgba(34, 197, 94, 0.8)"; if(noteInput) noteInput.placeholder = "Tên người giao hoặc lý do nhập (tuỳ chọn)..."; } 
         else if (mode === 'xuat') { hint.innerText = "Quét mã để tự động TRỪ (-1) khỏi kho."; hint.style.color = "var(--warning)"; laser.style.background = "#f59e0b"; laser.style.boxShadow = "0 0 12px 2px rgba(245, 158, 11, 0.8)"; if(noteInput) noteInput.placeholder = "Tên người nhận hoặc lý do xuất (tuỳ chọn)..."; } 
         else if (mode === 'muon') { hint.innerText = "Quét mã để tự động ghi nhận MƯỢN (-1) khỏi kho."; hint.style.color = "#fd7e14"; laser.style.background = "#fd7e14"; laser.style.boxShadow = "0 0 12px 2px rgba(253, 126, 20, 0.8)"; if(noteInput) noteInput.placeholder = "Tên người mượn (Khuyên dùng để dễ quản lý)..."; }
     }
-
-    function startCameraScanner() {
-        if (html5QrCode && html5QrCode.isScanning) return;
-        html5QrCode = new Html5Qrcode("scanner-view");
-        const config = { fps: 15, qrbox: function(width, height) { return { width: Math.floor(width * 0.85), height: Math.floor(height * 0.5) }; }, aspectRatio: 1.0 };
-        html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure).then(() => { document.getElementById('scanner-laser').style.display = 'block'; }).catch(err => { alert("⚠️ Không thể mở Camera!\nLưu ý: Bạn phải cấp quyền truy cập Camera cho trình duyệt."); closeScannerModal(); });
-    }
-
+    function startCameraScanner() { if (html5QrCode && html5QrCode.isScanning) return; html5QrCode = new Html5Qrcode("scanner-view"); const config = { fps: 15, qrbox: function(width, height) { return { width: Math.floor(width * 0.85), height: Math.floor(height * 0.5) }; }, aspectRatio: 1.0 }; html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure).then(() => { document.getElementById('scanner-laser').style.display = 'block'; }).catch(err => { alert("⚠️ Không thể mở Camera!\nLưu ý: Bạn phải cấp quyền truy cập Camera cho trình duyệt."); closeScannerModal(); }); }
     function stopCameraScanner() { if (html5QrCode) { html5QrCode.stop().then(() => { html5QrCode = null; }).catch(err => console.error(err)); } document.getElementById('scanner-laser').style.display = 'none'; }
-
     function onScanSuccess(decodedText, decodedResult) {
-        if (isScanningPaused) return; 
-        const skuScanned = decodedText.trim().toUpperCase();
-        let statusEl = document.getElementById('qr-status'); let scanNote = document.getElementById('scanNoteInput') ? document.getElementById('scanNoteInput').value.trim() : "";
-        if (!scanNote) scanNote = "Quét camera điện thoại";
-
+        if (isScanningPaused) return; const skuScanned = decodedText.trim().toUpperCase(); let statusEl = document.getElementById('qr-status'); let scanNote = document.getElementById('scanNoteInput') ? document.getElementById('scanNoteInput').value.trim() : ""; if (!scanNote) scanNote = "Quét camera điện thoại";
         if (currentScanMode === 'edit_sku') {
-            if (html5QrCode) html5QrCode.pause(true);
-            let itemIndex = inventory.findIndex(i => i.id === editingSkuProductId);
+            if (html5QrCode) html5QrCode.pause(true); let itemIndex = inventory.findIndex(i => i.id === editingSkuProductId);
             if (itemIndex !== -1) {
-                let item = inventory[itemIndex];
-                let isDuplicate = inventory.some(i => i.sku === skuScanned && i.id !== editingSkuProductId);
+                let item = inventory[itemIndex]; let isDuplicate = inventory.some(i => i.sku === skuScanned && i.id !== editingSkuProductId);
                 if (isDuplicate) { playBeep('error'); alert(`⚠️ LỖI: Mã SKU [${skuScanned}] đã được sử dụng cho một sản phẩm khác!`); if (html5QrCode) html5QrCode.resume(); return; }
-                playBeep('success'); let oldSku = item.sku || 'Trống'; item.sku = skuScanned; luuDuLieu(); ghiLog(item.sku, item.name, "Sửa SKU", "-", "var(--primary)", `[${oldSku}] ➔ [${item.sku}]`);
-                searchProduct(); alert(`✅ Đã cập nhật SKU thành công!`); closeScannerModal();
-            }
-            return; 
+                playBeep('success'); let oldSku = item.sku || 'Trống'; item.sku = skuScanned; luuDuLieu(); ghiLog(item.sku, item.name, "Sửa SKU", "-", "var(--primary)", `[${oldSku}] ➔ [${item.sku}]`); searchProduct(); alert(`✅ Đã cập nhật SKU thành công!`); closeScannerModal();
+            } return; 
         }
-
-        isScanningPaused = true; statusEl.style.display = 'block';
-        let idx = inventory.findIndex(i => (i.sku && i.sku.toUpperCase() === skuScanned));
-
+        isScanningPaused = true; statusEl.style.display = 'block'; let idx = inventory.findIndex(i => (i.sku && i.sku.toUpperCase() === skuScanned));
         if (idx !== -1) {
             let item = inventory[idx];
-            if (currentScanMode === 'nhap') {
-                playBeep('success'); item.qty += 1; luuDuLieu(true); ghiLog(item.sku, item.name, "Nhập 📥", 1, "var(--success)", scanNote);
-                statusEl.innerHTML = `✅ Đã nhập 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho: ${item.qty})</span>`; statusEl.style.backgroundColor = "#dcfce7"; statusEl.style.color = "#166534";
-            } 
+            if (currentScanMode === 'nhap') { playBeep('success'); item.qty += 1; luuDuLieu(true); ghiLog(item.sku, item.name, "Nhập 📥", 1, "var(--success)", scanNote); statusEl.innerHTML = `✅ Đã nhập 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho: ${item.qty})</span>`; statusEl.style.backgroundColor = "#dcfce7"; statusEl.style.color = "#166534"; } 
             else if (currentScanMode === 'xuat' || currentScanMode === 'pos') {
+                if (item.qty > 0) { playBeep('success'); item.qty -= 1; luuDuLieu(true); let type = currentScanMode === 'pos' ? "POS Xuất" : "Xuất 📤"; let color = currentScanMode === 'pos' ? "#e11d48" : "var(--warning)"; ghiLog(item.sku, item.name, type, 1, color, scanNote); statusEl.innerHTML = `✅ Đã xuất 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho: ${item.qty})</span>`; statusEl.style.backgroundColor = "#fef3c7"; statusEl.style.color = "#b45309"; } 
+                else { playBeep('error'); statusEl.innerHTML = `❌ <b>${item.name}</b> ĐÃ HẾT HÀNG!`; statusEl.style.backgroundColor = "#fee2e2"; statusEl.style.color = "#991b1b"; }
+            } else if (currentScanMode === 'muon') {
                 if (item.qty > 0) {
-                    playBeep('success'); item.qty -= 1; luuDuLieu(true); 
-                    let type = currentScanMode === 'pos' ? "POS Xuất" : "Xuất 📤"; let color = currentScanMode === 'pos' ? "#e11d48" : "var(--warning)";
-                    ghiLog(item.sku, item.name, type, 1, color, scanNote);
-                    statusEl.innerHTML = `✅ Đã xuất 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho: ${item.qty})</span>`; statusEl.style.backgroundColor = "#fef3c7"; statusEl.style.color = "#b45309";
-                } else { playBeep('error'); statusEl.innerHTML = `❌ <b>${item.name}</b> ĐÃ HẾT HÀNG!`; statusEl.style.backgroundColor = "#fee2e2"; statusEl.style.color = "#991b1b"; }
-            } 
-            else if (currentScanMode === 'muon') {
-                if (item.qty > 0) {
-                    playBeep('success'); item.qty -= 1; item.borrowedQty = (item.borrowedQty || 0) + 1;
-                    if (!item.borrowList) item.borrowList = [];
+                    playBeep('success'); item.qty -= 1; item.borrowedQty = (item.borrowedQty || 0) + 1; if (!item.borrowList) item.borrowList = [];
                     let exB = item.borrowList.find(b => b.note === scanNote); if (exB && scanNote !== "Quét camera điện thoại") { exB.qty += 1; } else { item.borrowList.push({ id: Date.now().toString(), qty: 1, note: scanNote, time: getFormatedDate() }); }
-                    luuDuLieu(true); ghiLog(item.sku, item.name, "Mượn 📦 ➔", 1, "#fd7e14", scanNote);
-                    statusEl.innerHTML = `✅ Đã cho mượn 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho: ${item.qty})</span>`; statusEl.style.backgroundColor = "#ffedd5"; statusEl.style.color = "#c2410c";
+                    luuDuLieu(true); ghiLog(item.sku, item.name, "Mượn 📦 ➔", 1, "#fd7e14", scanNote); statusEl.innerHTML = `✅ Đã cho mượn 1 <b>${item.name}</b><br><span style="font-size:13px;">(Tồn kho: ${item.qty})</span>`; statusEl.style.backgroundColor = "#ffedd5"; statusEl.style.color = "#c2410c";
                 } else { playBeep('error'); statusEl.innerHTML = `❌ <b>${item.name}</b> ĐÃ HẾT HÀNG!`; statusEl.style.backgroundColor = "#fee2e2"; statusEl.style.color = "#991b1b"; }
             }
-            searchProduct();
-            setTimeout(() => { isScanningPaused = false; statusEl.innerText = "Sẵn sàng quét mã tiếp theo..."; statusEl.style.backgroundColor = "#f8fafc"; statusEl.style.color = "var(--primary)"; }, 1200);
+            searchProduct(); setTimeout(() => { isScanningPaused = false; statusEl.innerText = "Sẵn sàng quét mã tiếp theo..."; statusEl.style.backgroundColor = "#f8fafc"; statusEl.style.color = "var(--primary)"; }, 1200);
         } else {
-            playBeep('error'); if (html5QrCode) html5QrCode.pause(true);
-            statusEl.innerHTML = `⚠️ Mã <b>${skuScanned}</b> chưa có trong hệ thống!`; statusEl.style.backgroundColor = "#ffedd5"; statusEl.style.color = "#9a3412";
-            setTimeout(() => {
-                if (confirm(`⚠️ Mã SKU [${skuScanned}] chưa có trong kho.\nBạn có muốn tự động điền mã này vào Form tạo sản phẩm mới không?`)) {
-                    document.getElementById('productSKU').value = skuScanned; closeScannerModal(); document.getElementById('productName').focus();
-                } else { if (html5QrCode) html5QrCode.resume(); isScanningPaused = false; statusEl.innerText = "Sẵn sàng quét mã tiếp theo..."; statusEl.style.backgroundColor = "#f8fafc"; statusEl.style.color = "var(--primary)"; }
-            }, 150); 
+            playBeep('error'); if (html5QrCode) html5QrCode.pause(true); statusEl.innerHTML = `⚠️ Mã <b>${skuScanned}</b> chưa có trong hệ thống!`; statusEl.style.backgroundColor = "#ffedd5"; statusEl.style.color = "#9a3412";
+            setTimeout(() => { if (confirm(`⚠️ Mã SKU [${skuScanned}] chưa có trong kho.\nBạn có muốn tự động điền mã này vào Form tạo sản phẩm mới không?`)) { document.getElementById('productSKU').value = skuScanned; closeScannerModal(); document.getElementById('productName').focus(); } else { if (html5QrCode) html5QrCode.resume(); isScanningPaused = false; statusEl.innerText = "Sẵn sàng quét mã tiếp theo..."; statusEl.style.backgroundColor = "#f8fafc"; statusEl.style.color = "var(--primary)"; } }, 150); 
         }
     }
-
     function onScanFailure(error) {}
 
     // KHỞI CHẠY HỆ THỐNG BAN ĐẦU
