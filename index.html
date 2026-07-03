@@ -1201,7 +1201,7 @@
             // Cấu hình camera ưu tiên camera sau (environment) độ phân giải tối ưu quét cận cảnh
             html5QrCode.start(
                 { facingMode: "environment" },
-                { fps: 15, qrbox: (width, height) => { return { width: width * 0.75, height: height * 0.75 }; } },
+                { fps: 15, qrbox: (width, height) => { return { width: width * 0.95, height: height * 0.9 }; } },
                 (decodedText) => {
                     if (!isScanningPaused) {
                         xuLyMaVachQuetThanhCong(decodedText.trim().toUpperCase());
