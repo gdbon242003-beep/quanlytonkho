@@ -1160,51 +1160,23 @@
             }
         });
 
-        // 🚀 ĐÃ CẬP NHẬT: HÀM KHỞI CHẠY CAMERA CẤU HÌNH SIÊU NHẠY
         function batCameraDocQr() {
             tatCameraDocQr();
             isScanningPaused = false;
             html5QrCode = new Html5Qrcode("cameraReader");
             
-            // CẤU HÌNH PHẦN CỨNG NÂNG CAO - SIÊU NHẠY CHO TẤT CẢ MÃ TO VÀ NHỎ
-            const cameraConfig = {
-                fps: 30, // Tăng tốc độ lấy mẫu từ 15 lên 30 hình/giây để nhận diện chớp nhoáng
-                disableFlip: false,
-                // Hộp quét động tự động co giãn linh hoạt theo kích thước màn hình thực tế
-                qrbox: function(viewfinderWidth, viewfinderHeight) {
-                    let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
-                    // Chiếm 75% khung hình giúp mã lớn không bị tràn, mã nhỏ vẫn nằm gọn trong tâm nhận diện
-                    let qrboxSize = Math.floor(minEdgeSize * 0.75);
-                    return { width: qrboxSize, height: qrboxSize };
-                },
-                // Ép cảm biến camera hoạt động ở độ phân giải cao và kích hoạt lấy nét liên tục
-                videoConstraints: {
-                    facingMode: "environment",
-                    width: { min: 640, ideal: 1280, max: 1920 }, // Ưu tiên chất lượng HD/Full HD để thấy rõ mã nhỏ ở xa
-                    height: { min: 480, ideal: 720, max: 1080 },
-                    advanced: [{ focusMode: "continuous" }] // Lệnh ép ống kính tự động lấy nét liên tục, chống mờ nhòe khi bắt mã nhanh
-                }
-            };
-
             html5QrCode.start(
                 { facingMode: "environment" },
-                cameraConfig,
+                { fps: 15, qrbox: (width, height) => { return { width: width * 0.95, height: height * 0.95 }; } },
                 (decodedText) => {
                     if (!isScanningPaused) {
                         xuLyMaVachQuetThanhCong(decodedText.trim().toUpperCase());
                     }
                 },
-                (errorMessage) => {
-                    // Để trống để bỏ qua các log lỗi quét hụt, giúp điện thoại không bị lag/nghẽn khi dò mã liên tục
-                }
+                (errorMessage) => { }
             ).catch(err => {
-                console.error("Lỗi camera máy quét:", err);
-                document.getElementById('viewCamScanner').innerHTML = `
-                    <div class="text-xs text-rose-500 font-bold p-4 text-center bg-rose-950/40 border border-rose-900/60 rounded-xl mt-4 animate-fadeIn">
-                        <i class="fa-solid fa-triangle-exclamation text-xl mb-1.5"></i><br>
-                        Không thể khởi động Camera ở chế độ chất lượng cao.<br>
-                        <span class="text-slate-400 font-normal">Vui lòng kiểm tra quyền Camera hoặc thử lại trên trình duyệt khác.</span>
-                    </div>`;
+                console.error("Không mở được camera máy quét:", err);
+                document.getElementById('viewCamScanner').innerHTML = `<div class="text-xs text-rose-500 font-bold p-4 text-center">⚠️ Không truy cập được Camera. Vui lòng cấp quyền camera cho trình duyệt hoặc dùng thiết bị có camera.</div>`;
             });
         }
 
