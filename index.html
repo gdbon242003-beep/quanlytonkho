@@ -51,7 +51,7 @@
             <div class="text-center md:text-left">
                 <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-slate-900 via-indigo-950 to-indigo-600 bg-clip-text text-transparent flex items-center justify-center md:justify-start gap-3">
                     <i class="fa-solid from-indigo-600 to-violet-600 fa-boxes-stacked text-indigo-600"></i>
-                    HI SPORTS - QUẢN LÝ KHO VẬN
+                    QUẢN LÝ KHO VẬN
                 </h1>
                 <p class="text-slate-500 text-sm font-medium mt-1">Hệ thống điều phối, kiểm kê tồn kho và quản lý mượn hàng thông minh</p>
             </div>
@@ -238,7 +238,7 @@
     <div id="actionModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl border border-slate-200 w-full max-w-md shadow-xl overflow-hidden animate-scaleIn">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center">
-                <h3 id="actionModalTitle" class="text-base font-extrabold tracking-tight">THAO TÁC KHO hàng</h3>
+                <h3 id="actionModalTitle" class="text-base font-extrabold tracking-tight">THAO TÁC KHO HÀNG</h3>
                 <button onclick="closeActionModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:bg-slate-100 flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="p-5">
@@ -365,25 +365,20 @@
     </div>
 
     <script>
-        // CẤU HÌNH BIẾN TOÀN CỤC CHUẨN MỰC
         let GOOGLE_SHEET_URL = localStorage.getItem('googleSheetUrl') || '';
         let inventory = [];
         let historyLog = [];
         let selectedItems = new Set();
         
-        // Cấu hình máy quét mã
-        let currentScannerDevice = 'gun'; // 'gun' hoặc 'cam'
-        let currentScanMode = 'info'; // 'info', 'nhap', 'xuat', 'muon'
+        let currentScannerDevice = 'gun'; 
+        let currentScanMode = 'info'; 
         let html5QrCode = null;
         let isScanningPaused = false;
 
-        // Ảnh mặc định bằng SVG Base64 (Cực nhẹ, giao diện sạch, không lo lỗi link ảnh chết)
         const DEFAULT_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%25' height='100%25' fill='%23f1f5f9'/><path d='M35 45a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM25 65h50L60 45 45 60l-10-9-10 14z' fill='%23cbd5e1'/></svg>";
 
-        // Khởi tạo và đồng bộ giao diện cấu hình URL ban đầu
         document.getElementById('sheetUrlInput').value = GOOGLE_SHEET_URL;
 
-        // TẢI DỮ LIỆU BAN ĐẦU TỪ LOCAL STORAGE HỢP LỆ
         try {
             inventory = JSON.parse(localStorage.getItem('khoHangPro')) || [];
             historyLog = JSON.parse(localStorage.getItem('lichSuKhoPro')) || [];
@@ -393,7 +388,6 @@
             historyLog = [];
         }
 
-        // CHUẨN HÓA DỮ LIỆU ĐỂ TRÁNH LỖI ĐỘT TỬ DO THIẾU THUỘC TÍNH (Mẹo phòng thủ lỗi)
         function chuanHoaDuLieuGoc() {
             let coThayDoi = false;
             inventory.forEach(item => {
@@ -401,13 +395,13 @@
                 if (typeof item.borrowedQty !== 'number') { item.borrowedQty = item.borrowList.reduce((s, b) => s + b.qty, 0); coThayDoi = true; }
                 if (!item.image) { item.image = DEFAULT_IMAGE; coThayDoi = true; }
                 if (!item.sku) { item.sku = "SP" + Math.floor(10000 + Math.random() * 90000); coThayDoi = true; }
-                item.sku = item.sku.trim().toUpperCase();
+                // [ĐÃ FIX]: Ép định dạng String để chặn đứng lỗi trang web bị crash khi sku vô tình là kiểu dữ liệu Number (số nguyên)
+                item.sku = String(item.sku).trim().toUpperCase(); 
             });
             if (coThayDoi) luuDuLieu(false);
         }
         chuanHoaDuLieuGoc();
 
-        // ĐỒNG BỘ TRẠNG THÁI GIAO DIỆN CHÍNH
         function lamMoiHeThong() {
             renderTable();
             renderHistory();
@@ -415,7 +409,6 @@
             updateBulkUI();
         }
 
-        // LƯU DỮ LIỆU VÀO CACHE TRÌNH DUYỆT AN TOÀN
         function luuDuLieu(kichHoatAutoSync = true) {
             try {
                 localStorage.setItem('khoHangPro', JSON.stringify(inventory));
@@ -427,14 +420,13 @@
 
         function luuLichSuLog() {
             try {
-                if (historyLog.length > 500) historyLog = historyLog.slice(0, 500); // Giới hạn tối đa 500 log tránh phình cache
+                if (historyLog.length > 500) historyLog = historyLog.slice(0, 500); 
                 localStorage.setItem('lichSuKhoPro', JSON.stringify(historyLog));
             } catch (e) {
                 console.error("Lỗi cache lịch sử log:", e);
             }
         }
 
-        // HÀM TẠO ÂM THANH BEEP THỜI GIAN THỰC KHÔNG DÙNG FILE NGOÀI (Web Audio API - Chạy mọi trình duyệt không lo chết link)
         function playBeepSound(type = 'success') {
             try {
                 let ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -453,7 +445,7 @@
                     gain.gain.setValueAtTime(0.1, ctx.currentTime);
                     osc.start();
                     osc.stop(ctx.currentTime + 0.15);
-                } else { // error
+                } else { 
                     osc.frequency.setValueAtTime(220, ctx.currentTime);
                     gain.gain.setValueAtTime(0.15, ctx.currentTime);
                     osc.start();
@@ -462,7 +454,6 @@
             } catch (e) { console.warn("Trình duyệt chặn phát âm thanh tự động:", e); }
         }
 
-        // LẤY ĐỊNH DẠNG NGÀY GIỜ CHUẨN VIỆT NAM
         function layThoiGianHienTai() {
             return new Date().toLocaleString('vi-VN', { 
                 hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', 
@@ -470,7 +461,6 @@
             });
         }
 
-        // GHI NHẬT KÝ HOẠT ĐỘNG VÀO TIMELINE
         function ghiLogLichSu(sku, name, actionType, qty, badgeColor, noteText) {
             historyLog.unshift({
                 id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
@@ -487,7 +477,6 @@
             renderHistory();
         }
 
-        // CẬP NHẬT CÁC SỐ LIỆU THỐNG KÊ (KPI BADGES)
         function capNhatKhoiKpiThongKe() {
             document.getElementById('statTotalSku').innerText = inventory.length;
             document.getElementById('statTotalQty').innerText = inventory.reduce((s, i) => s + (i.qty || 0), 0);
@@ -495,7 +484,6 @@
             document.getElementById('statLowStock').innerText = inventory.filter(i => (i.qty || 0) <= 5 && (i.qty || 0) > 0).length;
         }
 
-        // LƯU CẤU HÌNH CLOUD APP SCRIPT
         function luuConfigCloud() {
             let url = document.getElementById('sheetUrlInput').value.trim();
             localStorage.setItem('googleSheetUrl', url);
@@ -503,27 +491,25 @@
             alert("✅ Đã ghi nhận cấu hình liên kết Google Sheet Cloud thành công!");
         }
 
-        // NÉN VÀ CHUYỂN ĐỔI HÌNH ẢNH SANG BASE64 ĐỂ TỐI ƯU KHÔNG GIAN BỘ NHỚ LOCAL STORAGE
         function compressAndConvertImage(file, callback) {
             let reader = new FileReader();
             reader.onload = function(e) {
                 let img = new Image();
                 img.onload = function() {
                     let canvas = document.createElement('canvas');
-                    let max_size = 300; // Khống chế ảnh vuông tối đa 300px để siêu nhẹ kho lưu trữ
+                    let max_size = 300; 
                     let w = img.width, h = img.height;
                     if (w > h) { if (w > max_size) { h *= max_size / w; w = max_size; } }
                     else { if (h > max_size) { w *= max_size / h; h = max_size; } }
                     canvas.width = w; canvas.height = h;
                     canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    callback(canvas.toDataURL('image/jpeg', 0.7)); // Tỷ lệ nén ảnh jpeg chất lượng 70% tối ưu tuyệt đối
+                    callback(canvas.toDataURL('image/jpeg', 0.7)); 
                 };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
 
-        // XỬ LÝ LƯU FORM SẢN PHẨM MỚI / THÊM TỒN KHO HỢP NHẤT
         document.getElementById('inventoryForm').addEventListener('submit', function(e) {
             e.preventDefault();
             let skuInput = document.getElementById('productSKU').value.trim().toUpperCase();
@@ -532,24 +518,23 @@
             let imgFile = document.getElementById('productImage').files[0];
 
             if(!nameInput) return;
+            // [ĐÃ FIX]: Chặn tạo dữ liệu với số lượng âm từ form
+            if (qtyInput <= 0) { alert("⚠️ Vui lòng nhập số lượng lớn hơn 0!"); return; }
 
-            // Thuật toán kiểm tra trùng lặp thông minh: Ưu tiên đối khớp SKU trước, nếu trống đối khớp Tên sản phẩm
             let existingIndex = -1;
             if (skuInput !== "") {
                 existingIndex = inventory.findIndex(i => i.sku === skuInput);
             } else {
                 existingIndex = inventory.findIndex(i => i.name.toLowerCase() === nameInput.toLowerCase());
-                skuInput = "SP" + Math.floor(10000 + Math.random() * 90000); // Tự cấp mã SKU chuẩn hóa nếu người dùng để trống
+                skuInput = "SP" + Math.floor(10000 + Math.random() * 90000); 
             }
 
             let xửLýHoànTất = (base64Img) => {
                 if (existingIndex !== -1) {
-                    // Cộng dồn tồn kho nếu sản phẩm đã tồn tại
                     inventory[existingIndex].qty += qtyInput;
                     if(base64Img) inventory[existingIndex].image = base64Img;
                     ghiLogLichSu(inventory[existingIndex].sku, inventory[existingIndex].name, "Nhập thêm ➕", qtyInput, "bg-emerald-600", "Bổ sung số lượng qua Form khai báo");
                 } else {
-                    // Thêm mới hoàn toàn
                     inventory.push({
                         sku: skuInput,
                         name: nameInput,
@@ -573,7 +558,6 @@
             }
         });
 
-        // RENDER MÃ TRẬN BẢNG DỮ LIỆU SẢN PHẨM CHÍNH
         function renderTable(filteredData = null) {
             let targetData = filteredData || inventory;
             let tbody = document.querySelector('#inventoryTable tbody');
@@ -587,10 +571,8 @@
             }
 
             targetData.forEach((item) => {
-                // Định vị index thực tế trong mảng gốc inventory để tránh lỗi khi Filter kiếm tìm
                 let realIndex = inventory.findIndex(i => i.sku === item.sku);
                 
-                // Trạng thái nhãn số lượng tồn kho trực quan sắc nét
                 let badgeQtyHtml = '';
                 if (item.qty === 0) {
                     badgeQtyHtml = `<span class="bg-rose-50 text-rose-600 px-2.5 py-1 rounded-full text-xs font-extrabold border border-rose-200">HẾT HÀNG</span>`;
@@ -600,7 +582,6 @@
                     badgeQtyHtml = `<span class="text-slate-900 font-extrabold text-base">${item.qty}</span>`;
                 }
 
-                // Xây dựng danh sách mượn hàng chi tiết từng người một
                 let borrowListHtml = '';
                 if (item.borrowList && item.borrowList.length > 0) {
                     borrowListHtml += `
@@ -667,7 +648,6 @@
             });
         }
 
-        // RENDER NHẬT KÝ BIẾN ĐỘNG (TIMELINE HISTORY LOGS)
         function renderHistory() {
             let logListContainer = document.getElementById('historyLogList');
             logListContainer.innerHTML = '';
@@ -708,7 +688,6 @@
             });
         }
 
-        // TÌM KIẾM SẢN PHẨM KHÔNG DẤU THÔNG MINH
         function searchProduct() {
             let keyword = document.getElementById('searchInput').value.toLowerCase().trim();
             if (keyword === "") {
@@ -721,8 +700,6 @@
                 renderTable(results);
             }
         }
-
-        // ==================== CÁC CHỨC NĂNG SỬA ĐỔI DỮ LIỆU NHANH TRÊN DÒNG ====================
 
         function suaTenSanPhamTrucTiep(idx) {
             let curName = inventory[idx].name;
@@ -777,9 +754,6 @@
             }
         }
 
-        // ==================== XỬ LÝ KHÁCH TRẢ HÀNG LẺ & KHÁCH TRẢ TỪ LOG ====================
-
-        // Trả hàng đơn lẻ tại danh sách mượn trong bảng sản phẩm
         function traHangDonLe(pIdx, bIdx) {
             let item = inventory[pIdx];
             let borrowData = item.borrowList[bIdx];
@@ -803,7 +777,6 @@
             lamMoiHeThong();
         }
 
-        // Khách mang trả hàng dựa trên lịch sử xuất log cũ
         function hoanNhapTuLichSu(logIdx) {
             let log = historyLog[logIdx];
             let targetProductIndex = inventory.findIndex(i => i.sku === log.sku);
@@ -834,15 +807,19 @@
             lamMoiHeThong();
         }
 
-        // XÓA SẢN PHẨM ĐƠN LẺ
         function xoaSanPhamDonLe(idx) {
             let target = inventory[idx];
             if (confirm(`❌ Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm:\n"${target.name}" khỏi hệ thống?`)) {
                 let reason = prompt("Vui lòng ghi lý do xóa sản phẩm này (Bắt buộc):");
                 if (reason !== null && reason.trim() !== "") {
                     ghiLogLichSu(target.sku, target.name, "Xóa mã hàng 🗑️", target.qty + target.borrowedQty, "bg-slate-900", `Lý do xóa: ${reason.trim()}`);
+                    
                     inventory.splice(idx, 1);
-                    selectedItems.delete(idx); // Xóa khỏi danh sách chọn hàng loạt nếu có
+                    
+                    // [ĐÃ FIX]: Dọn dẹp lại toàn bộ mảng selected để tránh lỗi rỗng mảng sau khi xóa sản phẩm và bị lệch Index
+                    selectedItems.clear(); 
+                    document.getElementById('selectAll').checked = false;
+                    
                     luuDuLieu(true);
                     lamMoiHeThong();
                 } else if (reason !== null) {
@@ -851,7 +828,6 @@
             }
         }
 
-        // XÓA LỊCH SỬ NHẬT KÝ LOG
         function xoaLichSu() {
             if (confirm("🚨 Bạn có chắc chắn muốn xóa sạch toàn bộ lịch sử log biến động kho không?\nHành động này không thể hoàn tác.")) {
                 historyLog = [];
@@ -860,9 +836,8 @@
             }
         }
 
-        // ==================== HỆ THỐNG ĐIỀU PHỐI UNIFIED ACTION MODAL LẺ ====================
         let currentActionIndex = -1;
-        let currentActionType = ''; // 'nhap', 'xuat', 'muon'
+        let currentActionType = ''; 
 
         function openActionModal(idx, type) {
             currentActionIndex = idx;
@@ -915,7 +890,7 @@
             let qty = parseInt(document.getElementById('actionModalQty').value) || 0;
             let note = document.getElementById('actionModalNote').value.trim();
 
-            if (qty <= 0) { alert("Vui lòng nhập số lượng xử lý lớn hơn 0!"); return; }
+            if (qty <= 0 || isNaN(qty)) { alert("⚠️ Vui lòng nhập số lượng xử lý lớn hơn 0 hợp lệ!"); return; }
 
             if (currentActionType === 'nhap') {
                 item.qty += qty;
@@ -946,8 +921,6 @@
             playBeepSound('success');
         }
 
-        // ==================== QUẢN LÝ CHỌN HÀNG LOẠT & BULK OPERATIONS LO HÀNG ====================
-
         function handleSingleSelect(checkbox) {
             let idx = parseInt(checkbox.value);
             if (checkbox.checked) selectedItems.add(idx);
@@ -955,14 +928,22 @@
             updateBulkUI();
         }
 
+        // [ĐÃ FIX]: Chống lỗi bị mất lựa chọn khi user gõ ô tìm kiếm xong ấn "Chọn tất cả"
         function toggleSelectAll() {
             let isAllChecked = document.getElementById('selectAll').checked;
             let checkboxes = document.querySelectorAll('.item-checkbox');
-            selectedItems.clear();
-            checkboxes.forEach(cb => {
-                cb.checked = isAllChecked;
-                if (isAllChecked) selectedItems.add(parseInt(cb.value));
-            });
+            
+            if(isAllChecked) {
+                checkboxes.forEach(cb => {
+                    cb.checked = true;
+                    selectedItems.add(parseInt(cb.value));
+                });
+            } else {
+                checkboxes.forEach(cb => {
+                    cb.checked = false;
+                    selectedItems.delete(parseInt(cb.value));
+                });
+            }
             updateBulkUI();
         }
 
@@ -985,13 +966,11 @@
             }
         }
 
-        // Xử lý xóa hàng loạt sản phẩm theo lô
         function xoaHangLoat() {
             if (confirm(`🚨 Bạn chắc chắn muốn xóa vĩnh viễn toàn bộ ${selectedItems.size} sản phẩm đang được chọn không?`)) {
                 let reason = prompt("Nhập lý do xóa lô hàng này:");
                 if (!reason) { alert("Hủy bỏ, bạn bắt buộc phải điền lý do xóa lô."); return; }
 
-                // Sắp xếp index từ lớn xuống nhỏ để tránh lệch chỉ mục khi splice mảng
                 let sortedIndices = Array.from(selectedItems).sort((a, b) => b - a);
                 sortedIndices.forEach(idx => {
                     let item = inventory[idx];
@@ -1006,7 +985,6 @@
             }
         }
 
-        // Mở hộp thoại cấu hình số lượng cho lô hàng
         let currentBulkType = '';
         function openBulkModal(type) {
             currentBulkType = type;
@@ -1044,7 +1022,6 @@
             document.getElementById('bulkModal').classList.add('hidden');
         }
 
-        // Thực thi áp dụng thay đổi toàn bộ lô hàng
         function confirmBulkAction() {
             let globalNote = document.getElementById('bulkModalNote').value.trim();
             if (currentBulkType !== 'nhap' && !globalNote) {
@@ -1054,7 +1031,6 @@
 
             let loiVuotTonKho = [];
             
-            // Bước kiểm tra rà soát lỗi trước khi ghi đè dữ liệu (Atomicity Check)
             for (let idx of selectedItems) {
                 let qtyEl = document.getElementById(`bulk_qty_${idx}`);
                 let qtyVal = parseInt(qtyEl.value) || 0;
@@ -1071,7 +1047,6 @@
                 return;
             }
 
-            // Tiến hành cập nhật đồng loạt
             selectedItems.forEach(idx => {
                 let qtyVal = parseInt(document.getElementById(`bulk_qty_${idx}`).value) || 0;
                 let item = inventory[idx];
@@ -1103,8 +1078,6 @@
             alert("🎉 Đã điều phối xử lý thành công lô hàng loạt!");
         }
 
-        // ==================== TRUNG TÂM QUÉT MÃ ĐIỀU PHỐI (CAMERA & SÚNG QUÉT CHUYÊN NGHIỆP) ====================
-
         function openScannerModal() {
             document.getElementById('scannerModal').classList.remove('hidden');
             setScannerActionMode(currentScanMode);
@@ -1116,7 +1089,6 @@
             document.getElementById('scannerModal').classList.add('hidden');
         }
 
-        // Thay đổi Tab thiết bị: Súng quét cầm tay hoặc Camera
         function switchScannerDevice(device) {
             currentScannerDevice = device;
             let tabGun = document.getElementById('tabGun');
@@ -1140,7 +1112,6 @@
             }
         }
 
-        // Thay đổi chế độ nghiệp vụ khi quét trúng mã (Tra cứu / Nhập / Xuất / Mượn)
         function setScannerActionMode(mode) {
             currentScanMode = mode;
             let buttons = ['btnHwInfo', 'btnHwNhap', 'btnHwXuat', 'btnHwMuon'];
@@ -1167,7 +1138,6 @@
             kichHoatFocusSungQuet();
         }
 
-        // Đảm bảo súng quét phần cứng luôn trong trạng thái sẵn sàng bắt tín hiệu
         function kichHoatFocusSungQuet() {
             if (currentScannerDevice === 'gun') {
                 setTimeout(() => {
@@ -1177,28 +1147,24 @@
             }
         }
 
-        // Click bất kỳ đâu trong View súng quét để lấy lại Focus nếu lỡ click chuột ra ngoài
         document.getElementById('viewGunScanner').addEventListener('click', kichHoatFocusSungQuet);
 
-        // BẮT SỰ KIỆN TỪ SÚNG QUÉT PHẦN CỨNG (Giả lập bàn phím luồng cao tốc nhấn Enter cuối chuỗi)
         document.getElementById('hwScannerInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 let skuScanned = this.value.trim().toUpperCase();
-                this.value = ''; // Xóa ngay bộ đệm để đón nhận mã tiếp theo
+                this.value = ''; 
                 if (skuScanned !== '') {
                     xuLyMaVachQuetThanhCong(skuScanned);
                 }
             }
         });
 
-        // BẬT CAMERA LÀM MÁY QUÉT MÃ QR/BARCODE PHẦN MỀM
         function batCameraDocQr() {
             tatCameraDocQr();
             isScanningPaused = false;
             html5QrCode = new Html5Qrcode("cameraReader");
             
-            // Cấu hình camera ưu tiên camera sau (environment) độ phân giải tối ưu quét cận cảnh
             html5QrCode.start(
                 { facingMode: "environment" },
                 { fps: 15, qrbox: (width, height) => { return { width: width * 0.95, height: height * 0.95 }; } },
@@ -1207,10 +1173,10 @@
                         xuLyMaVachQuetThanhCong(decodedText.trim().toUpperCase());
                     }
                 },
-                (errorMessage) => { /* Bỏ qua log lỗi quét trượt liên tục của thư viện */ }
+                (errorMessage) => { }
             ).catch(err => {
                 console.error("Không mở được camera máy quét:", err);
-                document.getElementById('viewCamScanner').innerHTML = `<div class="text-xs text-rose-500 font-bold p-4 text-center">⚠️ Không truy cập được Camera. Vui lòng cấp quyền camera cho trình duyệt hoặc dùng súng quét chuyên dụng.</div>`;
+                document.getElementById('viewCamScanner').innerHTML = `<div class="text-xs text-rose-500 font-bold p-4 text-center">⚠️ Không truy cập được Camera. Vui lòng cấp quyền camera cho trình duyệt hoặc dùng thiết bị có camera.</div>`;
             });
         }
 
@@ -1220,7 +1186,6 @@
             }
         }
 
-        // THUẬT TOÁN XỬ LÝ TRUNG TÂM KHI QUÉT TRÚNG MÃ MÁY QUÉT
         function xuLyMaVachQuetThanhCong(skuScanned) {
             isScanningPaused = true;
             if (html5QrCode) html5QrCode.pause(true);
@@ -1234,7 +1199,6 @@
 
             resBox.classList.remove('hidden');
 
-            // --- TRƯỜNG HỢP 1: SẢN PHẨM KHÔNG CÓ TRONG KHO HỆ THỐNG ---
             if (productIndex === -1) {
                 playBeepSound('error');
                 resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950/80 border border-rose-800 animate-fadeIn";
@@ -1253,7 +1217,6 @@
                 return;
             }
 
-            // --- TRƯỜNG HỢP 2: SẢN PHẨM TỒN TẠI - THỰC THI NGHIỆP VỤ ---
             let item = inventory[productIndex];
 
             if (currentScanMode === 'info') {
@@ -1299,7 +1262,7 @@
                 lamMoiHeThong();
                 tiepTucTrangThaiQuetTiepTheo();
             } 
-            else if (currentScanMode === 'muon') { //
+            else if (currentScanMode === 'muon') { 
                 if (!noteInputVal) {
                     playBeepSound('warning');
                     alert("⚠️ Hãy nhập Tên người mượn vào ô ghi chú trước khi bấm quét điều phối mượn!");
@@ -1317,7 +1280,7 @@
                 item.qty -= 1;
                 item.borrowedQty += 1;
                 
-                let bEx = item.borrowList.find(b => b.note === noteInputVal); // Gộp dòng mượn nếu trùng tên trực tiếp
+                let bEx = item.borrowList.find(b => b.note === noteInputVal); 
                 if (bEx) {
                     bEx.qty += 1;
                 } else {
@@ -1339,7 +1302,6 @@
             }
         }
 
-        // Hồi phục trạng thái chuẩn bị nhận lần quét tiếp theo sau 1.2s delay
         function tiepTucTrangThaiQuetTiepTheo() {
             setTimeout(() => {
                 isScanningPaused = false;
@@ -1350,13 +1312,12 @@
             }, 1200);
         }
 
-        // ==================== CƠ CHẾ TỰ ĐỘNG ĐỒNG BỘ ĐÁM MÂY (GOOGLE SHEET CLOUD SYNC) ====================
         let debounceTimerCloud = null;
         function triggerAutoSaveCloud() {
             clearTimeout(debounceTimerCloud);
             debounceTimerCloud = setTimeout(() => {
                 dongBoLenGoogleSheet(true);
-            }, 3000); // Tự động đẩy mây sau 3 giây không phát sinh thao tác mới
+            }, 3000); 
         }
 
         function dongBoLenGoogleSheet(isAuto = false) {
@@ -1379,7 +1340,7 @@
 
             fetch(GOOGLE_SHEET_URL, {
                 method: "POST",
-                mode: "no-cors", // Hoạt động mượt mà không lo dính lỗi CORS bảo mật chéo trình duyệt
+                mode: "no-cors", 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             })
@@ -1419,7 +1380,6 @@
                     inventory = data.ton_kho || [];
                     historyLog = data.nhat_ky || [];
                     
-                    // Lưu đè dữ liệu vào Cache local
                     localStorage.setItem('khoHangPro', JSON.stringify(inventory));
                     localStorage.setItem('lichSuKhoPro', JSON.stringify(historyLog));
                     
@@ -1441,11 +1401,9 @@
             });
         }
 
-        // ==================== CƠ CHẾ XUẤT BÁO CÁO EXCEL MỸ MÃN CHỨA CÔNG THỨC SẴN CÓ ====================
         function xuatBaoCaoExcel() {
             let dateStr = layThoiGianHienTai();
             
-            // Khởi tạo chuỗi cấu trúc bảng Excel định dạng CSS Inline cao cấp, tương thích tuyệt đối MS Excel
             let html = `
             <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
             <head>
@@ -1481,12 +1439,11 @@
             `;
 
             inventory.forEach((item, index) => {
-                let rowExcelIdx = index + 5; // Dòng bắt đầu ghi nhận dữ liệu trong bảng Excel để tính công thức
+                let rowExcelIdx = index + 5; 
                 let ready = item.qty || 0;
                 let borrow = item.borrowedQty || 0;
                 let totalSys = ready + borrow;
 
-                // Tạo chuỗi ghi chú mượn hàng để đưa vào cột ghi chú Excel
                 let noteBorrowStr = item.borrowList && item.borrowList.length > 0 
                     ? item.borrowList.map(b => `[${b.note} mượn ${b.qty}]`).join(', ') 
                     : '';
@@ -1506,7 +1463,6 @@
                 `;
             });
 
-            // Ghi nhận dòng Tổng cộng ở cuối bảng dùng hàm SUM
             let startRow = 5;
             let endRow = 4 + inventory.length;
             html += `
@@ -1527,7 +1483,6 @@
             </html>
             `;
 
-            // Xuất file tải xuống định dạng .xls giả lập Excel chuẩn
             let blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
             let url = URL.createObjectURL(blob);
             let link = document.createElement('a');
@@ -1538,7 +1493,6 @@
             document.body.removeChild(link);
         }
 
-        // KHỞI CHẠY KHỞI ĐỘNG HỆ THỐNG BAN ĐẦU ĐỒNG BỘ MỌI GIAO DIỆN
         lamMoiHeThong();
     </script>
 </body>
