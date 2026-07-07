@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://unpkg.com/html5-qrcode"></script>
@@ -220,7 +220,7 @@
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                     <span class="w-1.5 h-5 bg-slate-900 rounded-sm"></span>
-                    Nhật Ký Biến Động Kho Gần Đây
+                    Nhật Ký Biến Động Kho Gần Recent
                 </h2>
                 <button onclick="xoaLichSu()" class="text-xs font-bold text-slate-400 hover:text-rose-600 transition-all cursor-pointer">
                     <i class="fa-solid fa-clock-rotate-left mr-1"></i>Xóa lịch sử log
@@ -273,7 +273,7 @@
 
     <div id="bulkModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl border border-slate-200 w-full max-w-2xl shadow-xl max-h-[90dvh] flex flex-col overflow-hidden animate-scaleIn">
-            <div class="p-5 border-b border-slate-100 flex justify-between items-center flex-shrink-0">
+            <div class="p-5 border-t border-slate-100 flex justify-between items-center flex-shrink-0">
                 <h3 id="bulkModalTitle" class="text-base font-extrabold uppercase tracking-tight text-indigo-950">ĐIỀU PHỐI BIẾN ĐỘNG THEO LÔ HÀNG</h3>
                 <button onclick="closeBulkModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:bg-slate-100 flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
@@ -326,7 +326,7 @@
                 </div>
 
                 <div id="scannerNoteBox" class="hidden">
-                    <input type="text" id="scannerScanNote" placeholder="Tên người mượn hoặc lý do xuất kho (Bắt buộc)..." 
+                    <input type="text" id="scannerScanNote" placeholder="Tên người nhận hoặc lý do xuất kho (Bắt buộc)..." 
                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white font-semibold focus:outline-none focus:border-indigo-500 placeholder:text-slate-600">
                 </div>
 
@@ -395,7 +395,6 @@
                 if (typeof item.borrowedQty !== 'number') { item.borrowedQty = item.borrowList.reduce((s, b) => s + b.qty, 0); coThayDoi = true; }
                 if (!item.image) { item.image = DEFAULT_IMAGE; coThayDoi = true; }
                 if (!item.sku) { item.sku = "SP" + Math.floor(10000 + Math.random() * 90000); coThayDoi = true; }
-                // [ĐÃ FIX]: Ép định dạng String để chặn đứng lỗi trang web bị crash khi sku vô tình là kiểu dữ liệu Number (số nguyên)
                 item.sku = String(item.sku).trim().toUpperCase(); 
             });
             if (coThayDoi) luuDuLieu(false);
@@ -518,7 +517,6 @@
             let imgFile = document.getElementById('productImage').files[0];
 
             if(!nameInput) return;
-            // [ĐÃ FIX]: Chặn tạo dữ liệu với số lượng âm từ form
             if (qtyInput <= 0) { alert("⚠️ Vui lòng nhập số lượng lớn hơn 0!"); return; }
 
             let existingIndex = -1;
@@ -557,6 +555,48 @@
                 xửLýHoànTất(existingIndex !== -1 ? null : DEFAULT_IMAGE);
             }
         });
+
+        function thietLapQuyDoiThung(idx) {
+            let item = inventory[idx];
+            let currentParent = item.parentSku || '';
+            let currentRatio = item.ratio || '';
+            
+            let parentSkuInput = prompt(`📦 [CÀI ĐẶT LIÊN KẾT HÀNG THÙNG]\nNhập mã SKU lẻ của sản phẩm chứa trong thùng này (Ví dụ: RA-01):\n(Để trống nếu muốn hủy liên kết quy đổi)`, currentParent);
+            if (parentSkuInput === null) return;
+            
+            if (parentSkuInput.trim() === "") {
+                delete item.parentSku;
+                delete item.ratio;
+                luuDuLieu(true);
+                lamMoiHeThong();
+                alert("✅ Đã hủy liên kết quy đổi của sản phẩm này.");
+                return;
+            }
+            
+            let pSku = parentSkuInput.trim().toUpperCase();
+            let targetParent = inventory.find(i => i.sku === pSku);
+            if (!targetParent) {
+                alert(`⚠️ Thất bại: Không tìm thấy hàng lẻ nào có mã SKU là [${pSku}] trong danh mục kho! Vui lòng tạo mã hàng lẻ trước.`);
+                return;
+            }
+            if (pSku === item.sku) {
+                alert(`⚠️ Lỗi: Không thể liên kết quy đổi sản phẩm với chính nó!`);
+                return;
+            }
+            
+            let ratioInput = prompt(`🔢 Nhập số lượng hàng lẻ có trong 1 thùng (Tỷ lệ quy đổi, ví dụ: 25):`, currentRatio);
+            let ratioVal = parseInt(ratioInput);
+            if (isNaN(ratioVal) || ratioVal <= 0) {
+                alert("⚠️ Số lượng quy đổi không hợp lệ! Phải là số nguyên lớn hơn 0.");
+                return;
+            }
+            
+            item.parentSku = pSku;
+            item.ratio = ratioVal;
+            luuDuLieu(true);
+            lamMoiHeThong();
+            alert(`🎉 Thiết lập thành công! Khi xuất 1 thùng [${item.sku}], hệ thống sẽ tự động trừ ${ratioVal} cây hàng lẻ [${pSku}].`);
+        }
 
         function renderTable(filteredData = null) {
             let targetData = filteredData || inventory;
@@ -608,6 +648,13 @@
 
                 let isChecked = selectedItems.has(realIndex) ? 'checked' : '';
 
+                let quyDoiUiHtml = item.parentSku 
+                    ? `<div class="text-[10px] text-emerald-600 font-bold mt-1 flex items-center gap-0.5 select-none">
+                        <i class="fa-solid fa-box-open"></i> Thùng (${item.ratio} lẻ ➔ ${item.parentSku})
+                        <button onclick="thietLapQuyDoiThung(${realIndex})" class="text-slate-400 hover:text-indigo-600 ml-1 cursor-pointer" title="Sửa liên kết hàng thùng"><i class="fa-solid fa-gear text-[9px]"></i></button>
+                       </div>`
+                    : `<button onclick="thietLapQuyDoiThung(${realIndex})" class="text-indigo-500 hover:text-indigo-700 underline text-[10px] mt-1 block font-semibold cursor-pointer select-none"><i class="fa-solid fa-link mr-1"></i>Liên kết hàng lẻ</button>`;
+
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50/70 transition-all group">
                         <td class="p-4 text-center">
@@ -624,6 +671,7 @@
                                 <span class="font-mono font-bold text-xs text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md select-all">${item.sku}</span>
                                 <button onclick="suaMaSkuTrucTiep(${realIndex})" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-indigo-600 text-xs p-1 rounded transition-all cursor-pointer" title="Sửa mã SKU"><i class="fa-solid fa-pen-to-square"></i></button>
                             </div>
+                            ${quyDoiUiHtml}
                         </td>
                         <td class="p-4">
                             <div class="flex items-start gap-1">
@@ -815,8 +863,6 @@
                     ghiLogLichSu(target.sku, target.name, "Xóa mã hàng 🗑️", target.qty + target.borrowedQty, "bg-slate-900", `Lý do xóa: ${reason.trim()}`);
                     
                     inventory.splice(idx, 1);
-                    
-                    // [ĐÃ FIX]: Dọn dẹp lại toàn bộ mảng selected để tránh lỗi rỗng mảng sau khi xóa sản phẩm và bị lệch Index
                     selectedItems.clear(); 
                     document.getElementById('selectAll').checked = false;
                     
@@ -898,6 +944,20 @@
             } else if (currentActionType === 'xuat') {
                 if (qty > item.qty) { alert(`⚠️ Không đủ hàng xuất! Kho thực tế còn: ${item.qty}`); return; }
                 if (!note) { alert("⚠️ Vui lòng điền thông tin người nhận hàng hoặc lý do xuất!"); return; }
+                
+                if (item.parentSku && item.ratio) {
+                    let parentItem = inventory.find(i => i.sku === item.parentSku);
+                    if (parentItem) {
+                        let totalPiecesDeduct = qty * item.ratio;
+                        if (parentItem.qty < totalPiecesDeduct) {
+                            alert(`⚠️ Thất bại: Số lượng hàng lẻ [${parentItem.sku}] không đủ để trừ theo tỷ lệ thùng! (Yêu cầu trừ: ${totalPiecesDeduct} cây, Kho lẻ hiện có: ${parentItem.qty})`);
+                            return;
+                        }
+                        parentItem.qty -= totalPiecesDeduct;
+                        ghiLogLichSu(parentItem.sku, parentItem.name, "Xuất tự động ➖", totalPiecesDeduct, "bg-slate-500", `Trừ tự động theo mã thùng xuất: ${item.sku} (Lý do: ${note})`);
+                    }
+                }
+
                 item.qty -= qty;
                 ghiLogLichSu(item.sku, item.name, "Xuất kho ➖", qty, "bg-amber-600", note);
             } else if (currentActionType === 'muon') {
@@ -928,7 +988,6 @@
             updateBulkUI();
         }
 
-        // [ĐÃ FIX]: Chống lỗi bị mất lựa chọn khi user gõ ô tìm kiếm xong ấn "Chọn tất cả"
         function toggleSelectAll() {
             let isAllChecked = document.getElementById('selectAll').checked;
             let checkboxes = document.querySelectorAll('.item-checkbox');
@@ -1018,10 +1077,6 @@
             document.getElementById('bulkModal').classList.remove('hidden');
         }
 
-        function closeBulkModal() {
-            document.getElementById('bulkModal').classList.add('hidden');
-        }
-
         function confirmBulkAction() {
             let globalNote = document.getElementById('bulkModalNote').value.trim();
             if (currentBulkType !== 'nhap' && !globalNote) {
@@ -1040,10 +1095,20 @@
                 if (currentBulkType !== 'nhap' && qtyVal > item.qty) {
                     loiVuotTonKho.push(`- ${item.name} (Cần: ${qtyVal} / Sẵn sàng: ${item.qty})`);
                 }
+                
+                if (currentBulkType === 'xuat' && item.parentSku && item.ratio) {
+                    let parentItem = inventory.find(i => i.sku === item.parentSku);
+                    if (parentItem) {
+                        let totalPiecesDeduct = qtyVal * item.ratio;
+                        if (parentItem.qty < totalPiecesDeduct) {
+                            loiVuotTonKho.push(`- Hàng lẻ của ${item.name} [SKU: ${parentItem.sku}] không đủ (Cần trừ: ${totalPiecesDeduct}, Kho lẻ hiện có: ${parentItem.qty})`);
+                        }
+                    }
+                }
             }
 
             if (loiVuotTonKho.length > 0) {
-                alert(`⚠️ Không thể xử lý lô hàng do một số mặt hàng vượt quá tồn kho khả dụng:\n${loiVuotTonKho.join('\n')}`);
+                alert(`⚠️ Không thể xử lý lô hàng do một số mặt hàng không đáp ứng đủ tồn kho:\n${loiVuotTonKho.join('\n')}`);
                 return;
             }
 
@@ -1055,6 +1120,14 @@
                     item.qty += qtyVal;
                     ghiLogLichSu(item.sku, item.name, "Nhập lô 📥", qtyVal, "bg-emerald-600", globalNote || "Nhập bổ sung hàng loạt theo lô");
                 } else if (currentBulkType === 'xuat') {
+                    if (item.parentSku && item.ratio) {
+                        let parentItem = inventory.find(i => i.sku === item.parentSku);
+                        if (parentItem) {
+                            let totalPiecesDeduct = qtyVal * item.ratio;
+                            parentItem.qty -= totalPiecesDeduct;
+                            ghiLogLichSu(parentItem.sku, parentItem.name, "Xuất tự động ➖", totalPiecesDeduct, "bg-slate-500", `Trừ tự động theo lô thùng xuất: ${item.sku} (Ghi chú chung: ${globalNote})`);
+                        }
+                    }
                     item.qty -= qtyVal;
                     ghiLogLichSu(item.sku, item.name, "Xuất lô 📤", qtyVal, "bg-amber-600", globalNote);
                 } else if (currentBulkType === 'muon') {
@@ -1252,6 +1325,24 @@
                     tiepTucTrangThaiQuetTiepTheo();
                     return;
                 }
+
+                if (item.parentSku && item.ratio) {
+                    let parentItem = inventory.find(i => i.sku === item.parentSku);
+                    if (parentItem) {
+                        let totalPiecesDeduct = 1 * item.ratio;
+                        if (parentItem.qty < totalPiecesDeduct) {
+                            playBeepSound('error');
+                            resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950/80 border border-rose-800 animate-fadeIn";
+                            resIcon.innerText = "❌";
+                            resBody.innerHTML = `Hàng lẻ <b>[${parentItem.sku}]</b> không đủ trừ tỉ lệ! (Cần: ${totalPiecesDeduct}, Còn: ${parentItem.qty})`;
+                            tiepTucTrangThaiQuetTiepTheo();
+                            return;
+                        }
+                        parentItem.qty -= totalPiecesDeduct;
+                        ghiLogLichSu(parentItem.sku, parentItem.name, "Xuất tự động ➖", totalPiecesDeduct, "bg-slate-500", `Trừ tự động khi quét mã thùng xuất: ${item.sku}`);
+                    }
+                }
+
                 item.qty -= 1;
                 luuDuLieu(true);
                 ghiLogLichSu(item.sku, item.name, "Xuất quét 📷", 1, "bg-amber-600", noteInputVal);
@@ -1363,7 +1454,7 @@
 
         function khoiPhucTuGoogleSheet() {
             if (!GOOGLE_SHEET_URL) { alert("🚨 Vui lòng cấu hình URL Google Apps Script trước!"); return; }
-            if (!confirm("⚠️ HÀNH ĐỘNG CẢN THẬN: Bạn có chắc chắn muốn Tải dữ liệu từ Google Sheet Cloud và GHI ĐÈ toàn bộ dữ liệu hiện tại trên thiết bị không?")) return;
+            if (!confirm("⚠️ HÀNH ĐỘNG CẨN THẬN: Bạn có chắc chắn muốn Tải dữ liệu từ Google Sheet Cloud và GHI ĐÈ toàn bộ dữ liệu hiện tại trên thiết bị không?")) return;
 
             let btn = document.getElementById('btnRestore');
             let textGoc = btn.innerHTML;
