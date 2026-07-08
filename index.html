@@ -192,7 +192,7 @@
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-200">
                             <th class="p-4 text-center w-12">
-                                <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 cursor-pointer">
+                                <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-50 cursor-pointer">
                             </th>
                             <th class="p-4 text-center w-20 text-xs font-bold text-slate-500 uppercase tracking-wider">Hình Ảnh</th>
                             <th class="p-4 w-40 text-xs font-bold text-slate-500 uppercase tracking-wider">Mã SKU</th>
@@ -220,16 +220,42 @@
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                     <span class="w-1.5 h-5 bg-slate-900 rounded-sm"></span>
-                    Nhật Ký Biến Động Kho Gần Recent
+                    Nhật Ký Biến Động Kho 
                 </h2>
                 <button onclick="xoaLichSu()" class="text-xs font-bold text-slate-400 hover:text-rose-600 transition-all cursor-pointer">
                     <i class="fa-solid fa-clock-rotate-left mr-1"></i>Xóa lịch sử log
                 </button>
             </div>
+
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 mb-4 flex flex-col md:flex-row gap-3 items-center">
+                <div class="relative flex-grow w-full md:w-auto">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                    </span>
+                    <input type="text" id="filterLogKeyword" oninput="filterHistory()" placeholder="Tìm Tên, SKU hoặc Ghi chú..." 
+                           class="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-medium focus:outline-none focus:border-indigo-500 transition-all">
+                </div>
+                
+                <div class="w-full md:w-auto flex flex-wrap sm:flex-nowrap gap-2">
+                    <select id="filterLogAction" onchange="filterHistory()" class="flex-grow sm:flex-grow-0 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium focus:outline-none focus:border-indigo-500 cursor-pointer text-slate-700">
+                        <option value="">Tất cả nghiệp vụ</option>
+                        <option value="Nhập">📥 Chỉ Nhập kho</option>
+                        <option value="Xuất">📤 Chỉ Xuất kho</option>
+                        <option value="Mượn">📦 Chỉ Mượn hàng</option>
+                        <option value="Xóa">🗑️ Chỉ Xóa mã</option>
+                    </select>
+                    
+                    <input type="date" id="filterLogDate" onchange="filterHistory()" class="flex-grow sm:flex-grow-0 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium focus:outline-none focus:border-indigo-500 cursor-pointer text-slate-600" title="Chọn ngày thực hiện">
+                    
+                    <button onclick="clearLogFilter()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap" title="Xóa bộ lọc">
+                        <i class="fa-solid fa-filter-circle-xmark"></i>
+                    </button>
+                </div>
+            </div>
             
             <div class="border border-slate-200/60 rounded-xl overflow-hidden bg-slate-50">
                 <div class="max-h-[350px] overflow-y-auto divide-y divide-slate-200/60" id="historyLogList">
-                    </div>
+                </div>
             </div>
         </section>
 
@@ -696,16 +722,53 @@
             });
         }
 
-        function renderHistory() {
+        // HÀM LỌC NHẬT KÝ MỚI
+        function filterHistory() {
+            let keyword = document.getElementById('filterLogKeyword').value.toLowerCase().trim();
+            let action = document.getElementById('filterLogAction').value;
+            let dateVal = document.getElementById('filterLogDate').value; 
+
+            let formattedDate = "";
+            if (dateVal) {
+                let parts = dateVal.split('-');
+                formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`; 
+            }
+
+            let filteredLogs = historyLog.filter(log => {
+                let matchKeyword = log.name.toLowerCase().includes(keyword) || 
+                                   log.sku.toLowerCase().includes(keyword) || 
+                                   log.note.toLowerCase().includes(keyword);
+                let matchAction = action === "" || log.type.includes(action);
+                let matchDate = formattedDate === "" || log.time.includes(formattedDate);
+
+                return matchKeyword && matchAction && matchDate;
+            });
+
+            renderHistory(filteredLogs);
+        }
+
+        function clearLogFilter() {
+            document.getElementById('filterLogKeyword').value = '';
+            document.getElementById('filterLogAction').value = '';
+            document.getElementById('filterLogDate').value = '';
+            renderHistory(); 
+        }
+
+        // HÀM RENDER NHẬT KÝ CẬP NHẬT
+        function renderHistory(filteredData = null) {
             let logListContainer = document.getElementById('historyLogList');
             logListContainer.innerHTML = '';
+            
+            let targetLogs = filteredData || historyLog;
 
-            if (historyLog.length === 0) {
-                logListContainer.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs font-semibold">Chưa phát sinh hoạt động điều phối nào gần đây.</div>`;
+            if (targetLogs.length === 0) {
+                logListContainer.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs font-semibold">Chưa có hoặc không tìm thấy dữ liệu phù hợp với bộ lọc.</div>`;
                 return;
             }
 
-            historyLog.forEach((log, idx) => {
+            targetLogs.forEach((log) => {
+                let realIdx = historyLog.findIndex(h => h.id === log.id);
+                
                 let checkUndoDisable = (log.type.includes("Xóa") || log.type.includes("Tạo mới") || log.returnedQty >= log.qty) ? 'disabled style="display:none;"' : '';
                 let statusUndoText = log.returnedQty > 0 ? `<div class="text-[10px] text-purple-700 font-bold mt-1"><i class="fa-solid fa-reply-all mr-0.5"></i>Đã hoàn nhập trả: ${log.returnedQty}/${log.qty}</div>` : '';
 
@@ -726,8 +789,8 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end flex-shrink-0">
-                            <button onclick="suaGhiChuLogTrucTiep(${idx})" class="text-slate-400 hover:text-indigo-600 p-1.5 rounded border border-transparent hover:border-slate-200 bg-white shadow-3xs transition-all cursor-pointer" title="Sửa ghi chú log"><i class="fa-solid fa-file-pen"></i></button>
-                            <button ${checkUndoDisable} onclick="hoanNhapTuLichSu(${idx})" class="bg-white hover:bg-purple-600 text-purple-700 hover:text-white font-extrabold border border-purple-200 hover:border-purple-600 px-3 py-1.5 rounded-lg shadow-3xs transition-all cursor-pointer">
+                            <button onclick="suaGhiChuLogTrucTiep(${realIdx})" class="text-slate-400 hover:text-indigo-600 p-1.5 rounded border border-transparent hover:border-slate-200 bg-white shadow-3xs transition-all cursor-pointer" title="Sửa ghi chú log"><i class="fa-solid fa-file-pen"></i></button>
+                            <button ${checkUndoDisable} onclick="hoanNhapTuLichSu(${realIdx})" class="bg-white hover:bg-purple-600 text-purple-700 hover:text-white font-extrabold border border-purple-200 hover:border-purple-600 px-3 py-1.5 rounded-lg shadow-3xs transition-all cursor-pointer">
                                 <i class="fa-solid fa-arrow-rotate-left mr-1"></i>Khách Trả Lại
                             </button>
                         </div>
