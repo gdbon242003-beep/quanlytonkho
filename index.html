@@ -8,7 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://unpkg.com/html5-qrcode"></script>
@@ -47,10 +48,10 @@
 
     <div class="max-w-[1600px] mx-auto p-4 md:p-6 lg:p-8">
         
-        <header class="bg-white border border-slate-200/80 rounded-2xl p-6 mb-6 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+        <header class="bg-white border border-slate-200 rounded-2xl p-6 mb-6 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-center md:text-left">
                 <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-slate-900 via-indigo-950 to-indigo-600 bg-clip-text text-transparent flex items-center justify-center md:justify-start gap-3">
-                    <i class="fa-solid from-indigo-600 to-violet-600 fa-boxes-stacked text-indigo-600"></i>
+                    <i class="fa-solid fa-boxes-stacked text-indigo-600"></i>
                     QUẢN LÝ KHO VẬN
                 </h1>
                 <p class="text-slate-500 text-sm font-medium mt-1">Hệ thống điều phối, kiểm kê tồn kho và quản lý mượn hàng thông minh</p>
@@ -71,28 +72,28 @@
         </header>
 
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-xs flex items-center gap-4">
+            <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl font-bold"><i class="fa-solid fa-tag"></i></div>
                 <div>
                     <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">Mã Sản Phẩm</div>
                     <div id="statTotalSku" class="text-2xl font-extrabold text-slate-900 mt-0.5">0</div>
                 </div>
             </div>
-            <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-xs flex items-center gap-4">
+            <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 text-xl font-bold"><i class="fa-solid fa-warehouse"></i></div>
                 <div>
                     <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">Tổng Sẵn Sàng</div>
                     <div id="statTotalQty" class="text-2xl font-extrabold text-slate-900 mt-0.5">0</div>
                 </div>
             </div>
-            <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-xs flex items-center gap-4">
+            <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 text-xl font-bold"><i class="fa-solid fa-handshake"></i></div>
                 <div>
                     <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">Đang Cho Mượn</div>
                     <div id="statTotalBorrow" class="text-2xl font-extrabold text-slate-900 mt-0.5">0</div>
                 </div>
             </div>
-            <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-xs flex items-center gap-4">
+            <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center text-rose-600 text-xl font-bold"><i class="fa-solid fa-triangle-exclamation"></i></div>
                 <div>
                     <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">Sắp Hết Hàng</div>
@@ -101,37 +102,37 @@
             </div>
         </div>
 
-        <section class="bg-white border border-slate-200/80 rounded-2xl p-6 mb-6 shadow-xs">
+        <section class="bg-white border border-slate-200 rounded-2xl p-6 mb-6 shadow-sm">
             <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                 <span class="w-1.5 h-5 bg-indigo-600 rounded-sm"></span>
                 Khai Báo & Nhập Thêm Hàng Mới
             </h2>
-            <form id="inventoryForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+            <form id="inventoryForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end bg-slate-50 p-4 rounded-xl border border-slate-200">
                 <div class="lg:col-span-2">
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Mã SKU (Quét/Tự điền)</label>
-                    <input type="text" id="productSKU" placeholder="Ví dụ: T-SHIRT-M" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 font-mono font-bold text-sm uppercase focus:outline-none focus:border-indigo-500 focus:ring-3 focus:ring-indigo-500/10 transition-all">
+                    <input type="text" id="productSKU" placeholder="Ví dụ: T-SHIRT-M" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 font-mono font-bold text-sm uppercase focus:outline-none focus:border-indigo-500 transition-all">
                 </div>
                 <div class="lg:col-span-4">
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Tên Sản Phẩm <span class="text-rose-500">*</span></label>
-                    <input type="text" id="productName" required placeholder="Nhập tên chi tiết sản phẩm..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 font-medium text-sm focus:outline-none focus:border-indigo-500 focus:ring-3 focus:ring-indigo-500/10 transition-all">
+                    <input type="text" id="productName" required placeholder="Nhập tên chi tiết sản phẩm..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 font-medium text-sm focus:outline-none focus:border-indigo-500 transition-all">
                 </div>
                 <div class="lg:col-span-2">
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Số Lượng Nhập <span class="text-rose-500">*</span></label>
-                    <input type="number" id="productQty" required min="1" value="1" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 font-bold text-sm text-center focus:outline-none focus:border-indigo-500 focus:ring-3 focus:ring-indigo-500/10 transition-all">
+                    <input type="number" id="productQty" required min="1" value="1" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 font-bold text-sm text-center focus:outline-none focus:border-indigo-500 transition-all">
                 </div>
                 <div class="lg:col-span-2">
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Hình Ảnh Sản Phẩm</label>
                     <input type="file" id="productImage" accept="image/*" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
                 </div>
                 <div class="lg:col-span-2">
-                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-bold text-sm rounded-xl py-3.5 shadow-sm hover:from-indigo-700 hover:to-indigo-800 active:scale-98 transition-all cursor-pointer uppercase tracking-wider">
+                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-bold text-sm rounded-xl py-3.5 shadow-sm hover:from-indigo-700 hover:to-indigo-800 active:scale-95 transition-all cursor-pointer uppercase tracking-wider">
                         <i class="fa-solid fa-plus-circle mr-1.5"></i>Lưu Hàng
                     </button>
                 </div>
             </form>
         </section>
 
-        <div class="bg-white border border-slate-200/80 rounded-2xl p-5 mb-6 shadow-xs flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4">
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 mb-6 shadow-sm flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4">
             
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-grow max-w-2xl">
                 <div class="relative flex-grow">
@@ -142,25 +143,25 @@
                            class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-full text-sm font-medium focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
                 </div>
                 
-                <button onclick="openScannerModal()" class="bg-slate-900 text-white font-bold text-sm px-6 py-3 rounded-full hover:bg-indigo-950 active:scale-98 transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer whitespace-nowrap">
+                <button onclick="openScannerModal()" class="bg-slate-900 text-white font-bold text-sm px-6 py-3 rounded-full hover:bg-indigo-950 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer whitespace-nowrap">
                     <i class="fa-solid fa-qrcode text-base text-indigo-400"></i> MỞ KHU QUÉT MÃ
                 </button>
             </div>
 
             <div class="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0">
-                <button id="btnSync" onclick="dongBoLenGoogleSheet()" class="bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs px-4 py-3 rounded-xl hover:opacity-95 transition-all shadow-xs cursor-pointer flex items-center gap-1.5 whitespace-nowrap">
+                <button id="btnSync" onclick="dongBoLenGoogleSheet()" class="bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs px-4 py-3 rounded-xl hover:opacity-95 transition-all shadow-sm cursor-pointer flex items-center gap-1.5 whitespace-nowrap">
                     <i class="fa-solid fa-cloud-arrow-up"></i> Đẩy Cloud
                 </button>
                 <button id="btnRestore" onclick="khoiPhucTuGoogleSheet()" class="bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs px-4 py-3 rounded-xl hover:bg-slate-200 transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap">
                     <i class="fa-solid fa-cloud-arrow-down"></i> Tải Cloud
                 </button>
-                <button onclick="xuatBaoCaoExcel()" class="bg-emerald-600 text-white font-bold text-xs px-4 py-3 rounded-xl hover:bg-emerald-700 transition-all shadow-xs cursor-pointer flex items-center gap-1.5 whitespace-nowrap">
+                <button onclick="xuatBaoCaoExcel()" class="bg-emerald-600 text-white font-bold text-xs px-4 py-3 rounded-xl hover:bg-emerald-700 transition-all shadow-sm cursor-pointer flex items-center gap-1.5 whitespace-nowrap">
                     <i class="fa-solid fa-file-excel"></i> Xuất Bảng Kiểm Kho
                 </button>
             </div>
         </div>
 
-        <div id="bulkActionPanel" class="hidden bg-indigo-50 border border-indigo-200 rounded-2xl p-4 mb-6 animate-fadeIn flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div id="bulkActionPanel" class="hidden bg-indigo-50 border border-indigo-200 rounded-2xl p-4 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div class="flex items-center gap-3">
                 <span class="w-2.5 h-2.5 bg-indigo-600 rounded-full animate-ping"></span>
                 <span class="text-sm font-bold text-indigo-950">
@@ -171,28 +172,28 @@
                 </button>
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full md:w-auto">
-                <button onclick="openBulkModal('nhap')" class="bg-white border border-emerald-200 text-emerald-700 hover:bg-emerald-50 font-bold text-xs px-3 py-2.5 rounded-xl shadow-2xs transition-all cursor-pointer">
+                <button onclick="openBulkModal('nhap')" class="bg-white border border-emerald-200 text-emerald-700 hover:bg-emerald-50 font-bold text-xs px-3 py-2.5 rounded-xl transition-all cursor-pointer">
                     <i class="fa-solid fa-circle-plus mr-1"></i>Nhập Lô
                 </button>
-                <button onclick="openBulkModal('xuat')" class="bg-white border border-amber-200 text-amber-700 hover:bg-amber-50 font-bold text-xs px-3 py-2.5 rounded-xl shadow-2xs transition-all cursor-pointer">
+                <button onclick="openBulkModal('xuat')" class="bg-white border border-amber-200 text-amber-700 hover:bg-amber-50 font-bold text-xs px-3 py-2.5 rounded-xl transition-all cursor-pointer">
                     <i class="fa-solid fa-circle-minus mr-1"></i>Xuất Lô
                 </button>
-                <button onclick="openBulkModal('muon')" class="bg-white border border-purple-200 text-purple-700 hover:bg-purple-50 font-bold text-xs px-3 py-2.5 rounded-xl shadow-2xs transition-all cursor-pointer">
+                <button onclick="openBulkModal('muon')" class="bg-white border border-purple-200 text-purple-700 hover:bg-purple-50 font-bold text-xs px-3 py-2.5 rounded-xl transition-all cursor-pointer">
                     <i class="fa-solid fa-handshake mr-1"></i>Mượn Lô
                 </button>
-                <button onclick="xoaHangLoat()" class="bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 font-bold text-xs px-3 py-2.5 rounded-xl shadow-2xs transition-all cursor-pointer">
+                <button onclick="xoaHangLoat()" class="bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 font-bold text-xs px-3 py-2.5 rounded-xl transition-all cursor-pointer">
                     <i class="fa-solid fa-trash mr-1"></i>Xóa Lô
                 </button>
             </div>
         </div>
 
-        <main class="bg-white border border-slate-200/80 rounded-2xl shadow-xs overflow-hidden mb-6">
+        <main class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden mb-6">
             <div class="overflow-x-auto w-full">
                 <table id="inventoryTable" class="w-full text-left border-collapse min-w-[1100px]">
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-200">
                             <th class="p-4 text-center w-12">
-                                <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-50 cursor-pointer">
+                                <input type="checkbox" id="selectAll" onclick="toggleSelectAll()" class="w-4 h-4 text-indigo-600 border-slate-300 rounded cursor-pointer">
                             </th>
                             <th class="p-4 text-center w-20 text-xs font-bold text-slate-500 uppercase tracking-wider">Hình Ảnh</th>
                             <th class="p-4 w-40 text-xs font-bold text-slate-500 uppercase tracking-wider">Mã SKU</th>
@@ -203,7 +204,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
             
@@ -216,7 +217,7 @@
             </div>
         </main>
 
-        <section class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs">
+        <section class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                     <span class="w-1.5 h-5 bg-slate-900 rounded-sm"></span>
@@ -227,7 +228,7 @@
                 </button>
             </div>
 
-            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 mb-4 flex flex-col md:flex-row gap-3 items-center">
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 mb-4 flex flex-col md:flex-row gap-3 items-center">
                 <div class="relative flex-grow w-full md:w-auto">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                         <i class="fa-solid fa-magnifying-glass text-xs"></i>
@@ -236,8 +237,8 @@
                            class="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-medium focus:outline-none focus:border-indigo-500 transition-all">
                 </div>
                 
-                <div class="w-full md:w-auto flex flex-wrap sm:flex-nowrap gap-2">
-                    <select id="filterLogAction" onchange="filterHistory()" class="flex-grow sm:flex-grow-0 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium focus:outline-none focus:border-indigo-500 cursor-pointer text-slate-700">
+                <div class="w-full md:w-auto flex flex-wrap gap-2">
+                    <select id="filterLogAction" onchange="filterHistory()" class="bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium focus:outline-none focus:border-indigo-500 cursor-pointer text-slate-700">
                         <option value="">Tất cả nghiệp vụ</option>
                         <option value="Nhập">📥 Chỉ Nhập kho</option>
                         <option value="Xuất">📤 Chỉ Xuất kho</option>
@@ -245,24 +246,24 @@
                         <option value="Xóa">🗑️ Chỉ Xóa mã</option>
                     </select>
                     
-                    <input type="date" id="filterLogDate" onchange="filterHistory()" class="flex-grow sm:flex-grow-0 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium focus:outline-none focus:border-indigo-500 cursor-pointer text-slate-600" title="Chọn ngày thực hiện">
+                    <input type="date" id="filterLogDate" onchange="filterHistory()" class="bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium focus:outline-none focus:border-indigo-500 cursor-pointer text-slate-600" title="Chọn ngày thực hiện">
                     
-                    <button onclick="clearLogFilter()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap" title="Xóa bộ lọc">
+                    <button onclick="clearLogFilter()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer" title="Xóa bộ lọc">
                         <i class="fa-solid fa-filter-circle-xmark"></i>
                     </button>
                 </div>
             </div>
             
-            <div class="border border-slate-200/60 rounded-xl overflow-hidden bg-slate-50">
-                <div class="max-h-[350px] overflow-y-auto divide-y divide-slate-200/60" id="historyLogList">
+            <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
+                <div class="max-h-[350px] overflow-y-auto divide-y divide-slate-200" id="historyLogList">
                 </div>
             </div>
         </section>
 
     </div>
 
-    <div id="actionModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl border border-slate-200 w-full max-w-md shadow-xl overflow-hidden animate-scaleIn">
+    <div id="actionModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl border border-slate-200 w-full max-w-md shadow-xl overflow-hidden">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center">
                 <h3 id="actionModalTitle" class="text-base font-extrabold tracking-tight">THAO TÁC KHO HÀNG</h3>
                 <button onclick="closeActionModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:bg-slate-100 flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
@@ -297,20 +298,20 @@
         </div>
     </div>
 
-    <div id="bulkModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl border border-slate-200 w-full max-w-2xl shadow-xl max-h-[90dvh] flex flex-col overflow-hidden animate-scaleIn">
-            <div class="p-5 border-t border-slate-100 flex justify-between items-center flex-shrink-0">
+    <div id="bulkModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl border border-slate-200 w-full max-w-2xl shadow-xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center flex-shrink-0">
                 <h3 id="bulkModalTitle" class="text-base font-extrabold uppercase tracking-tight text-indigo-950">ĐIỀU PHỐI BIẾN ĐỘNG THEO LÔ HÀNG</h3>
                 <button onclick="closeBulkModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:bg-slate-100 flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
             <div id="bulkModalList" class="p-5 overflow-y-auto space-y-3 bg-slate-50/50 flex-grow">
-                </div>
+            </div>
 
             <div class="p-5 border-t border-slate-100 bg-white flex-shrink-0">
                 <div class="mb-4">
                     <label id="bulkGlobalNoteLabel" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Ghi Chú Chung Cho Toàn Bộ Lô Hàng này <span class="text-rose-500">*</span></label>
-                    <input type="text" id="bulkModalNote" placeholder="Nhập tên người nhận / người mượn hoặc lý do xuất kho..." class="w-full bg-white border border-indigo-200 rounded-xl px-4 py-3 text-sm font-bold shadow-xs focus:outline-none focus:border-indigo-600 focus:ring-3 focus:ring-indigo-500/10 transition-all">
+                    <input type="text" id="bulkModalNote" placeholder="Nhập tên người nhận / người mượn hoặc lý do xuất kho..." class="w-full bg-white border border-indigo-200 rounded-xl px-4 py-3 text-sm font-bold shadow-sm focus:outline-none focus:border-indigo-600 transition-all">
                 </div>
                 <div class="flex justify-end gap-2">
                     <button type="button" onclick="closeBulkModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 cursor-pointer">Đóng Lại</button>
@@ -320,12 +321,12 @@
         </div>
     </div>
 
-    <div id="scannerModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 text-white rounded-2xl border border-slate-800 w-full max-w-lg shadow-2xl overflow-hidden animate-scaleIn">
+    <div id="scannerModal" class="hidden fixed inset-0 bg-slate-950/85 z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 text-white rounded-2xl border border-slate-800 w-full max-w-lg shadow-2xl overflow-hidden">
             
             <div class="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
                 <h3 class="text-sm font-extrabold tracking-wider text-indigo-400 uppercase flex items-center gap-2">
-                    <i class="fa-solid fa-circle-dot text-rose-500 animate-pulse text-xs"></i> Trung Tâm Quét Mã Điều Phối
+                    <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Trung Tâm Quét Mã Điều Phối
                 </h3>
                 <button onclick="closeScannerModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark text-sm"></i></button>
             </div>
@@ -358,27 +359,27 @@
 
                 <div id="viewGunScanner" class="bg-slate-950 border border-slate-800 rounded-2xl p-6 text-center space-y-4 relative overflow-hidden">
                     <input type="text" id="hwScannerInput" class="absolute -top-40 opacity-0 pointer-events-none">
-                    <div class="w-16 h-16 rounded-full bg-indigo-950 border border-indigo-800/60 text-indigo-400 flex items-center justify-center text-2xl mx-auto shadow-inner animate-pulse">
+                    <div class="w-16 h-16 rounded-full bg-indigo-950 border border-indigo-800 text-indigo-400 flex items-center justify-center text-2xl mx-auto animate-pulse">
                         <i class="fa-solid fa-wifi"></i>
                     </div>
                     <div class="space-y-1">
                         <h4 class="text-sm font-bold text-slate-200">Hệ Thống Đang Đợi Súng Quét...</h4>
                         <p class="text-xs text-slate-500 max-w-xs mx-auto">Vui lòng bấm cò súng quét vào mã vạch/QR của sản phẩm. Kết quả sẽ tự động xử lý ngay lập tức.</p>
                     </div>
-                    <div class="inline-block px-3 py-1 bg-indigo-950/80 border border-indigo-900/60 rounded-full text-[10px] font-mono text-indigo-400 font-bold">
+                    <div class="inline-block px-3 py-1 bg-indigo-950 border border-indigo-900 rounded-full text-[10px] font-mono text-indigo-400 font-bold">
                         Trạng thái: Đang lắng nghe luồng USB/Bluetooth
                     </div>
                 </div>
 
                 <div id="viewCamScanner" class="hidden space-y-3">
-                    <div class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden relative shadow-inner aspect-video w-full max-w mx-auto">
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden relative aspect-video w-full max-w mx-auto">
                         <div id="cameraReader" class="w-full h-full bg-slate-950"></div>
-                        <div class="absolute inset-x-0 h-0.5 bg-rose-500 opacity-60 shadow-lg laser-line"></div>
+                        <div class="absolute inset-x-0 h-0.5 bg-rose-500 opacity-60 laser-line"></div>
                     </div>
                     <p class="text-center text-xs text-slate-500"><i class="fa-solid fa-circle-info mr-1"></i>Hãy đưa mã QR/Barcode vào trung tâm khung ngắm của Camera.</p>
                 </div>
 
-                <div id="scannerResultBox" class="hidden p-4 rounded-xl flex items-center gap-4 transition-all duration-300 animate-fadeIn">
+                <div id="scannerResultBox" class="hidden p-4 rounded-xl flex items-center gap-4 transition-all duration-300">
                     <div id="scannerResultIcon" class="text-2xl"></div>
                     <div class="flex-grow min-w-0">
                         <div id="scannerResultTitle" class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Kết quả xử lý</div>
@@ -391,34 +392,35 @@
     </div>
 
     <script>
-        let GOOGLE_SHEET_URL = localStorage.getItem('googleSheetUrl') || '';
-        let inventory = [];
-        let historyLog = [];
-        let selectedItems = new Set();
+        var GOOGLE_SHEET_URL = '';
+        var inventory = [];
+        var historyLog = [];
+        var selectedItems = new Set();
         
-        let currentScannerDevice = 'gun'; 
-        let currentScanMode = 'info'; 
-        let html5QrCode = null;
-        let isScanningPaused = false;
+        var currentScannerDevice = 'gun'; 
+        var currentScanMode = 'info'; 
+        var html5QrCode = null;
+        var isScanningPaused = false;
 
-        const DEFAULT_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%25' height='100%25' fill='%23f1f5f9'/><path d='M35 45a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM25 65h50L60 45 45 60l-10-9-10 14z' fill='%23cbd5e1'/></svg>";
-
-        document.getElementById('sheetUrlInput').value = GOOGLE_SHEET_URL;
+        var DEFAULT_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%25' height='100%25' fill='%23f1f5f9'/><path d='M35 45a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM25 65h50L60 45 45 60l-10-9-10 14z' fill='%23cbd5e1'/></svg>";
 
         try {
+            GOOGLE_SHEET_URL = localStorage.getItem('googleSheetUrl') || '';
             inventory = JSON.parse(localStorage.getItem('khoHangPro')) || [];
             historyLog = JSON.parse(localStorage.getItem('lichSuKhoPro')) || [];
         } catch (e) {
-            console.error("Lỗi parse cache dữ liệu local:", e);
+            console.warn("⚠️ Safari chặn truy cập bộ nhớ khi chạy dạng file offline.", e);
             inventory = [];
             historyLog = [];
         }
 
+        document.getElementById('sheetUrlInput').value = GOOGLE_SHEET_URL;
+
         function chuanHoaDuLieuGoc() {
-            let coThayDoi = false;
-            inventory.forEach(item => {
+            var coThayDoi = false;
+            inventory.forEach(function(item) {
                 if (!item.borrowList) { item.borrowList = []; coThayDoi = true; }
-                if (typeof item.borrowedQty !== 'number') { item.borrowedQty = item.borrowList.reduce((s, b) => s + b.qty, 0); coThayDoi = true; }
+                if (typeof item.borrowedQty !== 'number') { item.borrowedQty = item.borrowList.reduce(function(s, b) { return s + b.qty; }, 0); coThayDoi = true; }
                 if (!item.image) { item.image = DEFAULT_IMAGE; coThayDoi = true; }
                 if (!item.sku) { item.sku = "SP" + Math.floor(10000 + Math.random() * 90000); coThayDoi = true; }
                 item.sku = String(item.sku).trim().toUpperCase(); 
@@ -434,13 +436,14 @@
             updateBulkUI();
         }
 
-        function luuDuLieu(kichHoatAutoSync = true) {
+        function luuDuLieu(kichHoatAutoSync) {
+            if (kichHoatAutoSync === undefined) kichHoatAutoSync = true;
             try {
                 localStorage.setItem('khoHangPro', JSON.stringify(inventory));
-                if (kichHoatAutoSync) triggerAutoSaveCloud();
             } catch (e) {
-                alert("⚠️ Bộ nhớ Trình duyệt của bạn bị đầy! Không thể lưu thêm hình ảnh kích thước lớn.");
+                console.warn("⚠️ Trình duyệt chặn lưu dữ liệu cục bộ.");
             }
+            if (kichHoatAutoSync) triggerAutoSaveCloud();
         }
 
         function luuLichSuLog() {
@@ -448,15 +451,27 @@
                 if (historyLog.length > 500) historyLog = historyLog.slice(0, 500); 
                 localStorage.setItem('lichSuKhoPro', JSON.stringify(historyLog));
             } catch (e) {
-                console.error("Lỗi cache lịch sử log:", e);
+                console.warn("⚠️ Trình duyệt chặn lưu lịch sử.");
             }
         }
 
-        function playBeepSound(type = 'success') {
+        function luuConfigCloud() {
+            var url = document.getElementById('sheetUrlInput').value.trim();
+            GOOGLE_SHEET_URL = url;
             try {
-                let ctx = new (window.AudioContext || window.webkitAudioContext)();
-                let osc = ctx.createOscillator();
-                let gain = ctx.createGain();
+                localStorage.setItem('googleSheetUrl', url);
+                alert("✅ Đã ghi nhận cấu hình liên kết Google Sheet Cloud thành công!");
+            } catch(e) {
+                alert("⚠️ Trình duyệt chặn lưu vào bộ nhớ gốc. Hệ thống vẫn sẽ dùng Cloud Link này tạm thời cho đến khi bạn tải lại trang.");
+            }
+        }
+
+        function playBeepSound(type) {
+            if (type === undefined) type = 'success';
+            try {
+                var ctx = new (window.AudioContext || window.webkitAudioContext)();
+                var osc = ctx.createOscillator();
+                var gain = ctx.createGain();
                 osc.connect(gain);
                 gain.connect(ctx.destination);
 
@@ -504,26 +519,19 @@
 
         function capNhatKhoiKpiThongKe() {
             document.getElementById('statTotalSku').innerText = inventory.length;
-            document.getElementById('statTotalQty').innerText = inventory.reduce((s, i) => s + (i.qty || 0), 0);
-            document.getElementById('statTotalBorrow').innerText = inventory.reduce((s, i) => s + (i.borrowedQty || 0), 0);
-            document.getElementById('statLowStock').innerText = inventory.filter(i => (i.qty || 0) <= 5 && (i.qty || 0) > 0).length;
-        }
-
-        function luuConfigCloud() {
-            let url = document.getElementById('sheetUrlInput').value.trim();
-            localStorage.setItem('googleSheetUrl', url);
-            GOOGLE_SHEET_URL = url;
-            alert("✅ Đã ghi nhận cấu hình liên kết Google Sheet Cloud thành công!");
+            document.getElementById('statTotalQty').innerText = inventory.reduce(function(s, i) { return s + (i.qty || 0); }, 0);
+            document.getElementById('statTotalBorrow').innerText = inventory.reduce(function(s, i) { return s + (i.borrowedQty || 0); }, 0);
+            document.getElementById('statLowStock').innerText = inventory.filter(function(i) { return (i.qty || 0) <= 5 && (i.qty || 0) > 0; }).length;
         }
 
         function compressAndConvertImage(file, callback) {
-            let reader = new FileReader();
+            var reader = new FileReader();
             reader.onload = function(e) {
-                let img = new Image();
+                var img = new Image();
                 img.onload = function() {
-                    let canvas = document.createElement('canvas');
-                    let max_size = 300; 
-                    let w = img.width, h = img.height;
+                    var canvas = document.createElement('canvas');
+                    var max_size = 300; 
+                    var w = img.width, h = img.height;
                     if (w > h) { if (w > max_size) { h *= max_size / w; w = max_size; } }
                     else { if (h > max_size) { w *= max_size / h; h = max_size; } }
                     canvas.width = w; canvas.height = h;
@@ -537,23 +545,23 @@
 
         document.getElementById('inventoryForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            let skuInput = document.getElementById('productSKU').value.trim().toUpperCase();
-            let nameInput = document.getElementById('productName').value.trim();
-            let qtyInput = parseInt(document.getElementById('productQty').value) || 1;
-            let imgFile = document.getElementById('productImage').files[0];
+            var skuInput = document.getElementById('productSKU').value.trim().toUpperCase();
+            var nameInput = document.getElementById('productName').value.trim();
+            var qtyInput = parseInt(document.getElementById('productQty').value) || 1;
+            var imgFile = document.getElementById('productImage').files[0];
 
             if(!nameInput) return;
             if (qtyInput <= 0) { alert("⚠️ Vui lòng nhập số lượng lớn hơn 0!"); return; }
 
-            let existingIndex = -1;
+            var existingIndex = -1;
             if (skuInput !== "") {
-                existingIndex = inventory.findIndex(i => i.sku === skuInput);
+                existingIndex = inventory.findIndex(function(i) { return i.sku === skuInput; });
             } else {
-                existingIndex = inventory.findIndex(i => i.name.toLowerCase() === nameInput.toLowerCase());
+                existingIndex = inventory.findIndex(function(i) { return i.name.toLowerCase() === nameInput.toLowerCase(); });
                 skuInput = "SP" + Math.floor(10000 + Math.random() * 90000); 
             }
 
-            let xửLýHoànTất = (base64Img) => {
+            var xửLýHoànTất = function(base64Img) {
                 if (existingIndex !== -1) {
                     inventory[existingIndex].qty += qtyInput;
                     if(base64Img) inventory[existingIndex].image = base64Img;
@@ -583,11 +591,11 @@
         });
 
         function thietLapQuyDoiThung(idx) {
-            let item = inventory[idx];
-            let currentParent = item.parentSku || '';
-            let currentRatio = item.ratio || '';
+            var item = inventory[idx];
+            var currentParent = item.parentSku || '';
+            var currentRatio = item.ratio || '';
             
-            let parentSkuInput = prompt(`📦 [CÀI ĐẶT LIÊN KẾT HÀNG THÙNG]\nNhập mã SKU lẻ của sản phẩm chứa trong thùng này (Ví dụ: RA-01):\n(Để trống nếu muốn hủy liên kết quy đổi)`, currentParent);
+            var parentSkuInput = prompt("📦 [CÀI ĐẶT LIÊN KẾT HÀNG THÙNG]\nNhập mã SKU lẻ của sản phẩm chứa trong thùng này (Ví dụ: RA-01):\n(Để trống nếu muốn hủy liên kết quy đổi)", currentParent);
             if (parentSkuInput === null) return;
             
             if (parentSkuInput.trim() === "") {
@@ -599,19 +607,19 @@
                 return;
             }
             
-            let pSku = parentSkuInput.trim().toUpperCase();
-            let targetParent = inventory.find(i => i.sku === pSku);
+            var pSku = parentSkuInput.trim().toUpperCase();
+            var targetParent = inventory.find(function(i) { return i.sku === pSku; });
             if (!targetParent) {
-                alert(`⚠️ Thất bại: Không tìm thấy hàng lẻ nào có mã SKU là [${pSku}] trong danh mục kho! Vui lòng tạo mã hàng lẻ trước.`);
+                alert("⚠️ Thất bại: Không tìm thấy hàng lẻ nào có mã SKU là [" + pSku + "] trong danh mục kho! Vui lòng tạo mã hàng lẻ trước.");
                 return;
             }
             if (pSku === item.sku) {
-                alert(`⚠️ Lỗi: Không thể liên kết quy đổi sản phẩm với chính nó!`);
+                alert("⚠️ Lỗi: Không thể liên kết quy đổi sản phẩm với chính nó!");
                 return;
             }
             
-            let ratioInput = prompt(`🔢 Nhập số lượng hàng lẻ có trong 1 thùng (Tỷ lệ quy đổi, ví dụ: 25):`, currentRatio);
-            let ratioVal = parseInt(ratioInput);
+            var ratioInput = prompt("🔢 Nhập số lượng hàng lẻ có trong 1 thùng (Tỷ lệ quy đổi, ví dụ: 25):", currentRatio);
+            var ratioVal = parseInt(ratioInput);
             if (isNaN(ratioVal) || ratioVal <= 0) {
                 alert("⚠️ Số lượng quy đổi không hợp lệ! Phải là số nguyên lớn hơn 0.");
                 return;
@@ -621,12 +629,12 @@
             item.ratio = ratioVal;
             luuDuLieu(true);
             lamMoiHeThong();
-            alert(`🎉 Thiết lập thành công! Khi xuất 1 thùng [${item.sku}], hệ thống sẽ tự động trừ ${ratioVal} cây hàng lẻ [${pSku}].`);
+            alert("🎉 Thiết lập thành công! Khi xuất 1 thùng [" + item.sku + "], hệ thống sẽ tự động trừ " + ratioVal + " cây hàng lẻ [" + pSku + "].");
         }
 
-        function renderTable(filteredData = null) {
-            let targetData = filteredData || inventory;
-            let tbody = document.querySelector('#inventoryTable tbody');
+        function renderTable(filteredData) {
+            var targetData = filteredData || inventory;
+            var tbody = document.querySelector('#inventoryTable tbody');
             tbody.innerHTML = '';
 
             if (targetData.length === 0) {
@@ -636,59 +644,43 @@
                 document.getElementById('emptyState').classList.add('hidden');
             }
 
-            targetData.forEach((item) => {
-                let realIndex = inventory.findIndex(i => i.sku === item.sku);
+            targetData.forEach(function(item) {
+                var realIndex = inventory.findIndex(function(i) { return i.sku === item.sku; });
                 
-                let badgeQtyHtml = '';
+                var badgeQtyHtml = '';
                 if (item.qty === 0) {
-                    badgeQtyHtml = `<span class="bg-rose-50 text-rose-600 px-2.5 py-1 rounded-full text-xs font-extrabold border border-rose-200">HẾT HÀNG</span>`;
+                    badgeQtyHtml = '<span class="bg-rose-50 text-rose-600 px-2.5 py-1 rounded-full text-xs font-extrabold border border-rose-200">HẾT HÀNG</span>';
                 } else if (item.qty <= 5) {
-                    badgeQtyHtml = `<span class="text-rose-600 font-extrabold text-base bg-rose-50/50 px-2 py-0.5 rounded-md border border-rose-100">${item.qty}</span><div class="text-[10px] text-amber-600 font-bold mt-0.5"><i class="fa-solid fa-triangle-exclamation mr-0.5"></i>Ít hàng</div>`;
+                    badgeQtyHtml = '<span class="text-rose-600 font-extrabold text-base bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100">' + item.qty + '</span><div class="text-[10px] text-amber-600 font-bold mt-0.5"><i class="fa-solid fa-triangle-exclamation mr-0.5"></i>Ít hàng</div>';
                 } else {
-                    badgeQtyHtml = `<span class="text-slate-900 font-extrabold text-base">${item.qty}</span>`;
+                    badgeQtyHtml = '<span class="text-slate-900 font-extrabold text-base">' + item.qty + '</span>';
                 }
 
-                let borrowListHtml = '';
+                var borrowListHtml = '';
                 if (item.borrowList && item.borrowList.length > 0) {
-                    borrowListHtml += `
-                        <div class="mb-1.5 flex items-center gap-1.5 text-[11px] font-extrabold text-purple-700 bg-purple-50 border border-purple-100 rounded-lg px-2 py-1 w-max">
-                            <i class="fa-solid fa-chart-pie"></i> Đang cho mượn lẻ: ${item.borrowedQty}
-                        </div>
-                        <div class="flex flex-col gap-1.5 max-h-[120px] overflow-y-auto pr-1">
-                    `;
-                    item.borrowList.forEach((bItem, bIdx) => {
-                        borrowListHtml += `
-                            <div class="flex justify-between items-center bg-white border border-slate-200 pl-2.5 pr-1.5 py-1 rounded-lg text-xs gap-3 shadow-3xs hover:border-purple-300 transition-all">
-                                <div class="min-w-0 flex-grow">
-                                    <div class="font-bold text-slate-800 truncate" title="${bItem.note}">📦 SL: <span class="text-purple-700 font-mono font-extrabold">${bItem.qty}</span> - ${bItem.note}</div>
-                                    <div class="text-[10px] text-slate-400 font-medium mt-0.5"><i class="fa-regular fa-clock mr-1"></i>${bItem.time.split(',')[0]}</div>
-                                </div>
-                                <button onclick="traHangDonLe(${realIndex}, ${bIdx})" class="bg-slate-100 hover:bg-purple-600 text-slate-700 hover:text-white font-extrabold text-[11px] px-2.5 py-1 rounded-md border border-slate-200 hover:border-purple-600 transition-all cursor-pointer">Trả</button>
-                            </div>
-                        `;
+                    borrowListHtml += '<div class="mb-1.5 flex items-center gap-1.5 text-[11px] font-extrabold text-purple-700 bg-purple-50 border border-purple-100 rounded-lg px-2 py-1 w-max"><i class="fa-solid fa-chart-pie"></i> Đang cho mượn lẻ: ' + item.borrowedQty + '</div><div class="flex flex-col gap-1.5 max-h-[120px] overflow-y-auto pr-1">';
+                    item.borrowList.forEach(function(bItem, bIdx) {
+                        borrowListHtml += '<div class="flex justify-between items-center bg-white border border-slate-200 pl-2.5 pr-1.5 py-1 rounded-lg text-xs gap-3 shadow-sm hover:border-purple-300 transition-all"><div class="min-w-0 flex-grow"><div class="font-bold text-slate-800 truncate" title="' + bItem.note + '">📦 SL: <span class="text-purple-700 font-mono font-extrabold">' + bItem.qty + '</span> - ' + bItem.note + '</div><div class="text-[10px] text-slate-400 font-medium mt-0.5"><i class="fa-regular fa-clock mr-1"></i>' + bItem.time.split(',')[0] + '</div></div><button onclick="traHangDonLe(' + realIndex + ', ' + bIdx + ')" class="bg-slate-100 hover:bg-purple-600 text-slate-700 hover:text-white font-extrabold text-[11px] px-2.5 py-1 rounded-md border border-slate-200 hover:border-purple-600 transition-all cursor-pointer">Trả</button></div>';
                     });
-                    borrowListHtml += `</div>`;
+                    borrowListHtml += '</div>';
                 } else {
-                    borrowListHtml = `<span class="text-slate-300 font-medium text-xs">Không có ai mượn</span>`;
+                    borrowListHtml = '<span class="text-slate-300 font-medium text-xs">Không có ai mượn</span>';
                 }
 
-                let isChecked = selectedItems.has(realIndex) ? 'checked' : '';
+                var isChecked = selectedItems.has(realIndex) ? 'checked' : '';
 
-                let quyDoiUiHtml = item.parentSku 
-                    ? `<div class="text-[10px] text-emerald-600 font-bold mt-1 flex items-center gap-0.5 select-none">
-                        <i class="fa-solid fa-box-open"></i> Thùng (${item.ratio} lẻ ➔ ${item.parentSku})
-                        <button onclick="thietLapQuyDoiThung(${realIndex})" class="text-slate-400 hover:text-indigo-600 ml-1 cursor-pointer" title="Sửa liên kết hàng thùng"><i class="fa-solid fa-gear text-[9px]"></i></button>
-                       </div>`
-                    : `<button onclick="thietLapQuyDoiThung(${realIndex})" class="text-indigo-500 hover:text-indigo-700 underline text-[10px] mt-1 block font-semibold cursor-pointer select-none"><i class="fa-solid fa-link mr-1"></i>Liên kết hàng lẻ</button>`;
+                var quyDoiUiHtml = item.parentSku 
+                    ? '<div class="text-[10px] text-emerald-600 font-bold mt-1 flex items-center gap-0.5 select-none"><i class="fa-solid fa-box-open"></i> Thùng (' + item.ratio + ' lẻ ➔ ' + item.parentSku + ')<button onclick="thietLapQuyDoiThung(' + realIndex + ')" class="text-slate-400 hover:text-indigo-600 ml-1 cursor-pointer" title="Sửa liên kết hàng thùng"><i class="fa-solid fa-gear text-[9px]"></i></button></div>'
+                    : '<button onclick="thietLapQuyDoiThung(' + realIndex + ')" class="text-indigo-500 hover:text-indigo-700 underline text-[10px] mt-1 block font-semibold cursor-pointer select-none"><i class="fa-solid fa-link mr-1"></i>Liên kết hàng lẻ</button>';
 
                 tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50/70 transition-all group">
+                    <tr class="hover:bg-slate-50 transition-all group">
                         <td class="p-4 text-center">
-                            <input type="checkbox" value="${realIndex}" ${isChecked} onclick="handleSingleSelect(this)" class="item-checkbox w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 cursor-pointer">
+                            <input type="checkbox" value="${realIndex}" ${isChecked} onclick="handleSingleSelect(this)" class="item-checkbox w-4 h-4 text-indigo-600 border-slate-300 rounded cursor-pointer">
                         </td>
                         <td class="p-4 text-center">
                             <div class="relative inline-block">
-                                <img src="${item.image}" class="w-12 h-12 object-cover rounded-xl border border-slate-200/80 shadow-3xs bg-slate-50">
+                                <img src="${item.image}" class="w-12 h-12 object-cover rounded-xl border border-slate-200 shadow-sm bg-slate-50">
                                 <div onclick="doiAnhSanPhanTrucTiep(${realIndex})" class="absolute inset-0 bg-slate-900/60 text-white text-[9px] font-bold rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all cursor-pointer"> Đổi ảnh</div>
                             </div>
                         </td>
@@ -722,24 +714,23 @@
             });
         }
 
-        // HÀM LỌC NHẬT KÝ MỚI
         function filterHistory() {
-            let keyword = document.getElementById('filterLogKeyword').value.toLowerCase().trim();
-            let action = document.getElementById('filterLogAction').value;
-            let dateVal = document.getElementById('filterLogDate').value; 
+            var keyword = document.getElementById('filterLogKeyword').value.toLowerCase().trim();
+            var action = document.getElementById('filterLogAction').value;
+            var dateVal = document.getElementById('filterLogDate').value; 
 
-            let formattedDate = "";
+            var formattedDate = "";
             if (dateVal) {
-                let parts = dateVal.split('-');
-                formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`; 
+                var parts = dateVal.split('-');
+                formattedDate = parts[2] + "/" + parts[1] + "/" + parts[0]; 
             }
 
-            let filteredLogs = historyLog.filter(log => {
-                let matchKeyword = log.name.toLowerCase().includes(keyword) || 
+            var filteredLogs = historyLog.filter(function(log) {
+                var matchKeyword = log.name.toLowerCase().includes(keyword) || 
                                    log.sku.toLowerCase().includes(keyword) || 
                                    log.note.toLowerCase().includes(keyword);
-                let matchAction = action === "" || log.type.includes(action);
-                let matchDate = formattedDate === "" || log.time.includes(formattedDate);
+                var matchAction = action === "" || log.type.includes(action);
+                var matchDate = formattedDate === "" || log.time.includes(formattedDate);
 
                 return matchKeyword && matchAction && matchDate;
             });
@@ -754,28 +745,27 @@
             renderHistory(); 
         }
 
-        // HÀM RENDER NHẬT KÝ CẬP NHẬT
-        function renderHistory(filteredData = null) {
-            let logListContainer = document.getElementById('historyLogList');
+        function renderHistory(filteredData) {
+            var logListContainer = document.getElementById('historyLogList');
             logListContainer.innerHTML = '';
             
-            let targetLogs = filteredData || historyLog;
+            var targetLogs = filteredData || historyLog;
 
             if (targetLogs.length === 0) {
-                logListContainer.innerHTML = `<div class="p-8 text-center text-slate-400 text-xs font-semibold">Chưa có hoặc không tìm thấy dữ liệu phù hợp với bộ lọc.</div>`;
+                logListContainer.innerHTML = '<div class="p-8 text-center text-slate-400 text-xs font-semibold">Chưa có hoặc không tìm thấy dữ liệu phù hợp với bộ lọc.</div>';
                 return;
             }
 
-            targetLogs.forEach((log) => {
-                let realIdx = historyLog.findIndex(h => h.id === log.id);
+            targetLogs.forEach(function(log) {
+                var realIdx = historyLog.findIndex(function(h) { return h.id === log.id; });
                 
-                let checkUndoDisable = (log.type.includes("Xóa") || log.type.includes("Tạo mới") || log.returnedQty >= log.qty) ? 'disabled style="display:none;"' : '';
-                let statusUndoText = log.returnedQty > 0 ? `<div class="text-[10px] text-purple-700 font-bold mt-1"><i class="fa-solid fa-reply-all mr-0.5"></i>Đã hoàn nhập trả: ${log.returnedQty}/${log.qty}</div>` : '';
+                var checkUndoDisable = (log.type.includes("Xóa") || log.type.includes("Tạo mới") || log.returnedQty >= log.qty) ? 'disabled style="display:none;"' : '';
+                var statusUndoText = log.returnedQty > 0 ? '<div class="text-[10px] text-purple-700 font-bold mt-1"><i class="fa-solid fa-reply-all mr-0.5"></i>Đã hoàn nhập trả: ' + log.returnedQty + '/' + log.qty + '</div>' : '';
 
                 logListContainer.innerHTML += `
-                    <div class="p-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 hover:bg-slate-100/60 transition-all text-xs">
+                    <div class="p-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 hover:bg-slate-100 transition-all text-xs">
                         <div class="flex items-start gap-3 min-w-0 flex-grow">
-                            <span class="${log.color} text-white px-2.5 py-1 rounded-md font-extrabold text-[10px] tracking-wide uppercase shadow-3xs flex-shrink-0">${log.type}</span>
+                            <span class="${log.color} text-white px-2.5 py-1 rounded-md font-extrabold text-[10px] tracking-wide uppercase flex-shrink-0">${log.type}</span>
                             <div class="min-w-0">
                                 <div class="text-slate-900 font-bold leading-normal">
                                     <span class="font-mono bg-slate-200 px-1.5 py-0.5 rounded text-indigo-600 font-bold mr-1">${log.sku}</span>
@@ -789,8 +779,8 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end flex-shrink-0">
-                            <button onclick="suaGhiChuLogTrucTiep(${realIdx})" class="text-slate-400 hover:text-indigo-600 p-1.5 rounded border border-transparent hover:border-slate-200 bg-white shadow-3xs transition-all cursor-pointer" title="Sửa ghi chú log"><i class="fa-solid fa-file-pen"></i></button>
-                            <button ${checkUndoDisable} onclick="hoanNhapTuLichSu(${realIdx})" class="bg-white hover:bg-purple-600 text-purple-700 hover:text-white font-extrabold border border-purple-200 hover:border-purple-600 px-3 py-1.5 rounded-lg shadow-3xs transition-all cursor-pointer">
+                            <button onclick="suaGhiChuLogTrucTiep(${realIdx})" class="text-slate-400 hover:text-indigo-600 p-1.5 rounded border border-transparent hover:border-slate-200 bg-white shadow-sm transition-all cursor-pointer" title="Sửa ghi chú log"><i class="fa-solid fa-file-pen"></i></button>
+                            <button ${checkUndoDisable} onclick="hoanNhapTuLichSu(${realIdx})" class="bg-white hover:bg-purple-600 text-purple-700 hover:text-white font-extrabold border border-purple-200 hover:border-purple-600 px-3 py-1.5 rounded-lg shadow-sm transition-all cursor-pointer">
                                 <i class="fa-solid fa-arrow-rotate-left mr-1"></i>Khách Trả Lại
                             </button>
                         </div>
@@ -800,21 +790,21 @@
         }
 
         function searchProduct() {
-            let keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+            var keyword = document.getElementById('searchInput').value.toLowerCase().trim();
             if (keyword === "") {
                 renderTable();
             } else {
-                let results = inventory.filter(item => 
-                    item.name.toLowerCase().includes(keyword) || 
-                    (item.sku && item.sku.toLowerCase().includes(keyword))
-                );
+                var results = inventory.filter(function(item) { 
+                    return item.name.toLowerCase().includes(keyword) || 
+                    (item.sku && item.sku.toLowerCase().includes(keyword));
+                });
                 renderTable(results);
             }
         }
 
         function suaTenSanPhamTrucTiep(idx) {
-            let curName = inventory[idx].name;
-            let newName = prompt("📝 Nhập tên mới cho sản phẩm này:", curName);
+            var curName = inventory[idx].name;
+            var newName = prompt("📝 Nhập tên mới cho sản phẩm này:", curName);
             if (newName !== null && newName.trim() !== "") {
                 inventory[idx].name = newName.trim();
                 luuDuLieu(true);
@@ -823,11 +813,11 @@
         }
 
         function suaMaSkuTrucTiep(idx) {
-            let curSku = inventory[idx].sku;
-            let newSku = prompt("⚙️ Nhập mã SKU mới độc nhất (Viết liền không dấu):", curSku);
+            var curSku = inventory[idx].sku;
+            var newSku = prompt("⚙️ Nhập mã SKU mới độc nhất (Viết liền không dấu):", curSku);
             if (newSku !== null && newSku.trim() !== "") {
-                let fixSku = newSku.trim().toUpperCase();
-                let checkDuplicate = inventory.findIndex((item, i) => item.sku === fixSku && i !== idx);
+                var fixSku = newSku.trim().toUpperCase();
+                var checkDuplicate = inventory.findIndex(function(item, i) { return item.sku === fixSku && i !== idx; });
                 if (checkDuplicate !== -1) {
                     alert("⚠️ Lỗi: Mã SKU mới này đã tồn tại ở sản phẩm khác trong hệ thống!");
                     return;
@@ -839,13 +829,13 @@
         }
 
         function doiAnhSanPhanTrucTiep(idx) {
-            let inputFile = document.createElement('input');
+            var inputFile = document.createElement('input');
             inputFile.type = 'file';
             inputFile.accept = 'image/*';
             inputFile.onchange = function(e) {
-                let file = e.target.files[0];
+                var file = e.target.files[0];
                 if (file) {
-                    compressAndConvertImage(file, base64Data => {
+                    compressAndConvertImage(file, function(base64Data) {
                         inventory[idx].image = base64Data;
                         luuDuLieu(true);
                         lamMoiHeThong();
@@ -856,8 +846,8 @@
         }
 
         function suaGhiChuLogTrucTiep(logIdx) {
-            let oldNote = historyLog[logIdx].note;
-            let newNote = prompt("📝 Cập nhật lại nội dung ghi chú của hoạt động này:", oldNote);
+            var oldNote = historyLog[logIdx].note;
+            var newNote = prompt("📝 Cập nhật lại nội dung ghi chú của hoạt động này:", oldNote);
             if (newNote !== null) {
                 historyLog[logIdx].note = newNote.trim() || "Không có ghi chú";
                 luuLichSuLog();
@@ -866,14 +856,14 @@
         }
 
         function traHangDonLe(pIdx, bIdx) {
-            let item = inventory[pIdx];
-            let borrowData = item.borrowList[bIdx];
-            let rawQty = prompt(`🔄 Khách hoàn trả hàng từ: ${borrowData.note}\nNhập số lượng thực tế nhận lại:`, borrowData.qty);
-            let qtyReturn = parseInt(rawQty);
+            var item = inventory[pIdx];
+            var borrowData = item.borrowList[bIdx];
+            var rawQty = prompt("🔄 Khách hoàn trả hàng từ: " + borrowData.note + "\nNhập số lượng thực tế nhận lại:", borrowData.qty);
+            var qtyReturn = parseInt(rawQty);
 
             if (isNaN(qtyReturn) || qtyReturn <= 0) return;
             if (qtyReturn > borrowData.qty) {
-                alert(`⚠️ Lỗi: Số lượng trả vượt quá số lượng đang mượn (${borrowData.qty})!`);
+                alert("⚠️ Lỗi: Số lượng trả vượt quá số lượng đang mượn (" + borrowData.qty + ")!");
                 return;
             }
 
@@ -884,21 +874,21 @@
             if (borrowData.qty === 0) item.borrowList.splice(bIdx, 1);
 
             luuDuLieu(true);
-            ghiLogLichSu(item.sku, item.name, "Nhận trả (🔀)", qtyReturn, "bg-purple-600", `Hoàn trả hàng trực tiếp từ danh mục mượn của [${borrowData.note}]`);
+            ghiLogLichSu(item.sku, item.name, "Nhận trả (🔀)", qtyReturn, "bg-purple-600", "Hoàn trả hàng trực tiếp từ danh mục mượn của [" + borrowData.note + "]");
             lamMoiHeThong();
         }
 
         function hoanNhapTuLichSu(logIdx) {
-            let log = historyLog[logIdx];
-            let targetProductIndex = inventory.findIndex(i => i.sku === log.sku);
+            var log = historyLog[logIdx];
+            var targetProductIndex = inventory.findIndex(function(i) { return i.sku === log.sku; });
             if (targetProductIndex === -1) {
                 alert("⚠️ Không thể hoàn nhập vì mã sản phẩm này đã bị xóa khỏi hệ thống chính!");
                 return;
             }
 
-            let maxAllowable = log.qty - (log.returnedQty || 0);
-            let rawInput = prompt(`↩ Nhận hàng trả lại từ hoạt động: ${log.type}\nSố lượng có thể trả tối đa: ${maxAllowable}\nNhập số lượng thực nhận:`, maxAllowable);
-            let qty = parseInt(rawInput);
+            var maxAllowable = log.qty - (log.returnedQty || 0);
+            var rawInput = prompt("↩ Nhận hàng trả lại từ hoạt động: " + log.type + "\nSố lượng có thể trả tối đa: " + maxAllowable + "\nNhập số lượng thực nhận:", maxAllowable);
+            var qty = parseInt(rawInput);
 
             if (isNaN(qty) || qty <= 0) return;
             if (qty > maxAllowable) {
@@ -906,7 +896,7 @@
                 return;
             }
 
-            let customReason = prompt("Nhập lý do hoặc người thực hiện hoàn nhập:", `Khách hoàn trả (Từ giao dịch ngày ${log.time.split(',')[0]})`);
+            var customReason = prompt("Nhập lý do hoặc người thực hiện hoàn nhập:", "Khách hoàn trả (Từ giao dịch ngày " + log.time.split(',')[0] + ")");
             if (customReason === null) return;
 
             inventory[targetProductIndex].qty += qty;
@@ -919,11 +909,11 @@
         }
 
         function xoaSanPhamDonLe(idx) {
-            let target = inventory[idx];
-            if (confirm(`❌ Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm:\n"${target.name}" khỏi hệ thống?`)) {
-                let reason = prompt("Vui lòng ghi lý do xóa sản phẩm này (Bắt buộc):");
+            var target = inventory[idx];
+            if (confirm("❌ Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm:\n\"" + target.name + "\" khỏi hệ thống?")) {
+                var reason = prompt("Vui lòng ghi lý do xóa sản phẩm này (Bắt buộc):");
                 if (reason !== null && reason.trim() !== "") {
-                    ghiLogLichSu(target.sku, target.name, "Xóa mã hàng 🗑️", target.qty + target.borrowedQty, "bg-slate-900", `Lý do xóa: ${reason.trim()}`);
+                    ghiLogLichSu(target.sku, target.name, "Xóa mã hàng 🗑️", target.qty + target.borrowedQty, "bg-slate-900", "Lý do xóa: " + reason.trim());
                     
                     inventory.splice(idx, 1);
                     selectedItems.clear(); 
@@ -945,23 +935,23 @@
             }
         }
 
-        let currentActionIndex = -1;
-        let currentActionType = ''; 
+        var currentActionIndex = -1;
+        var currentActionType = ''; 
 
         function openActionModal(idx, type) {
             currentActionIndex = idx;
             currentActionType = type;
-            let item = inventory[idx];
+            var item = inventory[idx];
 
             document.getElementById('actionModalImg').src = item.image;
             document.getElementById('actionModalSku').innerText = item.sku;
             document.getElementById('actionModalName').innerText = item.name;
             
-            let qtyInput = document.getElementById('actionModalQty');
-            let noteInput = document.getElementById('actionModalNote');
-            let maxLabel = document.getElementById('actionModalMaxLabel');
-            let submitBtn = document.getElementById('actionModalSubmitBtn');
-            let title = document.getElementById('actionModalTitle');
+            var qtyInput = document.getElementById('actionModalQty');
+            var noteInput = document.getElementById('actionModalNote');
+            var maxLabel = document.getElementById('actionModalMaxLabel');
+            var submitBtn = document.getElementById('actionModalSubmitBtn');
+            var title = document.getElementById('actionModalTitle');
 
             qtyInput.value = 1;
             noteInput.value = '';
@@ -969,19 +959,19 @@
             if (type === 'nhap') {
                 title.innerText = "➕ NHẬP BỔ SUNG SỐ LƯỢNG";
                 title.className = "text-base font-extrabold text-emerald-700 tracking-tight";
-                maxLabel.innerText = `Kho hiện có: ${item.qty}`;
+                maxLabel.innerText = "Kho hiện có: " + item.qty;
                 document.getElementById('actionModalNoteLabel').innerText = "Người giao / Lý do nhập hàng (Tùy chọn)";
                 submitBtn.className = "px-5 py-2.5 rounded-xl text-white font-bold text-xs bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-all cursor-pointer";
             } else if (type === 'xuat') {
                 title.innerText = "➖ XUẤT KHO SẢN PHẨM";
                 title.className = "text-base font-extrabold text-amber-700 tracking-tight";
-                maxLabel.innerText = `Kho khả dụng: ${item.qty}`;
+                maxLabel.innerText = "Kho khả dụng: " + item.qty;
                 document.getElementById('actionModalNoteLabel').innerText = "Người nhận / Lý do xuất kho (Bắt buộc)";
                 submitBtn.className = "px-5 py-2.5 rounded-xl text-white font-bold text-xs bg-amber-600 hover:bg-amber-700 shadow-sm transition-all cursor-pointer";
             } else if (type === 'muon') {
                 title.innerText = "📦 CHO MƯỢN SẢN PHẨM TẠM THỜI";
                 title.className = "text-base font-extrabold text-purple-700 tracking-tight";
-                maxLabel.innerText = `Kho khả dụng: ${item.qty}`;
+                maxLabel.innerText = "Kho khả dụng: " + item.qty;
                 document.getElementById('actionModalNoteLabel').innerText = "Họ tên người mượn / Phòng ban (Bắt buộc)";
                 submitBtn.className = "px-5 py-2.5 rounded-xl text-white font-bold text-xs bg-purple-600 hover:bg-purple-700 shadow-sm transition-all cursor-pointer";
             }
@@ -995,9 +985,9 @@
         }
 
         function submitActionModal() {
-            let item = inventory[currentActionIndex];
-            let qty = parseInt(document.getElementById('actionModalQty').value) || 0;
-            let note = document.getElementById('actionModalNote').value.trim();
+            var item = inventory[currentActionIndex];
+            var qty = parseInt(document.getElementById('actionModalQty').value) || 0;
+            var note = document.getElementById('actionModalNote').value.trim();
 
             if (qty <= 0 || isNaN(qty)) { alert("⚠️ Vui lòng nhập số lượng xử lý lớn hơn 0 hợp lệ!"); return; }
 
@@ -1005,26 +995,26 @@
                 item.qty += qty;
                 ghiLogLichSu(item.sku, item.name, "Nhập thêm ➕", qty, "bg-emerald-600", note || "Nhập bổ sung kho lẻ");
             } else if (currentActionType === 'xuat') {
-                if (qty > item.qty) { alert(`⚠️ Không đủ hàng xuất! Kho thực tế còn: ${item.qty}`); return; }
+                if (qty > item.qty) { alert("⚠️ Không đủ hàng xuất! Kho thực tế còn: " + item.qty); return; }
                 if (!note) { alert("⚠️ Vui lòng điền thông tin người nhận hàng hoặc lý do xuất!"); return; }
                 
                 if (item.parentSku && item.ratio) {
-                    let parentItem = inventory.find(i => i.sku === item.parentSku);
+                    var parentItem = inventory.find(function(i) { return i.sku === item.parentSku; });
                     if (parentItem) {
-                        let totalPiecesDeduct = qty * item.ratio;
+                        var totalPiecesDeduct = qty * item.ratio;
                         if (parentItem.qty < totalPiecesDeduct) {
-                            alert(`⚠️ Thất bại: Số lượng hàng lẻ [${parentItem.sku}] không đủ để trừ theo tỷ lệ thùng! (Yêu cầu trừ: ${totalPiecesDeduct} cây, Kho lẻ hiện có: ${parentItem.qty})`);
+                            alert("⚠️ Thất bại: Số lượng hàng lẻ [" + parentItem.sku + "] không đủ để trừ theo tỷ lệ thùng! (Yêu cầu trừ: " + totalPiecesDeduct + " cây, Kho lẻ hiện có: " + parentItem.qty + ")");
                             return;
                         }
                         parentItem.qty -= totalPiecesDeduct;
-                        ghiLogLichSu(parentItem.sku, parentItem.name, "Xuất tự động ➖", totalPiecesDeduct, "bg-slate-500", `Trừ tự động theo mã thùng xuất: ${item.sku} (Lý do: ${note})`);
+                        ghiLogLichSu(parentItem.sku, parentItem.name, "Xuất tự động ➖", totalPiecesDeduct, "bg-slate-500", "Trừ tự động theo mã thùng xuất: " + item.sku + " (Lý do: " + note + ")");
                     }
                 }
 
                 item.qty -= qty;
                 ghiLogLichSu(item.sku, item.name, "Xuất kho ➖", qty, "bg-amber-600", note);
             } else if (currentActionType === 'muon') {
-                if (qty > item.qty) { alert(`⚠️ Không đủ hàng cho mượn! Kho thực tế còn: ${item.qty}`); return; }
+                if (qty > item.qty) { alert("⚠️ Không đủ hàng cho mượn! Kho thực tế còn: " + item.qty); return; }
                 if (!note) { alert("⚠️ Vui lòng nhập họ tên người mượn hàng để theo dõi!"); return; }
                 
                 item.qty -= qty;
@@ -1035,7 +1025,7 @@
                     note: note,
                     time: layThoiGianHienTai()
                 });
-                ghiLogLichSu(item.sku, item.name, "Mượn hàng 📦", qty, "bg-purple-600", `Cho [${note}] mượn thiết bị`);
+                ghiLogLichSu(item.sku, item.name, "Mượn hàng 📦", qty, "bg-purple-600", "Cho [" + note + "] mượn thiết bị");
             }
 
             luuDuLieu(true);
@@ -1045,23 +1035,23 @@
         }
 
         function handleSingleSelect(checkbox) {
-            let idx = parseInt(checkbox.value);
+            var idx = parseInt(checkbox.value);
             if (checkbox.checked) selectedItems.add(idx);
             else selectedItems.delete(idx);
             updateBulkUI();
         }
 
         function toggleSelectAll() {
-            let isAllChecked = document.getElementById('selectAll').checked;
-            let checkboxes = document.querySelectorAll('.item-checkbox');
+            var isAllChecked = document.getElementById('selectAll').checked;
+            var checkboxes = document.querySelectorAll('.item-checkbox');
             
             if(isAllChecked) {
-                checkboxes.forEach(cb => {
+                checkboxes.forEach(function(cb) {
                     cb.checked = true;
                     selectedItems.add(parseInt(cb.value));
                 });
             } else {
-                checkboxes.forEach(cb => {
+                checkboxes.forEach(function(cb) {
                     cb.checked = false;
                     selectedItems.delete(parseInt(cb.value));
                 });
@@ -1071,15 +1061,15 @@
 
         function boChonTatCa() {
             document.getElementById('selectAll').checked = false;
-            let checkboxes = document.querySelectorAll('.item-checkbox');
-            checkboxes.forEach(cb => cb.checked = false);
+            var checkboxes = document.querySelectorAll('.item-checkbox');
+            checkboxes.forEach(function(cb) { cb.checked = false; });
             selectedItems.clear();
             updateBulkUI();
         }
 
         function updateBulkUI() {
-            let panel = document.getElementById('bulkActionPanel');
-            let countLabel = document.getElementById('bulkCount');
+            var panel = document.getElementById('bulkActionPanel');
+            var countLabel = document.getElementById('bulkCount');
             if (selectedItems.size > 0) {
                 panel.classList.remove('hidden');
                 countLabel.innerText = selectedItems.size;
@@ -1089,14 +1079,14 @@
         }
 
         function xoaHangLoat() {
-            if (confirm(`🚨 Bạn chắc chắn muốn xóa vĩnh viễn toàn bộ ${selectedItems.size} sản phẩm đang được chọn không?`)) {
-                let reason = prompt("Nhập lý do xóa lô hàng này:");
+            if (confirm("🚨 Bạn chắc chắn muốn xóa vĩnh viễn toàn bộ " + selectedItems.size + " sản phẩm đang được chọn không?")) {
+                var reason = prompt("Nhập lý do xóa lô hàng này:");
                 if (!reason) { alert("Hủy bỏ, bạn bắt buộc phải điền lý do xóa lô."); return; }
 
-                let sortedIndices = Array.from(selectedItems).sort((a, b) => b - a);
-                sortedIndices.forEach(idx => {
-                    let item = inventory[idx];
-                    ghiLogLichSu(item.sku, item.name, "Xóa lô hàng 🗑️", item.qty, "bg-slate-900", `Xóa hàng loạt - Lý do: ${reason}`);
+                var sortedIndices = Array.from(selectedItems).sort(function(a, b) { return b - a; });
+                sortedIndices.forEach(function(idx) {
+                    var item = inventory[idx];
+                    ghiLogLichSu(item.sku, item.name, "Xóa lô hàng 🗑️", item.qty, "bg-slate-900", "Xóa hàng loạt - Lý do: " + reason);
                     inventory.splice(idx, 1);
                 });
 
@@ -1107,22 +1097,22 @@
             }
         }
 
-        let currentBulkType = '';
+        var currentBulkType = '';
         function openBulkModal(type) {
             currentBulkType = type;
-            let container = document.getElementById('bulkModalList');
-            let globalLabel = document.getElementById('bulkGlobalNoteLabel');
+            var container = document.getElementById('bulkModalList');
+            var globalLabel = document.getElementById('bulkGlobalNoteLabel');
             container.innerHTML = '';
             document.getElementById('bulkModalNote').value = '';
 
-            let title = document.getElementById('bulkModalTitle');
+            var title = document.getElementById('bulkModalTitle');
             if(type === 'nhap') { title.innerText = "📥 NHẬP HÀNG THEO LÔ LOẠT"; globalLabel.innerText = "Ghi chú chung cho lô hàng nhập (Tùy chọn):"; }
             if(type === 'xuat') { title.innerText = "📤 XUẤT KHO HÀNG THEO LÔ LOẠT"; globalLabel.innerText = "Họ tên người nhận / Lý do xuất lô (Bắt buộc):"; }
             if(type === 'muon') { title.innerText = "📦 CHO MƯỢN HÀNG THEO LÔ ĐIỀU PHỐI"; globalLabel.innerText = "Họ tên người mượn hàng / Đơn vị tiếp nhận lô (Bắt buộc):"; }
 
-            selectedItems.forEach(idx => {
-                let item = inventory[idx];
-                let textLimit = type !== 'nhap' ? `<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold">Hiện có: ${item.qty}</span>` : '';
+            selectedItems.forEach(function(idx) {
+                var item = inventory[idx];
+                var textLimit = type !== 'nhap' ? '<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold">Hiện có: ' + item.qty + '</span>' : '';
                 container.innerHTML += `
                     <div class="bg-white border border-slate-200 p-3 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                         <div class="min-w-0">
@@ -1141,54 +1131,58 @@
         }
 
         function confirmBulkAction() {
-            let globalNote = document.getElementById('bulkModalNote').value.trim();
+            var globalNote = document.getElementById('bulkModalNote').value.trim();
             if (currentBulkType !== 'nhap' && !globalNote) {
                 alert("⚠️ Ghi chú / Người thực hiện là thông tin bắt buộc đối với nghiệp vụ Xuất/Mượn hàng!");
                 return;
             }
 
-            let loiVuotTonKho = [];
-            
-            for (let idx of selectedItems) {
-                let qtyEl = document.getElementById(`bulk_qty_${idx}`);
-                let qtyVal = parseInt(qtyEl.value) || 0;
-                let item = inventory[idx];
+            var loiVuotTonKho = [];
+            var flagError = false;
 
-                if (qtyVal <= 0) { alert(`Số lượng nhập cho mặt hàng ${item.name} không hợp lệ.`); return; }
+            selectedItems.forEach(function(idx) {
+                if (flagError) return;
+                var qtyEl = document.getElementById("bulk_qty_" + idx);
+                var qtyVal = parseInt(qtyEl.value) || 0;
+                var item = inventory[idx];
+
+                if (qtyVal <= 0) { alert("Số lượng nhập cho mặt hàng " + item.name + " không hợp lệ."); flagError = true; return; }
                 if (currentBulkType !== 'nhap' && qtyVal > item.qty) {
-                    loiVuotTonKho.push(`- ${item.name} (Cần: ${qtyVal} / Sẵn sàng: ${item.qty})`);
+                    loiVuotTonKho.push("- " + item.name + " (Cần: " + qtyVal + " / Sẵn sàng: " + item.qty + ")");
                 }
                 
                 if (currentBulkType === 'xuat' && item.parentSku && item.ratio) {
-                    let parentItem = inventory.find(i => i.sku === item.parentSku);
+                    var parentItem = inventory.find(function(i) { return i.sku === item.parentSku; });
                     if (parentItem) {
-                        let totalPiecesDeduct = qtyVal * item.ratio;
+                        var totalPiecesDeduct = qtyVal * item.ratio;
                         if (parentItem.qty < totalPiecesDeduct) {
-                            loiVuotTonKho.push(`- Hàng lẻ của ${item.name} [SKU: ${parentItem.sku}] không đủ (Cần trừ: ${totalPiecesDeduct}, Kho lẻ hiện có: ${parentItem.qty})`);
+                            loiVuotTonKho.push("- Hàng lẻ của " + item.name + " [SKU: " + parentItem.sku + "] không đủ (Cần trừ: " + totalPiecesDeduct + ", Kho lẻ hiện có: " + parentItem.qty + ")");
                         }
                     }
                 }
-            }
+            });
+
+            if (flagError) return;
 
             if (loiVuotTonKho.length > 0) {
-                alert(`⚠️ Không thể xử lý lô hàng do một số mặt hàng không đáp ứng đủ tồn kho:\n${loiVuotTonKho.join('\n')}`);
+                alert("⚠️ Không thể xử lý lô hàng do một số mặt hàng không đáp ứng đủ tồn kho:\n" + loiVuotTonKho.join('\n'));
                 return;
             }
 
-            selectedItems.forEach(idx => {
-                let qtyVal = parseInt(document.getElementById(`bulk_qty_${idx}`).value) || 0;
-                let item = inventory[idx];
+            selectedItems.forEach(function(idx) {
+                var qtyVal = parseInt(document.getElementById("bulk_qty_" + idx).value) || 0;
+                var item = inventory[idx];
 
                 if (currentBulkType === 'nhap') {
                     item.qty += qtyVal;
                     ghiLogLichSu(item.sku, item.name, "Nhập lô 📥", qtyVal, "bg-emerald-600", globalNote || "Nhập bổ sung hàng loạt theo lô");
                 } else if (currentBulkType === 'xuat') {
                     if (item.parentSku && item.ratio) {
-                        let parentItem = inventory.find(i => i.sku === item.parentSku);
+                        var parentItem = inventory.find(function(i) { return i.sku === item.parentSku; });
                         if (parentItem) {
-                            let totalPiecesDeduct = qtyVal * item.ratio;
+                            var totalPiecesDeduct = qtyVal * item.ratio;
                             parentItem.qty -= totalPiecesDeduct;
-                            ghiLogLichSu(parentItem.sku, parentItem.name, "Xuất tự động ➖", totalPiecesDeduct, "bg-slate-500", `Trừ tự động theo lô thùng xuất: ${item.sku} (Ghi chú chung: ${globalNote})`);
+                            ghiLogLichSu(parentItem.sku, parentItem.name, "Xuất tự động ➖", totalPiecesDeduct, "bg-slate-500", "Trừ tự động theo lô thùng xuất: " + item.sku + " (Ghi chú chung: " + globalNote + ")");
                         }
                     }
                     item.qty -= qtyVal;
@@ -1202,7 +1196,7 @@
                         note: globalNote + " (Theo lô)",
                         time: layThoiGianHienTai()
                     });
-                    ghiLogLichSu(item.sku, item.name, "Mượn lô 📦", qtyVal, "bg-purple-600", `Cho [${globalNote}] mượn lô hàng loạt`);
+                    ghiLogLichSu(item.sku, item.name, "Mượn lô 📦", qtyVal, "bg-purple-600", "Cho [" + globalNote + "] mượn lô hàng loạt");
                 }
             });
 
@@ -1227,10 +1221,10 @@
 
         function switchScannerDevice(device) {
             currentScannerDevice = device;
-            let tabGun = document.getElementById('tabGun');
-            let tabCam = document.getElementById('tabCam');
-            let viewGun = document.getElementById('viewGunScanner');
-            let viewCam = document.getElementById('viewCamScanner');
+            var tabGun = document.getElementById('tabGun');
+            var tabCam = document.getElementById('tabCam');
+            var viewGun = document.getElementById('viewGunScanner');
+            var viewCam = document.getElementById('viewCamScanner');
 
             if (device === 'gun') {
                 tabGun.className = "py-3 border-b-2 border-indigo-500 text-indigo-400 bg-slate-900/60 focus:outline-none cursor-pointer";
@@ -1250,11 +1244,11 @@
 
         function setScannerActionMode(mode) {
             currentScanMode = mode;
-            let buttons = ['btnHwInfo', 'btnHwNhap', 'btnHwXuat', 'btnHwMuon'];
-            buttons.forEach(bId => document.getElementById(bId).className = "py-2.5 px-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer text-center text-slate-400 hover:text-slate-200");
+            var buttons = ['btnHwInfo', 'btnHwNhap', 'btnHwXuat', 'btnHwMuon'];
+            buttons.forEach(function(bId) { document.getElementById(bId).className = "py-2.5 px-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer text-center text-slate-400 hover:text-slate-200"; });
 
-            let noteBox = document.getElementById('scannerNoteBox');
-            let noteInput = document.getElementById('scannerScanNote');
+            var noteBox = document.getElementById('scannerNoteBox');
+            var noteInput = document.getElementById('scannerScanNote');
             noteBox.classList.add('hidden');
 
             if (mode === 'info') document.getElementById('btnHwInfo').className = "py-2.5 px-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer text-center bg-indigo-600 text-white shadow-sm";
@@ -1276,8 +1270,8 @@
 
         function kichHoatFocusSungQuet() {
             if (currentScannerDevice === 'gun') {
-                setTimeout(() => {
-                    let input = document.getElementById('hwScannerInput');
+                setTimeout(function() {
+                    var input = document.getElementById('hwScannerInput');
                     if(input) { input.focus(); input.value = ''; }
                 }, 100);
             }
@@ -1288,7 +1282,7 @@
         document.getElementById('hwScannerInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                let skuScanned = this.value.trim().toUpperCase();
+                var skuScanned = this.value.trim().toUpperCase();
                 this.value = ''; 
                 if (skuScanned !== '') {
                     xuLyMaVachQuetThanhCong(skuScanned);
@@ -1303,46 +1297,48 @@
             
             html5QrCode.start(
                 { facingMode: "environment" },
-                { fps: 15, qrbox: (width, height) => { return { width: width * 0.95, height: height * 0.95 }; } },
-                (decodedText) => {
+                { fps: 15, qrbox: function(width, height) { return { width: width * 0.95, height: height * 0.95 }; } },
+                function(decodedText) {
                     if (!isScanningPaused) {
                         xuLyMaVachQuetThanhCong(decodedText.trim().toUpperCase());
                     }
                 },
-                (errorMessage) => { }
-            ).catch(err => {
+                function(errorMessage) { }
+            ).catch(function(err) {
                 console.error("Không mở được camera máy quét:", err);
-                document.getElementById('viewCamScanner').innerHTML = `<div class="text-xs text-rose-500 font-bold p-4 text-center">⚠️ Không truy cập được Camera. Vui lòng cấp quyền camera cho trình duyệt hoặc dùng thiết bị có camera.</div>`;
+                document.getElementById('viewCamScanner').innerHTML = '<div class="text-xs text-rose-500 font-bold p-4 text-center">⚠️ Không truy cập được Camera. Vui lòng cấp quyền camera cho trình duyệt.</div>';
             });
         }
 
         function tatCameraDocQr() {
             if (html5QrCode) {
-                html5QrCode.stop().then(() => { html5QrCode = null; }).catch(e => console.log("Lỗi dừng camera:", e));
+                html5QrCode.stop().then(function() { html5QrCode = null; }).catch(function(e) { console.log("Lỗi dừng camera:", e); });
             }
         }
 
         function xuLyMaVachQuetThanhCong(skuScanned) {
             isScanningPaused = true;
-            if (html5QrCode) html5QrCode.pause(true);
+            if (html5QrCode) {
+                try { html5QrCode.pause(true); } catch(e){}
+            }
 
-            let resBox = document.getElementById('scannerResultBox');
-            let resIcon = document.getElementById('scannerResultIcon');
-            let resBody = document.getElementById('scannerResultBody');
+            var resBox = document.getElementById('scannerResultBox');
+            var resIcon = document.getElementById('scannerResultIcon');
+            var resBody = document.getElementById('scannerResultBody');
 
-            let noteInputVal = document.getElementById('scannerScanNote').value.trim();
-            let productIndex = inventory.findIndex(item => item.sku === skuScanned);
+            var noteInputVal = document.getElementById('scannerScanNote').value.trim();
+            var productIndex = inventory.findIndex(function(item) { return item.sku === skuScanned; });
 
             resBox.classList.remove('hidden');
 
             if (productIndex === -1) {
                 playBeepSound('error');
-                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950/80 border border-rose-800 animate-fadeIn";
+                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950 border border-rose-800";
                 resIcon.innerText = "⚠️";
-                resBody.innerHTML = `Mã SKU <span class="font-mono text-yellow-400 font-bold font-sm">${skuScanned}</span> chưa được khai báo!`;
+                resBody.innerHTML = 'Mã SKU <span class="font-mono text-yellow-400 font-bold font-sm">' + skuScanned + '</span> chưa được khai báo!';
 
-                setTimeout(() => {
-                    if (confirm(`⚠️ Mã SKU [${skuScanned}] chưa có trong kho.\nBạn có muốn tự động điền mã này vào Form tạo sản phẩm mới không?`)) {
+                setTimeout(function() {
+                    if (confirm("⚠️ Mã SKU [" + skuScanned + "] chưa có trong kho.\nBạn có muốn tự động điền mã này vào Form tạo sản phẩm mới không?")) {
                         document.getElementById('productSKU').value = skuScanned;
                         closeScannerModal();
                         document.getElementById('productName').focus();
@@ -1353,13 +1349,13 @@
                 return;
             }
 
-            let item = inventory[productIndex];
+            var item = inventory[productIndex];
 
             if (currentScanMode === 'info') {
                 playBeepSound('success');
-                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-slate-800 border border-indigo-900/60 animate-fadeIn";
+                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-slate-800 border border-indigo-900";
                 resIcon.innerText = "ℹ️";
-                resBody.innerHTML = `<b>${item.name}</b><br><span class="text-indigo-400">Tồn kho: ${item.qty} | Cho mượn: ${item.borrowedQty}</span>`;
+                resBody.innerHTML = '<b>' + item.name + '</b><br><span class="text-indigo-400">Tồn kho: ' + item.qty + ' | Cho mượn: ' + item.borrowedQty + '</span>';
                 tiepTucTrangThaiQuetTiepTheo();
             } 
             else if (currentScanMode === 'nhap') {
@@ -1367,9 +1363,9 @@
                 luuDuLieu(true);
                 ghiLogLichSu(item.sku, item.name, "Nhập quét 📷", 1, "bg-emerald-600", "Tăng số lượng tự động qua máy quét");
                 playBeepSound('success');
-                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-emerald-950/80 border border-emerald-800 animate-fadeIn";
+                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-emerald-950 border border-emerald-800";
                 resIcon.innerText = "✅";
-                resBody.innerHTML = `Đã NHẬP thêm 1 <b>${item.name}</b> thành công! (Tồn: ${item.qty})`;
+                resBody.innerHTML = 'Đã NHẬP thêm 1 <b>' + item.name + '</b> thành công! (Tồn: ' + item.qty + ')';
                 lamMoiHeThong();
                 tiepTucTrangThaiQuetTiepTheo();
             } 
@@ -1382,27 +1378,27 @@
                 }
                 if (item.qty < 1) {
                     playBeepSound('error');
-                    resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950/80 border border-rose-800 animate-fadeIn";
+                    resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950 border border-rose-800";
                     resIcon.innerText = "❌";
-                    resBody.innerHTML = `<b>${item.name}</b> ĐÃ HẾT HÀNG! Không thể xuất kho.`;
+                    resBody.innerHTML = '<b>' + item.name + '</b> ĐÃ HẾT HÀNG! Không thể xuất kho.';
                     tiepTucTrangThaiQuetTiepTheo();
                     return;
                 }
 
                 if (item.parentSku && item.ratio) {
-                    let parentItem = inventory.find(i => i.sku === item.parentSku);
+                    var parentItem = inventory.find(function(i) { return i.sku === item.parentSku; });
                     if (parentItem) {
-                        let totalPiecesDeduct = 1 * item.ratio;
+                        var totalPiecesDeduct = 1 * item.ratio;
                         if (parentItem.qty < totalPiecesDeduct) {
                             playBeepSound('error');
-                            resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950/80 border border-rose-800 animate-fadeIn";
+                            resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950 border border-rose-800";
                             resIcon.innerText = "❌";
-                            resBody.innerHTML = `Hàng lẻ <b>[${parentItem.sku}]</b> không đủ trừ tỉ lệ! (Cần: ${totalPiecesDeduct}, Còn: ${parentItem.qty})`;
+                            resBody.innerHTML = 'Hàng lẻ <b>[' + parentItem.sku + ']</b> không đủ trừ tỉ lệ! (Cần: ' + totalPiecesDeduct + ', Còn: ' + parentItem.qty + ')';
                             tiepTucTrangThaiQuetTiepTheo();
                             return;
                         }
                         parentItem.qty -= totalPiecesDeduct;
-                        ghiLogLichSu(parentItem.sku, parentItem.name, "Xuất tự động ➖", totalPiecesDeduct, "bg-slate-500", `Trừ tự động khi quét mã thùng xuất: ${item.sku}`);
+                        ghiLogLichSu(parentItem.sku, parentItem.name, "Xuất tự động ➖", totalPiecesDeduct, "bg-slate-500", "Trừ tự động khi quét mã thùng xuất: " + item.sku);
                     }
                 }
 
@@ -1410,9 +1406,9 @@
                 luuDuLieu(true);
                 ghiLogLichSu(item.sku, item.name, "Xuất quét 📷", 1, "bg-amber-600", noteInputVal);
                 playBeepSound('success');
-                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-amber-950/80 border border-amber-800 animate-fadeIn";
+                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-amber-950 border border-amber-800";
                 resIcon.innerText = "📤";
-                resBody.innerHTML = `Đã XUẤT 1 <b>${item.name}</b> cho [${noteInputVal}]`;
+                resBody.innerHTML = 'Đã XUẤT 1 <b>' + item.name + '</b> cho [' + noteInputVal + ']';
                 lamMoiHeThong();
                 tiepTucTrangThaiQuetTiepTheo();
             } 
@@ -1425,16 +1421,16 @@
                 }
                 if (item.qty < 1) {
                     playBeepSound('error');
-                    resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950/80 border border-rose-800 animate-fadeIn";
+                    resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950 border border-rose-800";
                     resIcon.innerText = "❌";
-                    resBody.innerHTML = `<b>${item.name}</b> Không đủ hàng để cho mượn!`;
+                    resBody.innerHTML = '<b>' + item.name + '</b> Không đủ hàng để cho mượn!';
                     tiepTucTrangThaiQuetTiepTheo();
                     return;
                 }
                 item.qty -= 1;
                 item.borrowedQty += 1;
                 
-                let bEx = item.borrowList.find(b => b.note === noteInputVal); 
+                var bEx = item.borrowList.find(function(b) { return b.note === noteInputVal; }); 
                 if (bEx) {
                     bEx.qty += 1;
                 } else {
@@ -1446,47 +1442,48 @@
                     });
                 }
                 luuDuLieu(true);
-                ghiLogLichSu(item.sku, item.name, "Mượn quét 📷", 1, "bg-purple-600", `Cho [${noteInputVal}] mượn qua máy quét`);
+                ghiLogLichSu(item.sku, item.name, "Mượn quét 📷", 1, "bg-purple-600", "Cho [" + noteInputVal + "] mượn qua máy quét");
                 playBeepSound('success');
-                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-purple-950/80 border border-purple-800 animate-fadeIn";
+                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-purple-950 border border-purple-800";
                 resIcon.innerText = "📦";
-                resBody.innerHTML = `Đã ghi nhận [${noteInputVal}] mượn 1 <b>${item.name}</b>`;
+                resBody.innerHTML = 'Đã ghi nhận [' + noteInputVal + '] mượn 1 <b>' + item.name + '</b>';
                 lamMoiHeThong();
                 tiepTucTrangThaiQuetTiepTheo();
             }
         }
 
         function tiepTucTrangThaiQuetTiepTheo() {
-            setTimeout(() => {
+            setTimeout(function() {
                 isScanningPaused = false;
                 if (html5QrCode && currentScannerDevice === 'cam') {
-                    html5QrCode.resume();
+                    try { html5QrCode.resume(); } catch(e){}
                 }
                 kichHoatFocusSungQuet();
             }, 1200);
         }
 
-        let debounceTimerCloud = null;
+        var debounceTimerCloud = null;
         function triggerAutoSaveCloud() {
             clearTimeout(debounceTimerCloud);
-            debounceTimerCloud = setTimeout(() => {
+            debounceTimerCloud = setTimeout(function() {
                 dongBoLenGoogleSheet(true);
             }, 3000); 
         }
 
-        function dongBoLenGoogleSheet(isAuto = false) {
+        function dongBoLenGoogleSheet(isAuto) {
+            if (isAuto === undefined) isAuto = false;
             if (!GOOGLE_SHEET_URL) {
                 if (!isAuto) alert("🚨 Bạn chưa thiết lập URL Google Apps Script ở thanh Tiêu đề!");
                 return;
             }
             if (inventory.length === 0 && isAuto) return;
 
-            let btn = document.getElementById('btnSync');
-            let textGoc = btn.innerHTML;
+            var btn = document.getElementById('btnSync');
+            var textGoc = btn.innerHTML;
             btn.innerHTML = "⏳ Đang đồng bộ...";
             btn.style.opacity = "0.7";
 
-            let payload = {
+            var payload = {
                 thoi_gian: layThoiGianHienTai(),
                 ton_kho: inventory,
                 nhat_ky: historyLog
@@ -1498,20 +1495,20 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             })
-            .then(() => {
+            .then(function() {
                 btn.innerHTML = "🚀 Đồng bộ xong";
-                btn.className = "bg-emerald-600 text-white font-bold text-xs px-4 py-3 rounded-xl shadow-xs transition-all flex items-center gap-1.5 whitespace-nowrap";
-                setTimeout(() => {
+                btn.className = "bg-emerald-600 text-white font-bold text-xs px-4 py-3 rounded-xl shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap";
+                setTimeout(function() {
                     btn.innerHTML = textGoc;
-                    btn.className = "bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs px-4 py-3 rounded-xl hover:opacity-95 transition-all shadow-xs cursor-pointer flex items-center gap-1.5 whitespace-nowrap";
+                    btn.className = "bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs px-4 py-3 rounded-xl hover:opacity-95 transition-all shadow-sm cursor-pointer flex items-center gap-1.5 whitespace-nowrap";
                     btn.style.opacity = "1";
                 }, 2500);
             })
-            .catch(err => {
+            .catch(function(err) {
                 console.error("Lỗi Push đồng bộ Cloud:", err);
                 btn.innerHTML = "⚠️ Lỗi Kết Nối";
                 btn.style.background = "red";
-                setTimeout(() => { btn.innerHTML = textGoc; btn.style.background = ''; btn.style.opacity = "1"; }, 3000);
+                setTimeout(function() { btn.innerHTML = textGoc; btn.style.background = ''; btn.style.opacity = "1"; }, 3000);
             });
         }
 
@@ -1519,23 +1516,25 @@
             if (!GOOGLE_SHEET_URL) { alert("🚨 Vui lòng cấu hình URL Google Apps Script trước!"); return; }
             if (!confirm("⚠️ HÀNH ĐỘNG CẨN THẬN: Bạn có chắc chắn muốn Tải dữ liệu từ Google Sheet Cloud và GHI ĐÈ toàn bộ dữ liệu hiện tại trên thiết bị không?")) return;
 
-            let btn = document.getElementById('btnRestore');
-            let textGoc = btn.innerHTML;
+            var btn = document.getElementById('btnRestore');
+            var textGoc = btn.innerHTML;
             btn.innerHTML = "⏳ Đang nạp mây...";
             btn.style.opacity = "0.6";
 
             fetch(GOOGLE_SHEET_URL)
-            .then(res => {
+            .then(function(res) {
                 if (!res.ok) throw new Error("Mạng lỗi server đám mây trả về lỗi.");
                 return res.json();
             })
-            .then(data => {
+            .then(function(data) {
                 if (data && (data.ton_kho || data.nhat_ky)) {
                     inventory = data.ton_kho || [];
                     historyLog = data.nhat_ky || [];
                     
-                    localStorage.setItem('khoHangPro', JSON.stringify(inventory));
-                    localStorage.setItem('lichSuKhoPro', JSON.stringify(historyLog));
+                    try {
+                        localStorage.setItem('khoHangPro', JSON.stringify(inventory));
+                        localStorage.setItem('lichSuKhoPro', JSON.stringify(historyLog));
+                    } catch(e) { console.warn("Không lưu được vào máy, chỉ hiển thị tạm thời"); }
                     
                     chuanHoaDuLieuGoc();
                     lamMoiHeThong();
@@ -1545,20 +1544,20 @@
                     alert("⚠️ Cấu trúc file JSON trên Google Sheet không khớp hoặc rỗng!");
                 }
             })
-            .catch(err => {
+            .catch(function(err) {
                 console.error(err);
                 alert("❌ Lỗi: Không thể fetch dữ liệu. Vui lòng kiểm tra lại URL App Script hoặc quyền chia sẻ công khai Web App Google.");
             })
-            .finally(() => {
+            .finally(function() {
                 btn.innerHTML = textGoc;
                 btn.style.opacity = "1";
             });
         }
 
         function xuatBaoCaoExcel() {
-            let dateStr = layThoiGianHienTai();
+            var dateStr = layThoiGianHienTai();
             
-            let html = `
+            var html = `
             <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
             <head>
                 <meta charset="UTF-8">
@@ -1592,14 +1591,12 @@
                     <tbody>
             `;
 
-            inventory.forEach((item, index) => {
-                let rowExcelIdx = index + 5; 
-                let ready = item.qty || 0;
-                let borrow = item.borrowedQty || 0;
-                let totalSys = ready + borrow;
-
-                let noteBorrowStr = item.borrowList && item.borrowList.length > 0 
-                    ? item.borrowList.map(b => `[${b.note} mượn ${b.qty}]`).join(', ') 
+            inventory.forEach(function(item, index) {
+                var ready = item.qty || 0;
+                var borrow = item.borrowedQty || 0;
+                var rowExcelIdx = index + 5; 
+                var noteBorrowStr = item.borrowList && item.borrowList.length > 0 
+                    ? item.borrowList.map(function(b) { return "[" + b.note + " mượn " + b.qty + "]"; }).join(', ') 
                     : '';
 
                 html += `
@@ -1617,8 +1614,8 @@
                 `;
             });
 
-            let startRow = 5;
-            let endRow = 4 + inventory.length;
+            var startRow = 5;
+            var endRow = 4 + inventory.length;
             html += `
                 <tr class="total-row">
                     <td></td>
@@ -1637,11 +1634,11 @@
             </html>
             `;
 
-            let blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
-            let url = URL.createObjectURL(blob);
-            let link = document.createElement('a');
+            var blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement('a');
             link.href = url;
-            link.download = `Hi_SPORTS_Kiem_Kho_${new Date().toISOString().slice(0,10)}.xls`;
+            link.download = "Hi_SPORTS_Kiem_Kho_" + new Date().toISOString().slice(0,10) + ".xls";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
