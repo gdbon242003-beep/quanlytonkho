@@ -1301,12 +1301,12 @@
     isScanningPaused = false;
     html5QrCode = new Html5Qrcode("cameraReader");
     
+    // Thay đổi ở dòng này để ép buộc camera sau
     html5QrCode.start(
-        { facingMode: { exact: "environment" } },
+        { facingMode: { exact: "environment" } }, 
         { 
-            fps: 30, 
+            fps: 15, 
             qrbox: (width, height) => { return { width: width * 0.95, height: height * 0.95 }; },
-            // Cấu hình độ phân giải camera tại đây
             videoConstraints: {
                 width: { ideal: 1280 },
                 height: { ideal: 720 }
@@ -1319,8 +1319,9 @@
         },
         (errorMessage) => { }
     ).catch(err => {
-        console.error("Không mở được camera máy quét:", err);
-        document.getElementById('viewCamScanner').innerHTML = `<div class="text-xs text-rose-500 font-bold p-4 text-center">⚠️ Không truy cập được Camera. Vui lòng cấp quyền camera cho trình duyệt hoặc dùng thiết bị có camera.</div>`;
+        console.error("Lỗi khi mở camera:", err);
+        // Thông báo chi tiết hơn nếu không tìm thấy camera sau
+        document.getElementById('viewCamScanner').innerHTML = `<div class="text-xs text-rose-500 font-bold p-4 text-center">⚠️ Không tìm thấy camera sau. Vui lòng kiểm tra lại quyền truy cập hoặc thiết bị của bạn.</div>`;
     });
 }
 
