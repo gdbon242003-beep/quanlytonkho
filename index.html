@@ -1296,33 +1296,41 @@
             }
         });
 
-        function batCameraDocQr() {
-    tatCameraDocQr();
-    isScanningPaused = false;
-    html5QrCode = new Html5Qrcode("cameraReader");
-    
-    html5QrCode.start(
-        { facingMode: "environment" },
-        { 
-            fps: 30, 
-            qrbox: (width, height) => { return { width: width * 0.95, height: height * 0.95 }; },
-            // Cấu hình độ phân giải camera tại đây
-            videoConstraints: {
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
-            }
-        },
-        (decodedText) => {
-            if (!isScanningPaused) {
-                xuLyMaVachQuetThanhCong(decodedText.trim().toUpperCase());
-            }
-        },
-        (errorMessage) => { }
-    ).catch(err => {
-        console.error("Không mở được camera máy quét:", err);
-        document.getElementById('viewCamScanner').innerHTML = `<div class="text-xs text-rose-500 font-bold p-4 text-center">⚠️ Không truy cập được Camera. Vui lòng cấp quyền camera cho trình duyệt hoặc dùng thiết bị có camera.</div>`;
-    });
-}
+                function batCameraDocQr() {
+            tatCameraDocQr();
+            isScanningPaused = false;
+            html5QrCode = new Html5Qrcode("cameraReader");
+            
+            // Cấu hình chung cho khung quét
+            const qrConfig = { 
+                fps: 30, 
+                qrbox: (width, height) => { return { width: width * 0.95, height: height * 0.95 }; },
+                videoConstraints: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            };
+
+            // Hàm xử lý khi quét thành công
+            const onSuccess = (decodedText) => {
+                if (!isScanningPaused) {
+                    xuLyMaVachQuetThanhCong(decodedText.trim().toUpperCase());
+                }
+            };
+
+            // Thử ÉP BUỘC mở camera sau (dành cho điện thoại/tablet)
+            html5QrCode.start({ facingMode: { exact: "environment" } }, qrConfig, onSuccess, () => {})
+            .catch(err => {
+                console.warn("Không ép được camera sau, thử mở camera mặc định (PC/Laptop)...", err);
+                
+                // Dự phòng: Nếu thiết bị không có camera sau (ví dụ PC), mở camera mặc định
+                html5QrCode.start({ facingMode: "environment" }, qrConfig, onSuccess, () => {})
+                .catch(err2 => {
+                    console.error("Không mở được camera máy quét:", err2);
+                    document.getElementById('viewCamScanner').innerHTML = `<div class="text-xs text-rose-500 font-bold p-4 text-center">⚠️ Không truy cập được Camera. Vui lòng cấp quyền camera cho trình duyệt hoặc kiểm tra lại thiết bị.</div>`;
+                });
+            });
+        }
 
         function tatCameraDocQr() {
             if (html5QrCode) {
