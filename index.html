@@ -1302,7 +1302,7 @@
     html5QrCode = new Html5Qrcode("cameraReader");
     
     html5QrCode.start(
-        { facingMode: "environment" },
+        { facingMode: { exact: "environment" } },
         { 
             fps: 30, 
             qrbox: (width, height) => { return { width: width * 0.95, height: height * 0.95 }; },
