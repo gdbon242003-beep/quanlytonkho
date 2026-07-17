@@ -1297,7 +1297,7 @@
             
             html5QrCode.start(
                 { facingMode: "environment" },
-                { fps: 60, qrbox: function(width, height) { return { width: width * 0.75, height: height * 0.75 }; } },
+                { fps: 30, qrbox: function(width, height) { return { width: width * 0.75, height: height * 0.75 }; } },
                 function(decodedText) {
                     if (!isScanningPaused) {
                         xuLyMaVachQuetThanhCong(decodedText.trim().toUpperCase());
