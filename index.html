@@ -1290,40 +1290,20 @@
             }
         });
 
-        // 1. TÍCH HỢP TỐI ƯU CẤU HÌNH QUÉT
         function batCameraDocQr() {
             tatCameraDocQr();
             isScanningPaused = false;
             html5QrCode = new Html5Qrcode("cameraReader");
             
-            // Cấu hình ép lấy nét liên tục (nếu thiết bị hỗ trợ)
-            var cameraConfig = { 
-                facingMode: "environment",
-                advanced: [{ focusMode: "continuous" }] 
-            };
-
-            // Cấu hình tối ưu tốc độ, chỉ quét QR và các loại Barcode phổ biến
-            var config = { 
-                fps: 60,
-                disableFlip: false, 
-                formatsToSupport: [ 
-                    Html5QrcodeSupportedFormats.QR_CODE, 
-                    Html5QrcodeSupportedFormats.CODE_128,
-                    Html5QrcodeSupportedFormats.EAN_13 
-                ]
-            };
-
             html5QrCode.start(
-                cameraConfig,
-                config,
+                { facingMode: "environment" },
+                { fps: 60, qrbox: function(width, height) { return { width: width * 0.75, height: height * 0.75 }; } },
                 function(decodedText) {
                     if (!isScanningPaused) {
                         xuLyMaVachQuetThanhCong(decodedText.trim().toUpperCase());
                     }
                 },
-                function(errorMessage) { 
-                    // Bỏ qua log lỗi rác khi camera đang lấy nét
-                }
+                function(errorMessage) { }
             ).catch(function(err) {
                 console.error("Không mở được camera máy quét:", err);
                 document.getElementById('viewCamScanner').innerHTML = '<div class="text-xs text-rose-500 font-bold p-4 text-center">⚠️ Không truy cập được Camera. Vui lòng cấp quyền camera cho trình duyệt.</div>';
@@ -1472,7 +1452,6 @@
             }
         }
 
-        // 2. TÍCH HỢP TỐI ƯU GIẢM DELAY XUỐNG CÒN 400ms
         function tiepTucTrangThaiQuetTiepTheo() {
             setTimeout(function() {
                 isScanningPaused = false;
@@ -1480,7 +1459,7 @@
                     try { html5QrCode.resume(); } catch(e){}
                 }
                 kichHoatFocusSungQuet();
-            }, 400); // Đã giảm từ 1200ms xuống 400ms
+            }, 1200);
         }
 
         var debounceTimerCloud = null;
