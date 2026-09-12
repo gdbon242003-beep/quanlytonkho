@@ -372,7 +372,7 @@
                 </div>
 
                 <div id="viewCamScanner" class="hidden space-y-3">
-                    <div class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden relative aspect-video w-full max-w mx-auto">
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden relative aspect-video w-full max-w-full mx-auto">
                         <div id="cameraReader" class="w-full h-full bg-slate-950"></div>
                         <div class="absolute inset-x-0 h-0.5 bg-rose-500 opacity-60 laser-line"></div>
                     </div>
@@ -383,7 +383,7 @@
                     <div id="scannerResultIcon" class="text-2xl"></div>
                     <div class="flex-grow min-w-0">
                         <div id="scannerResultTitle" class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Kết quả xử lý</div>
-                        <div id="scannerResultBody" class="text-xs font-bold text-slate-100 mt-0.5 leading-relaxed truncate">Thông tin chi tiết...</div>
+                        <div id="scannerResultBody" class="text-xs font-bold text-slate-100 mt-0.5 leading-relaxed truncate">Thông vị chi tiết...</div>
                     </div>
                 </div>
 
@@ -503,7 +503,7 @@
 
         function ghiLogLichSu(sku, name, actionType, qty, badgeColor, noteText) {
             historyLog.unshift({
-                id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                id: Date.now().toString() + Math.random().toString(36).substring(2, 7),
                 sku: sku || '---',
                 name: name,
                 type: actionType,
@@ -726,258 +726,103 @@
             }
 
             var filteredLogs = historyLog.filter(function(log) {
-                var matchKeyword = log.name.toLowerCase().includes(keyword) || 
-                                   log.sku.toLowerCase().includes(keyword) || 
-                                   log.note.toLowerCase().includes(keyword);
+                var matchKeyword = log.name.toLowerCase().includes(keyword) || log.sku.toLowerCase().includes(keyword) || log.note.toLowerCase().includes(keyword);
                 var matchAction = action === "" || log.type.includes(action);
                 var matchDate = formattedDate === "" || log.time.includes(formattedDate);
-
                 return matchKeyword && matchAction && matchDate;
             });
-
             renderHistory(filteredLogs);
         }
 
         function clearLogFilter() {
-            document.getElementById('filterLogKeyword').value = '';
-            document.getElementById('filterLogAction').value = '';
-            document.getElementById('filterLogDate').value = '';
-            renderHistory(); 
+            document.getElementById('filterLogKeyword').value = "";
+            document.getElementById('filterLogAction').value = "";
+            document.getElementById('filterLogDate').value = "";
+            renderHistory();
         }
 
-        function renderHistory(filteredData) {
-            var logListContainer = document.getElementById('historyLogList');
-            logListContainer.innerHTML = '';
-            
-            var targetLogs = filteredData || historyLog;
+        function renderHistory(dataToRender) {
+            var list = document.getElementById('historyLogList');
+            list.innerHTML = '';
+            var data = dataToRender || historyLog;
 
-            if (targetLogs.length === 0) {
-                logListContainer.innerHTML = '<div class="p-8 text-center text-slate-400 text-xs font-semibold">Chưa có hoặc không tìm thấy dữ liệu phù hợp với bộ lọc.</div>';
+            if (data.length === 0) {
+                list.innerHTML = '<div class="text-center py-6 text-slate-400 text-sm font-medium"><i class="fa-solid fa-ghost text-2xl mb-2 opacity-50 block"></i>Không có bản ghi nào phù hợp</div>';
                 return;
             }
 
-            targetLogs.forEach(function(log) {
-                var realIdx = historyLog.findIndex(function(h) { return h.id === log.id; });
-                
-                var checkUndoDisable = (log.type.includes("Xóa") || log.type.includes("Tạo mới") || log.returnedQty >= log.qty) ? 'disabled style="display:none;"' : '';
-                var statusUndoText = log.returnedQty > 0 ? '<div class="text-[10px] text-purple-700 font-bold mt-1"><i class="fa-solid fa-reply-all mr-0.5"></i>Đã hoàn nhập trả: ' + log.returnedQty + '/' + log.qty + '</div>' : '';
+            data.forEach(function(log) {
+                var iconHtml = "";
+                if (log.type.includes("Nhập")) iconHtml = '<div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-arrow-turn-down"></i></div>';
+                else if (log.type.includes("Xuất")) iconHtml = '<div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-arrow-turn-up"></i></div>';
+                else if (log.type.includes("Mượn")) iconHtml = '<div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-handshake"></i></div>';
+                else if (log.type.includes("Trả")) iconHtml = '<div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-box-open"></i></div>';
+                else iconHtml = '<div class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-circle-info"></i></div>';
 
-                logListContainer.innerHTML += `
-                    <div class="p-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 hover:bg-slate-100 transition-all text-xs">
-                        <div class="flex items-start gap-3 min-w-0 flex-grow">
-                            <span class="${log.color} text-white px-2.5 py-1 rounded-md font-extrabold text-[10px] tracking-wide uppercase flex-shrink-0">${log.type}</span>
-                            <div class="min-w-0">
-                                <div class="text-slate-900 font-bold leading-normal">
-                                    <span class="font-mono bg-slate-200 px-1.5 py-0.5 rounded text-indigo-600 font-bold mr-1">${log.sku}</span>
-                                    ${log.name} (SL: <span class="text-slate-900 font-extrabold text-sm">${log.qty}</span>)
-                                </div>
-                                <div class="text-slate-500 font-medium mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
-                                    <span class="text-slate-700 bg-white border border-slate-200 px-2 py-0.5 rounded-md font-semibold text-[11px]"><i class="fa-solid fa-comment-dots text-slate-400 mr-1"></i>${log.note}</span>
-                                    <span class="text-[11px] text-slate-400 font-mono"><i class="fa-regular fa-clock mr-1"></i>${log.time}</span>
-                                </div>
-                                ${statusUndoText}
+                list.innerHTML += `
+                    <div class="p-3 hover:bg-white transition-all flex items-start gap-3">
+                        ${iconHtml}
+                        <div class="flex-grow min-w-0">
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <span class="${log.color} text-white px-1.5 py-0.5 rounded text-[10px] font-extrabold whitespace-nowrap">${log.type}</span>
+                                <span class="text-slate-400 text-[10px] font-medium"><i class="fa-regular fa-clock mr-1"></i>${log.time}</span>
                             </div>
-                        </div>
-                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end flex-shrink-0">
-                            <button onclick="suaGhiChuLogTrucTiep(${realIdx})" class="text-slate-400 hover:text-indigo-600 p-1.5 rounded border border-transparent hover:border-slate-200 bg-white shadow-sm transition-all cursor-pointer" title="Sửa ghi chú log"><i class="fa-solid fa-file-pen"></i></button>
-                            <button ${checkUndoDisable} onclick="hoanNhapTuLichSu(${realIdx})" class="bg-white hover:bg-purple-600 text-purple-700 hover:text-white font-extrabold border border-purple-200 hover:border-purple-600 px-3 py-1.5 rounded-lg shadow-sm transition-all cursor-pointer">
-                                <i class="fa-solid fa-arrow-rotate-left mr-1"></i>Khách Trả Lại
-                            </button>
+                            <div class="font-bold text-slate-900 text-sm truncate">
+                                <span class="text-indigo-600 font-mono text-xs mr-1">[${log.sku}]</span>
+                                ${log.name} 
+                                <span class="ml-1 text-slate-500 font-extrabold">(SL: ${log.qty})</span>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-0.5 truncate"><i class="fa-solid fa-comment-dots mr-1 text-slate-300"></i>${log.note}</div>
                         </div>
                     </div>
                 `;
             });
         }
 
-        function searchProduct() {
-            var keyword = document.getElementById('searchInput').value.toLowerCase().trim();
-            if (keyword === "") {
-                renderTable();
-            } else {
-                var results = inventory.filter(function(item) { 
-                    return item.name.toLowerCase().includes(keyword) || 
-                    (item.sku && item.sku.toLowerCase().includes(keyword));
-                });
-                renderTable(results);
-            }
-        }
-
-        function suaTenSanPhamTrucTiep(idx) {
-            var curName = inventory[idx].name;
-            var newName = prompt("📝 Nhập tên mới cho sản phẩm này:", curName);
-            if (newName !== null && newName.trim() !== "") {
-                inventory[idx].name = newName.trim();
-                luuDuLieu(true);
-                lamMoiHeThong();
-            }
-        }
-
-        function suaMaSkuTrucTiep(idx) {
-            var curSku = inventory[idx].sku;
-            var newSku = prompt("⚙️ Nhập mã SKU mới độc nhất (Viết liền không dấu):", curSku);
-            if (newSku !== null && newSku.trim() !== "") {
-                var fixSku = newSku.trim().toUpperCase();
-                var checkDuplicate = inventory.findIndex(function(item, i) { return item.sku === fixSku && i !== idx; });
-                if (checkDuplicate !== -1) {
-                    alert("⚠️ Lỗi: Mã SKU mới này đã tồn tại ở sản phẩm khác trong hệ thống!");
-                    return;
-                }
-                inventory[idx].sku = fixSku;
-                luuDuLieu(true);
-                lamMoiHeThong();
-            }
-        }
-
-        function doiAnhSanPhanTrucTiep(idx) {
-            var inputFile = document.createElement('input');
-            inputFile.type = 'file';
-            inputFile.accept = 'image/*';
-            inputFile.onchange = function(e) {
-                var file = e.target.files[0];
-                if (file) {
-                    compressAndConvertImage(file, function(base64Data) {
-                        inventory[idx].image = base64Data;
-                        luuDuLieu(true);
-                        lamMoiHeThong();
-                    });
-                }
-            };
-            inputFile.click();
-        }
-
-        function suaGhiChuLogTrucTiep(logIdx) {
-            var oldNote = historyLog[logIdx].note;
-            var newNote = prompt("📝 Cập nhật lại nội dung ghi chú của hoạt động này:", oldNote);
-            if (newNote !== null) {
-                historyLog[logIdx].note = newNote.trim() || "Không có ghi chú";
-                luuLichSuLog();
-                renderHistory();
-            }
-        }
-
-        function traHangDonLe(pIdx, bIdx) {
-            var item = inventory[pIdx];
-            var borrowData = item.borrowList[bIdx];
-            var rawQty = prompt("🔄 Khách hoàn trả hàng từ: " + borrowData.note + "\nNhập số lượng thực tế nhận lại:", borrowData.qty);
-            var qtyReturn = parseInt(rawQty);
-
-            if (isNaN(qtyReturn) || qtyReturn <= 0) return;
-            if (qtyReturn > borrowData.qty) {
-                alert("⚠️ Lỗi: Số lượng trả vượt quá số lượng đang mượn (" + borrowData.qty + ")!");
-                return;
-            }
-
-            item.qty += qtyReturn;
-            borrowData.qty -= qtyReturn;
-            item.borrowedQty -= qtyReturn;
-
-            if (borrowData.qty === 0) item.borrowList.splice(bIdx, 1);
-
-            luuDuLieu(true);
-            ghiLogLichSu(item.sku, item.name, "Nhận trả (🔀)", qtyReturn, "bg-purple-600", "Hoàn trả hàng trực tiếp từ danh mục mượn của [" + borrowData.note + "]");
-            lamMoiHeThong();
-        }
-
-        function hoanNhapTuLichSu(logIdx) {
-            var log = historyLog[logIdx];
-            var targetProductIndex = inventory.findIndex(function(i) { return i.sku === log.sku; });
-            if (targetProductIndex === -1) {
-                alert("⚠️ Không thể hoàn nhập vì mã sản phẩm này đã bị xóa khỏi hệ thống chính!");
-                return;
-            }
-
-            var maxAllowable = log.qty - (log.returnedQty || 0);
-            var rawInput = prompt("↩ Nhận hàng trả lại từ hoạt động: " + log.type + "\nSố lượng có thể trả tối đa: " + maxAllowable + "\nNhập số lượng thực nhận:", maxAllowable);
-            var qty = parseInt(rawInput);
-
-            if (isNaN(qty) || qty <= 0) return;
-            if (qty > maxAllowable) {
-                alert("⚠️ Số lượng nhập trả vượt giới hạn lịch sử!");
-                return;
-            }
-
-            var customReason = prompt("Nhập lý do hoặc người thực hiện hoàn nhập:", "Khách hoàn trả (Từ giao dịch ngày " + log.time.split(',')[0] + ")");
-            if (customReason === null) return;
-
-            inventory[targetProductIndex].qty += qty;
-            log.returnedQty = (log.returnedQty || 0) + qty;
-            
-            luuDuLieu(true);
-            luuLichSuLog();
-            ghiLogLichSu(log.sku, log.name, "Hoàn nhập (↩)", qty, "bg-emerald-600", customReason.trim() || 'Hoàn lại kho từ lịch sử giao dịch');
-            lamMoiHeThong();
-        }
-
-        function xoaSanPhamDonLe(idx) {
-            var target = inventory[idx];
-            if (confirm("❌ Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm:\n\"" + target.name + "\" khỏi hệ thống?")) {
-                var reason = prompt("Vui lòng ghi lý do xóa sản phẩm này (Bắt buộc):");
-                if (reason !== null && reason.trim() !== "") {
-                    ghiLogLichSu(target.sku, target.name, "Xóa mã hàng 🗑️", target.qty + target.borrowedQty, "bg-slate-900", "Lý do xóa: " + reason.trim());
-                    
-                    inventory.splice(idx, 1);
-                    selectedItems.clear(); 
-                    document.getElementById('selectAll').checked = false;
-                    
-                    luuDuLieu(true);
-                    lamMoiHeThong();
-                } else if (reason !== null) {
-                    alert("⚠️ Bạn phải nhập lý do xóa để đảm bảo tính minh bạch kiểm kho!");
-                }
-            }
-        }
-
         function xoaLichSu() {
-            if (confirm("🚨 Bạn có chắc chắn muốn xóa sạch toàn bộ lịch sử log biến động kho không?\nHành động này không thể hoàn tác.")) {
+            if (confirm("⚠️ Chú ý: Bạn có chắc chắn muốn XÓA TOÀN BỘ lịch sử biến động không? (Dữ liệu tồn kho vẫn được giữ nguyên)")) {
                 historyLog = [];
                 luuLichSuLog();
                 renderHistory();
             }
         }
 
-        var currentActionIndex = -1;
-        var currentActionType = ''; 
+        var currentActionIdx = -1;
+        var currentActionType = '';
 
         function openActionModal(idx, type) {
-            currentActionIndex = idx;
+            currentActionIdx = idx;
             currentActionType = type;
             var item = inventory[idx];
-
-            document.getElementById('actionModalImg').src = item.image;
+            
             document.getElementById('actionModalSku').innerText = item.sku;
             document.getElementById('actionModalName').innerText = item.name;
+            document.getElementById('actionModalImg').src = item.image;
+            document.getElementById('actionModalMaxLabel').innerText = "Kho hiện có: " + item.qty;
+            document.getElementById('actionModalQty').value = 1;
+            document.getElementById('actionModalNote').value = "";
+            document.getElementById('actionModalNote').className = "w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:border-indigo-500";
             
-            var qtyInput = document.getElementById('actionModalQty');
-            var noteInput = document.getElementById('actionModalNote');
-            var maxLabel = document.getElementById('actionModalMaxLabel');
-            var submitBtn = document.getElementById('actionModalSubmitBtn');
-            var title = document.getElementById('actionModalTitle');
-
-            qtyInput.value = 1;
-            noteInput.value = '';
-
+            var title = "", btnText = "", btnClass = "", noteLabel = "";
             if (type === 'nhap') {
-                title.innerText = "➕ NHẬP BỔ SUNG SỐ LƯỢNG";
-                title.className = "text-base font-extrabold text-emerald-700 tracking-tight";
-                maxLabel.innerText = "Kho hiện có: " + item.qty;
-                document.getElementById('actionModalNoteLabel').innerText = "Người giao / Lý do nhập hàng (Tùy chọn)";
-                submitBtn.className = "px-5 py-2.5 rounded-xl text-white font-bold text-xs bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-all cursor-pointer";
+                title = "📥 NHẬP HÀNG MỚI VÀO KHO"; btnText = "Xác Nhận Nhập"; btnClass = "bg-emerald-600 hover:bg-emerald-700";
+                noteLabel = "Lý Do Nhập / Người Thực Hiện";
             } else if (type === 'xuat') {
-                title.innerText = "➖ XUẤT KHO SẢN PHẨM";
-                title.className = "text-base font-extrabold text-amber-700 tracking-tight";
-                maxLabel.innerText = "Kho khả dụng: " + item.qty;
-                document.getElementById('actionModalNoteLabel').innerText = "Người nhận / Lý do xuất kho (Bắt buộc)";
-                submitBtn.className = "px-5 py-2.5 rounded-xl text-white font-bold text-xs bg-amber-600 hover:bg-amber-700 shadow-sm transition-all cursor-pointer";
+                title = "📤 XUẤT HÀNG KHỎI KHO"; btnText = "Xác Nhận Xuất"; btnClass = "bg-amber-600 hover:bg-amber-700";
+                noteLabel = "Lý Do Xuất / Tên Người Nhận (Bắt buộc) <span class='text-rose-500'>*</span>";
             } else if (type === 'muon') {
-                title.innerText = "📦 CHO MƯỢN SẢN PHẨM TẠM THỜI";
-                title.className = "text-base font-extrabold text-purple-700 tracking-tight";
-                maxLabel.innerText = "Kho khả dụng: " + item.qty;
-                document.getElementById('actionModalNoteLabel').innerText = "Họ tên người mượn / Phòng ban (Bắt buộc)";
-                submitBtn.className = "px-5 py-2.5 rounded-xl text-white font-bold text-xs bg-purple-600 hover:bg-purple-700 shadow-sm transition-all cursor-pointer";
+                title = "📦 CHO MƯỢN HÀNG"; btnText = "Xác Nhận Cho Mượn"; btnClass = "bg-purple-600 hover:bg-purple-700";
+                noteLabel = "Tên Người Mượn / Đơn vị (Bắt buộc) <span class='text-rose-500'>*</span>";
             }
-
+            
+            document.getElementById('actionModalTitle').innerText = title;
+            document.getElementById('actionModalNoteLabel').innerHTML = noteLabel;
+            var submitBtn = document.getElementById('actionModalSubmitBtn');
+            submitBtn.innerText = btnText;
+            submitBtn.className = "px-5 py-2.5 rounded-xl text-white font-bold text-xs shadow-sm transition-all cursor-pointer " + btnClass;
+            
             document.getElementById('actionModal').classList.remove('hidden');
-            qtyInput.focus();
+            setTimeout(function() { document.getElementById('actionModalQty').focus(); }, 100);
         }
 
         function closeActionModal() {
@@ -985,47 +830,56 @@
         }
 
         function submitActionModal() {
-            var item = inventory[currentActionIndex];
-            var qty = parseInt(document.getElementById('actionModalQty').value) || 0;
+            var qty = parseInt(document.getElementById('actionModalQty').value);
             var note = document.getElementById('actionModalNote').value.trim();
+            var item = inventory[currentActionIdx];
 
-            if (qty <= 0 || isNaN(qty)) { alert("⚠️ Vui lòng nhập số lượng xử lý lớn hơn 0 hợp lệ!"); return; }
+            if (isNaN(qty) || qty <= 0) { alert("⚠️ Vui lòng nhập số lượng hợp lệ lớn hơn 0!"); return; }
+
+            if ((currentActionType === 'xuat' || currentActionType === 'muon') && note === "") {
+                document.getElementById('actionModalNote').classList.add("border-rose-500", "bg-rose-50");
+                alert("⚠️ BẮT BUỘC: Vui lòng điền 'Lý do xuất / Tên người nhận' để lưu vào lịch sử truy vết!");
+                document.getElementById('actionModalNote').focus();
+                return;
+            }
 
             if (currentActionType === 'nhap') {
                 item.qty += qty;
-                ghiLogLichSu(item.sku, item.name, "Nhập thêm ➕", qty, "bg-emerald-600", note || "Nhập bổ sung kho lẻ");
-            } else if (currentActionType === 'xuat') {
-                if (qty > item.qty) { alert("⚠️ Không đủ hàng xuất! Kho thực tế còn: " + item.qty); return; }
-                if (!note) { alert("⚠️ Vui lòng điền thông tin người nhận hàng hoặc lý do xuất!"); return; }
+                ghiLogLichSu(item.sku, item.name, "Nhập kho 📥", qty, "bg-emerald-600", note);
+            } 
+            else if (currentActionType === 'xuat') {
+                if (qty > item.qty) { alert("⚠️ Lỗi: Không thể xuất lượng lớn hơn tồn kho hiện tại (" + item.qty + ")!"); return; }
+                item.qty -= qty;
                 
                 if (item.parentSku && item.ratio) {
-                    var parentItem = inventory.find(function(i) { return i.sku === item.parentSku; });
-                    if (parentItem) {
-                        var totalPiecesDeduct = qty * item.ratio;
-                        if (parentItem.qty < totalPiecesDeduct) {
-                            alert("⚠️ Thất bại: Số lượng hàng lẻ [" + parentItem.sku + "] không đủ để trừ theo tỷ lệ thùng! (Yêu cầu trừ: " + totalPiecesDeduct + " cây, Kho lẻ hiện có: " + parentItem.qty + ")");
-                            return;
+                    var targetParentIdx = inventory.findIndex(function(i) { return i.sku === item.parentSku; });
+                    if (targetParentIdx !== -1) {
+                        var pItem = inventory[targetParentIdx];
+                        var subQtyToSubtract = qty * item.ratio;
+                        if (subQtyToSubtract > pItem.qty) {
+                            alert("⚠️ Lỗi logic quy đổi: Không đủ hàng lẻ [" + pItem.sku + "] trong kho để quy đổi (Cần " + subQtyToSubtract + ", hiện có " + pItem.qty + "). Vui lòng kiểm tra lại!");
+                            return; 
                         }
-                        parentItem.qty -= totalPiecesDeduct;
-                        ghiLogLichSu(parentItem.sku, parentItem.name, "Xuất tự động ➖", totalPiecesDeduct, "bg-slate-500", "Trừ tự động theo mã thùng xuất: " + item.sku + " (Lý do: " + note + ")");
+                        pItem.qty -= subQtyToSubtract;
+                        ghiLogLichSu(pItem.sku, pItem.name, "Xuất quy đổi 📉", subQtyToSubtract, "bg-amber-600", "Trừ tự động do xuất thùng [" + item.sku + "]. Ghi chú gốc: " + note);
+                    } else {
+                        alert("⚠️ Cảnh báo: Không tìm thấy sản phẩm quy đổi [" + item.parentSku + "]. Chỉ trừ tồn kho thùng.");
                     }
                 }
-
-                item.qty -= qty;
-                ghiLogLichSu(item.sku, item.name, "Xuất kho ➖", qty, "bg-amber-600", note);
-            } else if (currentActionType === 'muon') {
-                if (qty > item.qty) { alert("⚠️ Không đủ hàng cho mượn! Kho thực tế còn: " + item.qty); return; }
-                if (!note) { alert("⚠️ Vui lòng nhập họ tên người mượn hàng để theo dõi!"); return; }
+                ghiLogLichSu(item.sku, item.name, "Xuất kho 📤", qty, "bg-amber-600", note);
+            } 
+            else if (currentActionType === 'muon') {
+                if (qty > item.qty) { alert("⚠️ Lỗi: Không thể cho mượn số lượng lớn hơn tồn kho (" + item.qty + ")!"); return; }
                 
                 item.qty -= qty;
                 item.borrowedQty += qty;
                 item.borrowList.push({
-                    id: Date.now().toString(),
+                    id: Math.random().toString(36).substring(2, 7),
                     qty: qty,
                     note: note,
                     time: layThoiGianHienTai()
                 });
-                ghiLogLichSu(item.sku, item.name, "Mượn hàng 📦", qty, "bg-purple-600", "Cho [" + note + "] mượn thiết bị");
+                ghiLogLichSu(item.sku, item.name, "Cho mượn 📦", qty, "bg-purple-600", note);
             }
 
             luuDuLieu(true);
@@ -1034,614 +888,694 @@
             playBeepSound('success');
         }
 
-        function handleSingleSelect(checkbox) {
-            var idx = parseInt(checkbox.value);
-            if (checkbox.checked) selectedItems.add(idx);
-            else selectedItems.delete(idx);
-            updateBulkUI();
+        function traHangDonLe(realIndex, borrowIndex) {
+            var item = inventory[realIndex];
+            var bItem = item.borrowList[borrowIndex];
+            
+            var confirmMsg = "🔄 TRẢ HÀNG MƯỢN\nSản phẩm: " + item.name + "\nNgười mượn: " + bItem.note + "\nSố lượng đang mượn: " + bItem.qty + "\n\nBạn muốn xác nhận đã nhận lại toàn bộ " + bItem.qty + " sản phẩm này vào kho?";
+            if(confirm(confirmMsg)) {
+                item.qty += bItem.qty;
+                item.borrowedQty -= bItem.qty;
+                ghiLogLichSu(item.sku, item.name, "Khách Trả 🔙", bItem.qty, "bg-indigo-600", "Đã nhận trả từ: " + bItem.note);
+                item.borrowList.splice(borrowIndex, 1);
+                
+                luuDuLieu(true);
+                lamMoiHeThong();
+                playBeepSound('success');
+            }
+        }
+
+        function xoaSanPhamDonLe(idx) {
+            var item = inventory[idx];
+            if(item.borrowedQty > 0) {
+                alert("⚠️ KHÔNG THỂ XÓA: Sản phẩm này đang có người mượn (" + item.borrowedQty + " cái). Vui lòng thu hồi hàng mượn trước khi xóa mã.");
+                return;
+            }
+            if(confirm("🗑️ Bạn có CHẮC CHẮN muốn XÓA VĨNH VIỄN sản phẩm:\n[" + item.sku + "] " + item.name + " khỏi kho không?")) {
+                ghiLogLichSu(item.sku, item.name, "Xóa Mã Kho ❌", item.qty, "bg-slate-800", "Xóa vĩnh viễn khỏi danh mục");
+                inventory.splice(idx, 1);
+                selectedItems.delete(idx); 
+                luuDuLieu(true);
+                lamMoiHeThong();
+            }
+        }
+
+        function suaMaSkuTrucTiep(idx) {
+            var oldSku = inventory[idx].sku;
+            var newSku = prompt("Sửa mã SKU cho sản phẩm (Không được trùng lặp):", oldSku);
+            if(newSku && newSku.trim() !== "" && newSku.trim().toUpperCase() !== oldSku) {
+                newSku = newSku.trim().toUpperCase();
+                if(inventory.some(function(i) { return i.sku === newSku; })) {
+                    alert("⚠️ Mã SKU này đã tồn tại trong kho!");
+                    return;
+                }
+                inventory[idx].sku = newSku;
+                ghiLogLichSu(newSku, inventory[idx].name, "Đổi SKU ✏️", 0, "bg-slate-600", "Cập nhật mã SKU cũ [" + oldSku + "] thành [" + newSku + "]");
+                luuDuLieu(true);
+                lamMoiHeThong();
+            }
+        }
+
+        function suaTenSanPhamTrucTiep(idx) {
+            var oldName = inventory[idx].name;
+            var newName = prompt("Sửa tên sản phẩm:", oldName);
+            if(newName && newName.trim() !== "" && newName.trim() !== oldName) {
+                inventory[idx].name = newName.trim();
+                luuDuLieu(true);
+                document.getElementById('nameText_' + idx).innerText = newName.trim();
+            }
+        }
+
+        function doiAnhSanPhanTrucTiep(idx) {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function(e) {
+                if(e.target.files && e.target.files[0]) {
+                    compressAndConvertImage(e.target.files[0], function(base64) {
+                        inventory[idx].image = base64;
+                        luuDuLieu(true);
+                        lamMoiHeThong();
+                    });
+                }
+            };
+            input.click();
         }
 
         function toggleSelectAll() {
-            var isAllChecked = document.getElementById('selectAll').checked;
+            var isChecked = document.getElementById('selectAll').checked;
             var checkboxes = document.querySelectorAll('.item-checkbox');
+            checkboxes.forEach(function(cb) {
+                cb.checked = isChecked;
+                if (isChecked) selectedItems.add(parseInt(cb.value));
+                else selectedItems.delete(parseInt(cb.value));
+            });
+            updateBulkUI();
+        }
+
+        function handleSingleSelect(cb) {
+            var val = parseInt(cb.value);
+            if (cb.checked) selectedItems.add(val);
+            else selectedItems.delete(val);
             
-            if(isAllChecked) {
-                checkboxes.forEach(function(cb) {
-                    cb.checked = true;
-                    selectedItems.add(parseInt(cb.value));
-                });
-            } else {
-                checkboxes.forEach(function(cb) {
-                    cb.checked = false;
-                    selectedItems.delete(parseInt(cb.value));
-                });
-            }
+            var checkboxes = document.querySelectorAll('.item-checkbox');
+            document.getElementById('selectAll').checked = selectedItems.size === checkboxes.length && checkboxes.length > 0;
             updateBulkUI();
         }
 
         function boChonTatCa() {
+            selectedItems.clear();
             document.getElementById('selectAll').checked = false;
             var checkboxes = document.querySelectorAll('.item-checkbox');
             checkboxes.forEach(function(cb) { cb.checked = false; });
-            selectedItems.clear();
             updateBulkUI();
         }
 
         function updateBulkUI() {
             var panel = document.getElementById('bulkActionPanel');
-            var countLabel = document.getElementById('bulkCount');
+            var countSpan = document.getElementById('bulkCount');
             if (selectedItems.size > 0) {
                 panel.classList.remove('hidden');
-                countLabel.innerText = selectedItems.size;
+                panel.classList.add('flex');
+                countSpan.innerText = selectedItems.size;
             } else {
                 panel.classList.add('hidden');
-            }
-        }
-
-        function xoaHangLoat() {
-            if (confirm("🚨 Bạn chắc chắn muốn xóa vĩnh viễn toàn bộ " + selectedItems.size + " sản phẩm đang được chọn không?")) {
-                var reason = prompt("Nhập lý do xóa lô hàng này:");
-                if (!reason) { alert("Hủy bỏ, bạn bắt buộc phải điền lý do xóa lô."); return; }
-
-                var sortedIndices = Array.from(selectedItems).sort(function(a, b) { return b - a; });
-                sortedIndices.forEach(function(idx) {
-                    var item = inventory[idx];
-                    ghiLogLichSu(item.sku, item.name, "Xóa lô hàng 🗑️", item.qty, "bg-slate-900", "Xóa hàng loạt - Lý do: " + reason);
-                    inventory.splice(idx, 1);
-                });
-
-                selectedItems.clear();
-                luuDuLieu(true);
-                lamMoiHeThong();
-                alert("✅ Đã xóa hoàn tất lô sản phẩm được chọn.");
+                panel.classList.remove('flex');
             }
         }
 
         var currentBulkType = '';
         function openBulkModal(type) {
             currentBulkType = type;
-            var container = document.getElementById('bulkModalList');
-            var globalLabel = document.getElementById('bulkGlobalNoteLabel');
-            container.innerHTML = '';
-            document.getElementById('bulkModalNote').value = '';
+            var title = "", btnText = "", btnClass = "", noteLabel = "";
+            if (type === 'nhap') { title = "📥 NHẬP LÔ HÀNG VÀO KHO"; btnText = "Hoàn Tất Nhập Lô"; btnClass = "bg-emerald-600 hover:bg-emerald-700"; noteLabel = "Ghi chú chung / Mã hóa đơn phiếu nhập"; }
+            else if (type === 'xuat') { title = "📤 XUẤT LÔ HÀNG KHỎI KHO"; btnText = "Hoàn Tất Xuất Lô"; btnClass = "bg-amber-600 hover:bg-amber-700"; noteLabel = "Tên Người Nhận / Đơn Vị / Lý Do Xuất Chung (Bắt buộc) <span class='text-rose-500'>*</span>"; }
+            else if (type === 'muon') { title = "📦 CHO MƯỢN THEO LÔ"; btnText = "Hoàn Tất Cho Mượn Lô"; btnClass = "bg-purple-600 hover:bg-purple-700"; noteLabel = "Tên Người Mượn / Đơn Vị Mượn Chung (Bắt buộc) <span class='text-rose-500'>*</span>"; }
+            
+            document.getElementById('bulkModalTitle').innerText = title;
+            document.getElementById('bulkGlobalNoteLabel').innerHTML = noteLabel;
+            document.getElementById('bulkModalNote').value = "";
+            document.getElementById('bulkModalNote').className = "w-full bg-white border border-indigo-200 rounded-xl px-4 py-3 text-sm font-bold shadow-sm focus:outline-none focus:border-indigo-600 transition-all";
+            
+            var submitBtn = document.getElementById('bulkModalConfirmBtn');
+            submitBtn.innerText = btnText;
+            submitBtn.className = "px-6 py-2.5 rounded-xl text-white font-bold text-xs shadow-sm cursor-pointer " + btnClass;
 
-            var title = document.getElementById('bulkModalTitle');
-            if(type === 'nhap') { title.innerText = "📥 NHẬP HÀNG THEO LÔ LOẠT"; globalLabel.innerText = "Ghi chú chung cho lô hàng nhập (Tùy chọn):"; }
-            if(type === 'xuat') { title.innerText = "📤 XUẤT KHO HÀNG THEO LÔ LOẠT"; globalLabel.innerText = "Họ tên người nhận / Lý do xuất lô (Bắt buộc):"; }
-            if(type === 'muon') { title.innerText = "📦 CHO MƯỢN HÀNG THEO LÔ ĐIỀU PHỐI"; globalLabel.innerText = "Họ tên người mượn hàng / Đơn vị tiếp nhận lô (Bắt buộc):"; }
-
-            selectedItems.forEach(function(idx) {
+            var listHtml = '';
+            Array.from(selectedItems).forEach(function(idx) {
                 var item = inventory[idx];
-                var textLimit = type !== 'nhap' ? '<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold">Hiện có: ' + item.qty + '</span>' : '';
-                container.innerHTML += `
-                    <div class="bg-white border border-slate-200 p-3 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                        <div class="min-w-0">
-                            <span class="font-mono text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded">${item.sku}</span>
-                            <div class="text-xs font-bold text-slate-900 mt-1 truncate">${item.name}</div>
+                listHtml += `
+                    <div class="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-xl shadow-sm bulk-item-row" data-idx="${idx}">
+                        <img src="${item.image}" class="w-10 h-10 object-cover rounded-md border border-slate-200">
+                        <div class="flex-grow min-w-0">
+                            <div class="text-xs font-mono font-bold text-indigo-600 truncate">${item.sku}</div>
+                            <div class="text-sm font-bold text-slate-900 truncate" title="${item.name}">${item.name}</div>
+                            <div class="text-[10px] text-slate-500 mt-0.5 font-medium">Kho: <span class="font-bold text-slate-700">${item.qty}</span> | Đang cho mượn: <span class="font-bold text-slate-700">${item.borrowedQty}</span></div>
                         </div>
-                        <div class="flex items-center gap-2 flex-shrink-0 w-full sm:w-auto justify-end">
-                            ${textLimit}
-                            <input type="number" id="bulk_qty_${idx}" min="1" value="1" placeholder="SL" class="w-20 bg-slate-50 border border-slate-300 rounded-lg p-2 font-bold text-center text-xs focus:bg-white focus:outline-none">
+                        <div class="flex flex-col items-end w-24 flex-shrink-0">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase mb-1">Số lượng</label>
+                            <input type="number" min="1" value="1" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-sm font-bold text-center focus:outline-none focus:border-indigo-500 bulk-qty-input">
                         </div>
                     </div>
                 `;
             });
-
+            document.getElementById('bulkModalList').innerHTML = listHtml;
             document.getElementById('bulkModal').classList.remove('hidden');
         }
 
+        function closeBulkModal() {
+            document.getElementById('bulkModal').classList.add('hidden');
+        }
+
         function confirmBulkAction() {
-            var globalNote = document.getElementById('bulkModalNote').value.trim();
-            if (currentBulkType !== 'nhap' && !globalNote) {
-                alert("⚠️ Ghi chú / Người thực hiện là thông tin bắt buộc đối với nghiệp vụ Xuất/Mượn hàng!");
+            var note = document.getElementById('bulkModalNote').value.trim();
+            if ((currentBulkType === 'xuat' || currentBulkType === 'muon') && note === "") {
+                document.getElementById('bulkModalNote').classList.add("border-rose-500", "bg-rose-50");
+                alert("⚠️ BẮT BUỘC: Vui lòng điền 'Ghi chú chung' (Tên người nhận/lý do) để áp dụng cho toàn bộ lô hàng!");
+                document.getElementById('bulkModalNote').focus();
                 return;
             }
 
-            var loiVuotTonKho = [];
-            var flagError = false;
+            var rows = document.querySelectorAll('.bulk-item-row');
+            var errors = [];
+            var updates = []; 
 
-            selectedItems.forEach(function(idx) {
-                if (flagError) return;
-                var qtyEl = document.getElementById("bulk_qty_" + idx);
-                var qtyVal = parseInt(qtyEl.value) || 0;
+            rows.forEach(function(row) {
+                var idx = parseInt(row.getAttribute('data-idx'));
                 var item = inventory[idx];
-
-                if (qtyVal <= 0) { alert("Số lượng nhập cho mặt hàng " + item.name + " không hợp lệ."); flagError = true; return; }
-                if (currentBulkType !== 'nhap' && qtyVal > item.qty) {
-                    loiVuotTonKho.push("- " + item.name + " (Cần: " + qtyVal + " / Sẵn sàng: " + item.qty + ")");
-                }
+                var qty = parseInt(row.querySelector('.bulk-qty-input').value);
                 
-                if (currentBulkType === 'xuat' && item.parentSku && item.ratio) {
-                    var parentItem = inventory.find(function(i) { return i.sku === item.parentSku; });
-                    if (parentItem) {
-                        var totalPiecesDeduct = qtyVal * item.ratio;
-                        if (parentItem.qty < totalPiecesDeduct) {
-                            loiVuotTonKho.push("- Hàng lẻ của " + item.name + " [SKU: " + parentItem.sku + "] không đủ (Cần trừ: " + totalPiecesDeduct + ", Kho lẻ hiện có: " + parentItem.qty + ")");
-                        }
-                    }
+                if (isNaN(qty) || qty <= 0) {
+                    errors.push(`- [${item.sku}] Số lượng không hợp lệ.`);
+                    return;
+                }
+
+                if (currentBulkType === 'xuat' && qty > item.qty) {
+                    errors.push(`- [${item.sku}] Tồn kho không đủ (Cần: ${qty}, Có: ${item.qty}).`);
+                } else if (currentBulkType === 'muon' && qty > item.qty) {
+                    errors.push(`- [${item.sku}] Tồn kho không đủ để cho mượn (Cần: ${qty}, Có: ${item.qty}).`);
+                } else {
+                    updates.push({idx: idx, qty: qty, item: item});
                 }
             });
 
-            if (flagError) return;
-
-            if (loiVuotTonKho.length > 0) {
-                alert("⚠️ Không thể xử lý lô hàng do một số mặt hàng không đáp ứng đủ tồn kho:\n" + loiVuotTonKho.join('\n'));
+            if (errors.length > 0) {
+                alert("⚠️ LỖI KIỂM KÊ TRƯỚC KHI LƯU LÔ HÀNG:\n\n" + errors.join("\n") + "\n\nVui lòng kiểm tra lại số lượng nhập trong danh sách bên dưới.");
                 return;
             }
 
-            selectedItems.forEach(function(idx) {
-                var qtyVal = parseInt(document.getElementById("bulk_qty_" + idx).value) || 0;
-                var item = inventory[idx];
+            var timeNow = layThoiGianHienTai();
+            var sharedBorrowId = Math.random().toString(36).substring(2, 7); 
 
+            updates.forEach(function(u) {
+                var item = u.item;
+                var qty = u.qty;
+                
                 if (currentBulkType === 'nhap') {
-                    item.qty += qtyVal;
-                    ghiLogLichSu(item.sku, item.name, "Nhập lô 📥", qtyVal, "bg-emerald-600", globalNote || "Nhập bổ sung hàng loạt theo lô");
-                } else if (currentBulkType === 'xuat') {
+                    item.qty += qty;
+                    ghiLogLichSu(item.sku, item.name, "Nhập Lô 📦", qty, "bg-emerald-600", note || "Nhập theo lô hàng");
+                } 
+                else if (currentBulkType === 'xuat') {
+                    item.qty -= qty;
+                    
                     if (item.parentSku && item.ratio) {
-                        var parentItem = inventory.find(function(i) { return i.sku === item.parentSku; });
-                        if (parentItem) {
-                            var totalPiecesDeduct = qtyVal * item.ratio;
-                            parentItem.qty -= totalPiecesDeduct;
-                            ghiLogLichSu(parentItem.sku, parentItem.name, "Xuất tự động ➖", totalPiecesDeduct, "bg-slate-500", "Trừ tự động theo lô thùng xuất: " + item.sku + " (Ghi chú chung: " + globalNote + ")");
+                        var targetParentIdx = inventory.findIndex(function(i) { return i.sku === item.parentSku; });
+                        if (targetParentIdx !== -1) {
+                            var pItem = inventory[targetParentIdx];
+                            var subQty = qty * item.ratio;
+                            if (subQty <= pItem.qty) {
+                                pItem.qty -= subQty;
+                                ghiLogLichSu(pItem.sku, pItem.name, "Xuất quy đổi lô 📉", subQty, "bg-amber-600", "Trừ tự động do xuất thùng lô [" + item.sku + "]. Ghi chú: " + note);
+                            }
                         }
                     }
-                    item.qty -= qtyVal;
-                    ghiLogLichSu(item.sku, item.name, "Xuất lô 📤", qtyVal, "bg-amber-600", globalNote);
-                } else if (currentBulkType === 'muon') {
-                    item.qty -= qtyVal;
-                    item.borrowedQty += qtyVal;
-                    item.borrowList.push({
-                        id: Date.now().toString() + Math.random().toString(36).substr(2, 4),
-                        qty: qtyVal,
-                        note: globalNote + " (Theo lô)",
-                        time: layThoiGianHienTai()
-                    });
-                    ghiLogLichSu(item.sku, item.name, "Mượn lô 📦", qtyVal, "bg-purple-600", "Cho [" + globalNote + "] mượn lô hàng loạt");
+                    ghiLogLichSu(item.sku, item.name, "Xuất Lô 🚛", qty, "bg-amber-600", note);
+                } 
+                else if (currentBulkType === 'muon') {
+                    item.qty -= qty;
+                    item.borrowedQty += qty;
+                    item.borrowList.push({ id: sharedBorrowId, qty: qty, note: note, time: timeNow });
+                    ghiLogLichSu(item.sku, item.name, "Mượn Lô 🤝", qty, "bg-purple-600", note);
                 }
             });
 
+            boChonTatCa(); 
             luuDuLieu(true);
-            boChonTatCa();
-            closeBulkModal();
             lamMoiHeThong();
+            closeBulkModal();
             playBeepSound('success');
-            alert("🎉 Đã điều phối xử lý thành công lô hàng loạt!");
+            alert("🎉 Đã xử lý lô hàng thành công!");
         }
 
-        function openScannerModal() {
-            document.getElementById('scannerModal').classList.remove('hidden');
-            setScannerActionMode(currentScanMode);
-            switchScannerDevice(currentScannerDevice);
+        function xoaHangLoat() {
+            var count = selectedItems.size;
+            if(confirm("⚠️ NGUY HIỂM: Bạn có thực sự muốn XÓA VĨNH VIỄN " + count + " sản phẩm đang chọn khỏi danh mục kho không? Hành động này không thể hoàn tác!")) {
+                
+                var canDeleteAll = true;
+                Array.from(selectedItems).forEach(function(idx) {
+                    if(inventory[idx].borrowedQty > 0) canDeleteAll = false;
+                });
+                
+                if(!canDeleteAll) {
+                    alert("⚠️ LỖI TỪ CHỐI: Trong danh sách bạn chọn có sản phẩm đang được mượn. Hệ thống khóa chức năng xóa hàng loạt để bảo vệ dữ liệu. Vui lòng bỏ chọn các mã đang có người mượn.");
+                    return;
+                }
+
+                var sortedIndices = Array.from(selectedItems).sort(function(a, b) { return b - a; });
+                sortedIndices.forEach(function(idx) {
+                    var item = inventory[idx];
+                    ghiLogLichSu(item.sku, item.name, "Xóa Lô Mã ❌", item.qty, "bg-slate-800", "Xóa hàng loạt khỏi hệ thống");
+                    inventory.splice(idx, 1);
+                });
+                
+                boChonTatCa();
+                luuDuLieu(true);
+                lamMoiHeThong();
+                alert("✅ Đã xóa " + count + " sản phẩm khỏi kho.");
+            }
         }
 
-        function closeScannerModal() {
-            tatCameraDocQr();
-            document.getElementById('scannerModal').classList.add('hidden');
+        function searchProduct() {
+            var keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+            var filtered = inventory.filter(function(item) {
+                return item.name.toLowerCase().includes(keyword) || item.sku.toLowerCase().includes(keyword);
+            });
+            renderTable(filtered);
         }
+
+        var hardwareScannerBuffer = "";
+        var scannerTimeout;
+        document.getElementById('hwScannerInput').addEventListener('keydown', function(e) {
+            if (isScanningPaused) return; 
+
+            if (e.key === 'Enter') {
+                var code = hardwareScannerBuffer.trim().toUpperCase();
+                hardwareScannerBuffer = "";
+                if (code.length > 0) xuLyMaVachQuetThanhCong(code);
+            } else {
+                if (e.key.length === 1) { 
+                    hardwareScannerBuffer += e.key;
+                    clearTimeout(scannerTimeout);
+                    scannerTimeout = setTimeout(function() { hardwareScannerBuffer = ""; }, 100); 
+                }
+            }
+        });
 
         function switchScannerDevice(device) {
             currentScannerDevice = device;
-            var tabGun = document.getElementById('tabGun');
-            var tabCam = document.getElementById('tabCam');
-            var viewGun = document.getElementById('viewGunScanner');
-            var viewCam = document.getElementById('viewCamScanner');
-
+            document.getElementById('tabGun').className = device === 'gun' ? "py-3 border-b-2 border-indigo-500 text-indigo-400 bg-slate-900/60 focus:outline-none cursor-pointer" : "py-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 bg-slate-900/20 focus:outline-none cursor-pointer";
+            document.getElementById('tabCam').className = device === 'cam' ? "py-3 border-b-2 border-indigo-500 text-indigo-400 bg-slate-900/60 focus:outline-none cursor-pointer" : "py-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 bg-slate-900/20 focus:outline-none cursor-pointer";
+            
             if (device === 'gun') {
-                tabGun.className = "py-3 border-b-2 border-indigo-500 text-indigo-400 bg-slate-900/60 focus:outline-none cursor-pointer";
-                tabCam.className = "py-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 bg-slate-900/20 focus:outline-none cursor-pointer";
-                viewGun.classList.remove('hidden');
-                viewCam.classList.add('hidden');
-                tatCameraDocQr();
-                kichHoatFocusSungQuet();
+                document.getElementById('viewGunScanner').classList.remove('hidden');
+                document.getElementById('viewCamScanner').classList.add('hidden');
+                document.getElementById('hwScannerInput').focus();
+                stopCameraReader();
             } else {
-                tabCam.className = "py-3 border-b-2 border-indigo-500 text-indigo-400 bg-slate-900/60 focus:outline-none cursor-pointer";
-                tabGun.className = "py-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200 bg-slate-900/20 focus:outline-none cursor-pointer";
-                viewCam.classList.remove('hidden');
-                viewGun.classList.add('hidden');
-                batCameraDocQr();
+                document.getElementById('viewGunScanner').classList.add('hidden');
+                document.getElementById('viewCamScanner').classList.remove('hidden');
+                startCameraReader();
             }
         }
 
         function setScannerActionMode(mode) {
             currentScanMode = mode;
-            var buttons = ['btnHwInfo', 'btnHwNhap', 'btnHwXuat', 'btnHwMuon'];
-            buttons.forEach(function(bId) { document.getElementById(bId).className = "py-2.5 px-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer text-center text-slate-400 hover:text-slate-200"; });
+            var modes = ['info', 'nhap', 'xuat', 'muon'];
+            modes.forEach(function(m) {
+                var btn = document.getElementById('btnHw' + m.charAt(0).toUpperCase() + m.slice(1));
+                if (m === mode) {
+                    btn.className = "py-2.5 px-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer text-center bg-indigo-600 text-white";
+                } else {
+                    btn.className = "py-2.5 px-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer text-center text-slate-400 hover:text-slate-200";
+                }
+            });
 
             var noteBox = document.getElementById('scannerNoteBox');
             var noteInput = document.getElementById('scannerScanNote');
-            noteBox.classList.add('hidden');
-
-            if (mode === 'info') document.getElementById('btnHwInfo').className = "py-2.5 px-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer text-center bg-indigo-600 text-white shadow-sm";
-            if (mode === 'nhap') document.getElementById('btnHwNhap').className = "py-2.5 px-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer text-center bg-emerald-600 text-white shadow-sm";
-            
-            if (mode === 'xuat') {
-                document.getElementById('btnHwXuat').className = "py-2.5 px-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer text-center bg-amber-600 text-white shadow-sm";
+            if (mode === 'xuat' || mode === 'muon') {
                 noteBox.classList.remove('hidden');
-                noteInput.placeholder = "Tên người nhận / Lý do xuất kho (Bắt buộc)...";
-            }
-            if (mode === 'muon') {
-                document.getElementById('btnHwMuon').className = "py-2.5 px-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer text-center bg-purple-600 text-white shadow-sm";
-                noteBox.classList.remove('hidden');
-                noteInput.placeholder = "Họ tên người mượn / Đơn vị tiếp nhận (Bắt buộc)...";
-            }
-
-            kichHoatFocusSungQuet();
-        }
-
-        function kichHoatFocusSungQuet() {
-            if (currentScannerDevice === 'gun') {
-                setTimeout(function() {
-                    var input = document.getElementById('hwScannerInput');
-                    if(input) { input.focus(); input.value = ''; }
-                }, 100);
+                noteInput.focus();
+            } else {
+                noteBox.classList.add('hidden');
+                noteInput.value = ""; 
+                if (currentScannerDevice === 'gun') document.getElementById('hwScannerInput').focus();
             }
         }
 
-        document.getElementById('viewGunScanner').addEventListener('click', kichHoatFocusSungQuet);
-
-        document.getElementById('hwScannerInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                var skuScanned = this.value.trim().toUpperCase();
-                this.value = ''; 
-                if (skuScanned !== '') {
-                    xuLyMaVachQuetThanhCong(skuScanned);
-                }
-            }
-        });
-
-        function batCameraDocQr() {
-            tatCameraDocQr();
+        function openScannerModal() {
+            document.getElementById('scannerModal').classList.remove('hidden');
+            hideScannerResult();
             isScanningPaused = false;
-            html5QrCode = new Html5Qrcode("cameraReader");
+            switchScannerDevice(currentScannerDevice);
+        }
+
+        function closeScannerModal() {
+            document.getElementById('scannerModal').classList.add('hidden');
+            stopCameraReader();
+        }
+
+        function startCameraReader() {
+            if (html5QrCode == null) {
+                html5QrCode = new Html5Qrcode("cameraReader");
+            }
+            if (html5QrCode.isScanning) return;
             
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 60, qrbox: function(width, height) { return { width: width * 0.75, height: height * 0.75 }; } },
+            html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: { width: 250, height: 250 } },
                 function(decodedText) {
                     if (!isScanningPaused) {
+                        playBeepSound('success');
                         xuLyMaVachQuetThanhCong(decodedText.trim().toUpperCase());
                     }
                 },
                 function(errorMessage) { }
             ).catch(function(err) {
-                console.error("Không mở được camera máy quét:", err);
-                document.getElementById('viewCamScanner').innerHTML = '<div class="text-xs text-rose-500 font-bold p-4 text-center">⚠️ Không truy cập được Camera. Vui lòng cấp quyền camera cho trình duyệt.</div>';
+                console.warn("Lỗi khởi chạy camera:", err);
+                alert("⚠️ Không thể kết nối với Camera. Vui lòng kiểm tra quyền truy cập Camera trên trình duyệt của bạn.");
+                switchScannerDevice('gun'); 
             });
         }
 
-        function tatCameraDocQr() {
-            if (html5QrCode) {
-                html5QrCode.stop().then(function() { html5QrCode = null; }).catch(function(e) { console.log("Lỗi dừng camera:", e); });
+        function stopCameraReader() {
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().then(function() {
+                    html5QrCode.clear();
+                }).catch(function(err) { console.error("Lỗi khi tắt camera", err); });
             }
         }
 
-        function xuLyMaVachQuetThanhCong(skuScanned) {
-            isScanningPaused = true;
-            if (html5QrCode) {
-                try { html5QrCode.pause(true); } catch(e){}
-            }
+        function showScannerResult(iconClass, titleText, bodyHtml, bgClass) {
+            var box = document.getElementById('scannerResultBox');
+            box.className = "p-4 rounded-xl flex items-center gap-4 transition-all duration-300 mt-4 " + bgClass;
+            document.getElementById('scannerResultIcon').innerHTML = `<i class="${iconClass}"></i>`;
+            document.getElementById('scannerResultTitle').innerText = titleText;
+            document.getElementById('scannerResultBody').innerHTML = bodyHtml;
+            box.classList.remove('hidden');
+        }
 
-            var resBox = document.getElementById('scannerResultBox');
-            var resIcon = document.getElementById('scannerResultIcon');
-            var resBody = document.getElementById('scannerResultBody');
+        function hideScannerResult() {
+            document.getElementById('scannerResultBox').classList.add('hidden');
+        }
 
-            var noteInputVal = document.getElementById('scannerScanNote').value.trim();
-            var productIndex = inventory.findIndex(function(item) { return item.sku === skuScanned; });
+        function xuLyMaVachQuetThanhCong(scannedCode) {
+            isScanningPaused = true; 
+            hideScannerResult();
 
-            resBox.classList.remove('hidden');
+            var itemIdx = inventory.findIndex(function(i) { return i.sku === scannedCode; });
+            var noteVal = document.getElementById('scannerScanNote').value.trim();
 
-            if (productIndex === -1) {
+            if (itemIdx === -1) {
                 playBeepSound('error');
-                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950 border border-rose-800";
-                resIcon.innerText = "⚠️";
-                resBody.innerHTML = 'Mã SKU <span class="font-mono text-yellow-400 font-bold font-sm">' + skuScanned + '</span> chưa được tạo mã!';
-
-                setTimeout(function() {
-                    if (confirm("⚠️ Mã SKU [" + skuScanned + "] chưa có trong kho.\nBạn có muốn tự động điền mã này vào Form tạo sản phẩm mới không?")) {
-                        document.getElementById('productSKU').value = skuScanned;
-                        closeScannerModal();
-                        document.getElementById('productName').focus();
-                    } else {
-                        tiepTucTrangThaiQuetTiepTheo();
-                    }
-                }, 200);
+                showScannerResult('fa-solid fa-circle-xmark text-rose-300', 'KHÔNG TÌM THẤY', 'Mã SKU: <span class="text-rose-200 font-mono">' + scannedCode + '</span> không có trong dữ liệu kho.', 'bg-rose-900/50 border border-rose-800 text-rose-100');
+                
+                var wantToAdd = confirm("⚠️ KHÔNG TÌM THẤY SẢN PHẨM!\nMã: " + scannedCode + "\n\nBạn có muốn khai báo sản phẩm mới này vào hệ thống không?");
+                if(wantToAdd) {
+                    closeScannerModal();
+                    document.getElementById('productSKU').value = scannedCode;
+                    document.getElementById('productName').focus();
+                    window.scrollTo({ top: document.getElementById('inventoryForm').offsetTop - 100, behavior: 'smooth' });
+                } else {
+                    tiepTucTrangThaiQuetTiepTheo();
+                }
                 return;
             }
 
-            var item = inventory[productIndex];
+            var item = inventory[itemIdx];
 
             if (currentScanMode === 'info') {
                 playBeepSound('success');
-                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-slate-800 border border-indigo-900";
-                resIcon.innerText = "ℹ️";
-                resBody.innerHTML = '<b>' + item.name + '</b><br><span class="text-indigo-400">Tồn kho: ' + item.qty + ' | Cho mượn: ' + item.borrowedQty + '</span>';
+                showScannerResult('fa-solid fa-box-open text-indigo-300', 'TRA CỨU THÀNH CÔNG', '<div class="text-[14px]">' + item.name + '</div><div class="mt-1 text-[11px] text-indigo-200 font-medium">Tồn khả dụng: <span class="font-extrabold text-white text-sm bg-indigo-800 px-1.5 rounded">' + item.qty + '</span> | Đang mượn: ' + item.borrowedQty + '</div>', 'bg-indigo-900/50 border border-indigo-800');
                 tiepTucTrangThaiQuetTiepTheo();
             } 
             else if (currentScanMode === 'nhap') {
                 item.qty += 1;
+                ghiLogLichSu(item.sku, item.name, "Nhập Máy Quét ⚡", 1, "bg-emerald-600", "Quét tự động (+1)");
                 luuDuLieu(true);
-                ghiLogLichSu(item.sku, item.name, "Nhập quét 📷", 1, "bg-emerald-600", "Tăng số lượng tự động qua máy quét");
-                playBeepSound('success');
-                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-emerald-950 border border-emerald-800";
-                resIcon.innerText = "✅";
-                resBody.innerHTML = 'Đã NHẬP thêm 1 <b>' + item.name + '</b> thành công! (Tồn: ' + item.qty + ')';
                 lamMoiHeThong();
+                playBeepSound('success');
+                showScannerResult('fa-solid fa-check-double text-emerald-300', 'NHẬP KHO (+1)', '<div class="text-[14px] truncate">' + item.name + '</div><div class="mt-1 text-[11px] text-emerald-200">Tồn kho hiện tại lên thành: <span class="font-extrabold text-white text-sm">' + item.qty + '</span></div>', 'bg-emerald-900/50 border border-emerald-800');
                 tiepTucTrangThaiQuetTiepTheo();
-            } 
+            }
             else if (currentScanMode === 'xuat') {
-                if (!noteInputVal) {
-                    playBeepSound('warning');
-                    alert("⚠️ Hãy nhập Tên người nhận / Lý do xuất kho vào ô ghi chú trước khi quét điều phối!");
-                    tiepTucTrangThaiQuetTiepTheo();
-                    return;
-                }
-                if (item.qty < 1) {
+                if (noteVal === "") {
                     playBeepSound('error');
-                    resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950 border border-rose-800";
-                    resIcon.innerText = "❌";
-                    resBody.innerHTML = '<b>' + item.name + '</b> ĐÃ HẾT HÀNG! Không thể xuất kho.';
-                    tiepTucTrangThaiQuetTiepTheo();
+                    showScannerResult('fa-solid fa-triangle-exclamation text-amber-300', 'CẢNH BÁO LỖI THIẾU THÔNG TIN', 'Chưa nhập Ghi chú/Người nhận (Ô bên trên)', 'bg-amber-900/50 border border-amber-800');
+                    alert("⚠️ YÊU CẦU BẮT BUỘC: Vui lòng nhập Tên người nhận hoặc Lý do xuất kho vào ô text bên trên trước khi dùng súng bắn mã xuất!");
+                    document.getElementById('scannerScanNote').focus();
+                    tiepTucTrangThaiQuetTiepTheo(100); 
                     return;
                 }
-
-                if (item.parentSku && item.ratio) {
-                    var parentItem = inventory.find(function(i) { return i.sku === item.parentSku; });
-                    if (parentItem) {
-                        var totalPiecesDeduct = 1 * item.ratio;
-                        if (parentItem.qty < totalPiecesDeduct) {
-                            playBeepSound('error');
-                            resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950 border border-rose-800";
-                            resIcon.innerText = "❌";
-                            resBody.innerHTML = 'Hàng lẻ <b>[' + parentItem.sku + ']</b> không đủ trừ tỉ lệ! (Cần: ' + totalPiecesDeduct + ', Còn: ' + parentItem.qty + ')';
-                            tiepTucTrangThaiQuetTiepTheo();
-                            return;
-                        }
-                        parentItem.qty -= totalPiecesDeduct;
-                        ghiLogLichSu(parentItem.sku, parentItem.name, "Xuất tự động ➖", totalPiecesDeduct, "bg-slate-500", "Trừ tự động khi quét mã thùng xuất: " + item.sku);
-                    }
-                }
-
-                item.qty -= 1;
-                luuDuLieu(true);
-                ghiLogLichSu(item.sku, item.name, "Xuất quét 📷", 1, "bg-amber-600", noteInputVal);
-                playBeepSound('success');
-                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-amber-950 border border-amber-800";
-                resIcon.innerText = "📤";
-                resBody.innerHTML = 'Đã XUẤT 1 <b>' + item.name + '</b> cho [' + noteInputVal + ']';
-                lamMoiHeThong();
-                tiepTucTrangThaiQuetTiepTheo();
-            } 
-            else if (currentScanMode === 'muon') { 
-                if (!noteInputVal) {
-                    playBeepSound('warning');
-                    alert("⚠️ Hãy nhập Tên người mượn vào ô ghi chú trước khi bấm quét điều phối mượn!");
-                    tiepTucTrangThaiQuetTiepTheo();
-                    return;
-                }
-                if (item.qty < 1) {
-                    playBeepSound('error');
-                    resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-rose-950 border border-rose-800";
-                    resIcon.innerText = "❌";
-                    resBody.innerHTML = '<b>' + item.name + '</b> Không đủ hàng để cho mượn!';
-                    tiepTucTrangThaiQuetTiepTheo();
-                    return;
-                }
-                item.qty -= 1;
-                item.borrowedQty += 1;
                 
-                var bEx = item.borrowList.find(function(b) { return b.note === noteInputVal; }); 
-                if (bEx) {
-                    bEx.qty += 1;
+                if (item.qty < 1) {
+                    playBeepSound('error');
+                    showScannerResult('fa-solid fa-xmark text-rose-300', 'LỖI XUẤT KHO', '<div class="text-[13px]">' + item.name + '</div><div class="text-[11px] mt-1 text-rose-300">Không đủ tồn kho để xuất. Tồn hiện tại: 0</div>', 'bg-rose-900/50 border border-rose-800');
                 } else {
+                    item.qty -= 1;
+                    
+                    if (item.parentSku && item.ratio) {
+                        var targetParentIdx = inventory.findIndex(function(i) { return i.sku === item.parentSku; });
+                        if (targetParentIdx !== -1) {
+                            var pItem = inventory[targetParentIdx];
+                            var subQty = 1 * item.ratio;
+                            if (subQty <= pItem.qty) {
+                                pItem.qty -= subQty;
+                                ghiLogLichSu(pItem.sku, pItem.name, "Xuất quy đổi quét 📉", subQty, "bg-amber-600", "Trừ tự động do xuất thùng quét [" + item.sku + "]. Ghi chú: " + noteVal);
+                            }
+                        }
+                    }
+
+                    ghiLogLichSu(item.sku, item.name, "Xuất Máy Quét ⚡", 1, "bg-amber-600", noteVal);
+                    luuDuLieu(true);
+                    lamMoiHeThong();
+                    playBeepSound('success');
+                    showScannerResult('fa-solid fa-truck-fast text-amber-300', 'XUẤT KHO (-1)', '<div class="text-[14px] truncate">' + item.name + '</div><div class="mt-1 text-[11px] text-amber-200">Tồn kho còn lại: <span class="font-extrabold text-white text-sm">' + item.qty + '</span></div>', 'bg-amber-900/50 border border-amber-800');
+                }
+                tiepTucTrangThaiQuetTiepTheo();
+            }
+            else if (currentScanMode === 'muon') {
+                if (noteVal === "") {
+                    playBeepSound('error');
+                    showScannerResult('fa-solid fa-triangle-exclamation text-purple-300', 'CẢNH BÁO LỖI THIẾU THÔNG TIN', 'Chưa nhập Tên người mượn (Ô bên trên)', 'bg-purple-900/50 border border-purple-800');
+                    alert("⚠️ YÊU CẦU BẮT BUỘC: Vui lòng nhập Tên người mượn vào ô text bên trên trước khi dùng súng bắn mã mượn hàng!");
+                    document.getElementById('scannerScanNote').focus();
+                    tiepTucTrangThaiQuetTiepTheo(100);
+                    return;
+                }
+                
+                if (item.qty < 1) {
+                    playBeepSound('error');
+                    showScannerResult('fa-solid fa-xmark text-rose-300', 'LỖI CHO MƯỢN', '<div class="text-[13px]">' + item.name + '</div><div class="text-[11px] mt-1 text-rose-300">Tồn khả dụng đã hết (0) không thể cho mượn thêm.</div>', 'bg-rose-900/50 border border-rose-800');
+                } else {
+                    item.qty -= 1;
+                    item.borrowedQty += 1;
                     item.borrowList.push({
-                        id: Date.now().toString(),
+                        id: Math.random().toString(36).substring(2, 7),
                         qty: 1,
-                        note: noteInputVal,
+                        note: noteVal,
                         time: layThoiGianHienTai()
                     });
+                    ghiLogLichSu(item.sku, item.name, "Mượn Máy Quét ⚡", 1, "bg-purple-600", noteVal);
+                    luuDuLieu(true);
+                    lamMoiHeThong();
+                    playBeepSound('success');
+                    showScannerResult('fa-solid fa-handshake-angle text-purple-300', 'CHO MƯỢN (+1)', '<div class="text-[14px] truncate">' + item.name + '</div><div class="mt-1 text-[11px] text-purple-200">Đã mượn: <span class="font-extrabold text-white">' + item.borrowedQty + '</span> | Kho còn: ' + item.qty + '</div>', 'bg-purple-900/50 border border-purple-800');
                 }
-                luuDuLieu(true);
-                ghiLogLichSu(item.sku, item.name, "Mượn quét 📷", 1, "bg-purple-600", "Cho [" + noteInputVal + "] mượn qua máy quét");
-                playBeepSound('success');
-                resBox.className = "p-4 rounded-xl flex items-center gap-4 bg-purple-950 border border-purple-800";
-                resIcon.innerText = "📦";
-                resBody.innerHTML = 'Đã ghi nhận [' + noteInputVal + '] mượn 1 <b>' + item.name + '</b>';
-                lamMoiHeThong();
                 tiepTucTrangThaiQuetTiepTheo();
             }
         }
 
-        function tiepTucTrangThaiQuetTiepTheo() {
+        function tiepTucTrangThaiQuetTiepTheo(delay) {
+            var waitTime = delay || 400; 
             setTimeout(function() {
                 isScanningPaused = false;
-                if (html5QrCode && currentScannerDevice === 'cam') {
-                    try { html5QrCode.resume(); } catch(e){}
+                if (currentScannerDevice === 'gun' && document.getElementById('scannerModal').classList.contains('hidden') === false) {
+                    document.getElementById('hwScannerInput').focus();
                 }
-                kichHoatFocusSungQuet();
-            }, 1200);
+            }, waitTime);
         }
 
-        var debounceTimerCloud = null;
-        function triggerAutoSaveCloud() {
-            clearTimeout(debounceTimerCloud);
-            debounceTimerCloud = setTimeout(function() {
-                dongBoLenGoogleSheet(true);
-            }, 3000); 
-        }
+        document.getElementById('scannerModal').addEventListener('click', function(e) {
+            if (currentScannerDevice === 'gun' && !e.target.closest('input') && !e.target.closest('button')) {
+                document.getElementById('hwScannerInput').focus();
+            }
+        });
 
-        function dongBoLenGoogleSheet(isAuto) {
-            if (isAuto === undefined) isAuto = false;
+        async function dongBoLenGoogleSheet() {
             if (!GOOGLE_SHEET_URL) {
-                if (!isAuto) alert("🚨 Bạn chưa thiết lập URL Google Apps Script ở thanh Tiêu đề!");
+                alert("⚠️ CHƯA CẤU HÌNH: Bạn cần điền URL của Google Apps Script vào ô ở góc phải trên cùng và Lưu lại trước khi dùng tính năng Cloud.");
+                document.getElementById('sheetUrlInput').focus();
                 return;
             }
-            if (inventory.length === 0 && isAuto) return;
-
+            
             var btn = document.getElementById('btnSync');
-            var textGoc = btn.innerHTML;
-            btn.innerHTML = "⏳ Đang đồng bộ...";
-            btn.style.opacity = "0.7";
+            var originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang Đẩy...';
+            btn.disabled = true;
+            btn.classList.add('opacity-70');
 
-            var payload = {
-                thoi_gian: layThoiGianHienTai(),
-                ton_kho: inventory,
-                nhat_ky: historyLog
-            };
-
-            fetch(GOOGLE_SHEET_URL, {
-                method: "POST",
-                mode: "no-cors", 
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            })
-            .then(function() {
-                btn.innerHTML = "🚀 Đồng bộ xong";
-                btn.className = "bg-emerald-600 text-white font-bold text-xs px-4 py-3 rounded-xl shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap";
-                setTimeout(function() {
-                    btn.innerHTML = textGoc;
-                    btn.className = "bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs px-4 py-3 rounded-xl hover:opacity-95 transition-all shadow-sm cursor-pointer flex items-center gap-1.5 whitespace-nowrap";
-                    btn.style.opacity = "1";
-                }, 2500);
-            })
-            .catch(function(err) {
-                console.error("Lỗi Push đồng bộ Cloud:", err);
-                btn.innerHTML = "⚠️ Lỗi Kết Nối";
-                btn.style.background = "red";
-                setTimeout(function() { btn.innerHTML = textGoc; btn.style.background = ''; btn.style.opacity = "1"; }, 3000);
-            });
+            try {
+                var payload = { method: "POST", data: JSON.stringify(inventory) };
+                var response = await fetch(GOOGLE_SHEET_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: "data=" + encodeURIComponent(JSON.stringify(payload))
+                });
+                var result = await response.json();
+                if(result.status === 'success') {
+                    playBeepSound('success');
+                    alert("✅ YAY! Đẩy dữ liệu lên Cloud Google Sheet thành công!");
+                } else {
+                    alert("⚠️ LỖI TỪ SERVER: " + result.message);
+                }
+            } catch(error) {
+                console.error("Lỗi đồng bộ:", error);
+                alert("⚠️ KHÔNG THỂ KẾT NỐI: Vui lòng kiểm tra lại mạng Internet hoặc URL App Script có bị chặn CORS không.");
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+                btn.classList.remove('opacity-70');
+            }
         }
 
-        function khoiPhucTuGoogleSheet() {
-            if (!GOOGLE_SHEET_URL) { alert("🚨 Vui lòng cấu hình URL Google Apps Script trước!"); return; }
-            if (!confirm("⚠️ HÀNH ĐỘNG CẨN THẬN: Bạn có chắc chắn muốn Tải dữ liệu từ Google Sheet Cloud và GHI ĐÈ toàn bộ dữ liệu hiện tại trên thiết bị không?")) return;
+        function triggerAutoSaveCloud() {
+            if (!GOOGLE_SHEET_URL) return;
+            var payload = { method: "POST", data: JSON.stringify(inventory) };
+            fetch(GOOGLE_SHEET_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: "data=" + encodeURIComponent(JSON.stringify(payload))
+            }).catch(function(e) { console.log("Auto-save failed silent", e); });
+        }
+
+        async function khoiPhucTuGoogleSheet() {
+            if (!GOOGLE_SHEET_URL) {
+                alert("⚠️ Bạn chưa cấu hình Google Sheet URL!");
+                return;
+            }
+            if (!confirm("🚨 CẢNH BÁO QUAN TRỌNG: Quá trình Tải dữ liệu từ Cloud sẽ GHI ĐÈ XÓA TRẮNG toàn bộ dữ liệu hiện tại trên trình duyệt này. Bạn có chắc chắn không?")) return;
 
             var btn = document.getElementById('btnRestore');
-            var textGoc = btn.innerHTML;
-            btn.innerHTML = "⏳ Đang nạp mây...";
-            btn.style.opacity = "0.6";
+            var originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang Tải...';
+            btn.disabled = true;
 
-            fetch(GOOGLE_SHEET_URL)
-            .then(function(res) {
-                if (!res.ok) throw new Error("Mạng lỗi server đám mây trả về lỗi.");
-                return res.json();
-            })
-            .then(function(data) {
-                if (data && (data.ton_kho || data.nhat_ky)) {
-                    inventory = data.ton_kho || [];
-                    historyLog = data.nhat_ky || [];
-                    
-                    try {
-                        localStorage.setItem('khoHangPro', JSON.stringify(inventory));
-                        localStorage.setItem('lichSuKhoPro', JSON.stringify(historyLog));
-                    } catch(e) { console.warn("Không lưu được vào máy, chỉ hiển thị tạm thời"); }
-                    
-                    chuanHoaDuLieuGoc();
-                    lamMoiHeThong();
-                    
-                    alert("🎉 Khôi phục đồng bộ dữ liệu gốc từ Google Sheet Cloud thành công mỹ mãn!");
+            try {
+                var response = await fetch(GOOGLE_SHEET_URL + "?method=GET");
+                var result = await response.json();
+                if(result.status === 'success') {
+                    if (result.data) {
+                        inventory = JSON.parse(result.data);
+                        luuDuLieu(false); 
+                        lamMoiHeThong();
+                        playBeepSound('success');
+                        alert("✅ Phục hồi dữ liệu từ Cloud thành công!");
+                    } else {
+                        alert("⚠️ Lỗi: Không có dữ liệu nào trả về từ Cloud.");
+                    }
                 } else {
-                    alert("⚠️ Cấu trúc file JSON trên Google Sheet không khớp hoặc rỗng!");
+                    alert("⚠️ LỖI SERVER: " + result.message);
                 }
-            })
-            .catch(function(err) {
-                console.error(err);
-                alert("❌ Lỗi: Không thể fetch dữ liệu. Vui lòng kiểm tra lại URL App Script hoặc quyền chia sẻ công khai Web App Google.");
-            })
-            .finally(function() {
-                btn.innerHTML = textGoc;
-                btn.style.opacity = "1";
-            });
+            } catch(error) {
+                console.error("Lỗi lấy dữ liệu:", error);
+                alert("⚠️ Lỗi khi kéo dữ liệu từ Cloud về. Vui lòng kiểm tra URL hoặc CORS.");
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }
         }
 
         function xuatBaoCaoExcel() {
-            var dateStr = layThoiGianHienTai();
+            if(inventory.length === 0) { alert("⚠️ Kho đang trống, không có dữ liệu để xuất Excel."); return; }
             
+            var dateStr = new Date().toLocaleString('vi-VN');
             var html = `
-            <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+            <html xmlns:x="urn:schemas-microsoft-com:office:excel">
             <head>
-                <meta charset="UTF-8">
+                <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
+                <!--[if gte mso 9]>
+                <xml>
+                    <x:ExcelWorkbook>
+                        <x:ExcelWorksheets>
+                            <x:ExcelWorksheet>
+                                <x:Name>KiemKho_HiSPORTS</x:Name>
+                                <x:WorksheetOptions>
+                                    <x:DisplayGridlines/>
+                                </x:WorksheetOptions>
+                            </x:ExcelWorksheet>
+                        </x:ExcelWorksheets>
+                    </x:ExcelWorkbook>
+                </xml>
+                <![endif]-->
                 <style>
-                    table { border-collapse:collapse; font-family:Arial, sans-serif; }
-                    td { padding:8px; border:1px solid #cbd5e1; font-size:13px; vertical-align:middle; }
-                    th { padding:10px; border:1px solid #94a3b8; background:#f1f5f9; font-weight:bold; font-size:12px; text-transform:uppercase; text-align:center; }
-                    .title { font-size:18px; font-weight:bold; color:#1e3a8a; text-align:center; }
-                    .sku { font-family:monospace; font-weight:bold; color:#4f46e5; text-align:center; }
-                    .total-row { font-weight:bold; background:#e2e8f0; }
+                    table { border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11pt; }
+                    th { background-color: #4f46e5; color: white; border: 1px solid #ccc; padding: 8px; }
+                    td { border: 1px solid #ccc; padding: 5px; }
+                    .header-title { font-size: 18pt; font-weight: bold; text-align: center; color: #1e1b4b; }
                 </style>
             </head>
             <body>
                 <table>
-                    <tr><td colspan="9" class="title">BẢNG KIỂM KHO SẢN PHẨM HI SPORTS</td></tr>
-                    <tr><td colspan="9" style="text-align:center; font-style:italic; color:#64748b;">Thời gian kết xuất: ${dateStr}</td></tr>
+                    <tr><td colspan="9" class="header-title">BÁO CÁO KIỂM KÊ TỒN KHO - HI SPORTS</td></tr>
+                    <tr><td colspan="9"><b>Thời gian trích xuất:</b> ${dateStr}</td></tr>
                     <tr><td colspan="9"></td></tr>
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>Mã SKU</th>
-                            <th>Tên Sản Phẩm</th>
-                            <th>Tồn Kho Sẵn Sàng (A)</th>
-                            <th>Đang Cho Mượn (B)</th>
-                            <th>Tổng Tồn Hệ Thống (C=A+B)</th>
-                            <th>Thực Tế Kiểm Đếm (Đếm tay)</th>
-                            <th>Chênh Lệch Thừa/Thiếu</th>
-                            <th>Ghi Chú Kiểm Kho</th>
-                        </tr>
-                    </thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã SKU</th>
+                        <th>Mã Lẻ Thuộc Thùng</th>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Tồn Khả Dụng</th>
+                        <th>Đang Mượn</th>
+                        <th>Giá Trị Khả Dụng</th>
+                        <th>Giá Trị Đang Mượn</th>
+                        <th>Ghi chú mượn hàng chi tiết</th>
+                    </tr>
                     <tbody>
             `;
-
-            inventory.forEach(function(item, index) {
-                var ready = item.qty || 0;
-                var borrow = item.borrowedQty || 0;
-                var rowExcelIdx = index + 5; 
-                var noteBorrowStr = item.borrowList && item.borrowList.length > 0 
-                    ? item.borrowList.map(function(b) { return "[" + b.note + " mượn " + b.qty + "]"; }).join(', ') 
-                    : '';
-
+            
+            var startRow = 6; 
+            var endRow = startRow + inventory.length - 1;
+            
+            inventory.forEach(function(item, idx) {
+                var notes = item.borrowList.map(function(b) { return "(" + b.qty + ") " + b.note; }).join(" | ");
+                var parentSkuText = item.parentSku ? item.parentSku + " (1 thùng = " + item.ratio + " lẻ)" : "";
+                
                 html += `
                     <tr>
-                        <td align="center">${index + 1}</td>
-                        <td class="sku">${item.sku}</td>
+                        <td align="center">${idx + 1}</td>
+                        <td>${item.sku}</td>
+                        <td>${parentSkuText}</td>
                         <td>${item.name}</td>
-                        <td align="right" style="color:#059669; font-weight:bold;">${ready}</td>
-                        <td align="right" style="color:#7c3aed;">${borrow}</td>
-                        <td align="right" style="font-weight:bold; background:#f8fafc;">=D${rowExcelIdx}+E${rowExcelIdx}</td>
-                        <td align="right" style="background:#fffbeb; border:1px solid #fcd34d;"></td>
-                        <td align="right" style="font-weight:bold;">=IF(G${rowExcelIdx}="","",G${rowExcelIdx}-F${rowExcelIdx})</td>
-                        <td>${noteBorrowStr}</td>
+                        <td align="right">${item.qty}</td>
+                        <td align="right">${item.borrowedQty}</td>
+                        <td align="right"></td>
+                        <td align="right"></td>
+                        <td>${notes}</td>
                     </tr>
                 `;
             });
 
-            var startRow = 5;
-            var endRow = 4 + inventory.length;
             html += `
-                <tr class="total-row">
-                    <td></td>
-                    <td></td>
-                    <td align="right">TỔNG CỘNG KIỂM KHO:</td>
-                    <td align="right">=SUM(D${startRow}:D${endRow})</td>
-                    <td align="right">=SUM(E${startRow}:E${endRow})</td>
-                    <td align="right">=SUM(F${startRow}:F${endRow})</td>
-                    <td align="right">=SUM(G${startRow}:G${endRow})</td>
-                    <td align="right">=SUM(H${startRow}:H${endRow})</td>
-                    <td></td>
-                </tr>
-            </tbody>
-            </table>
+                        <tr style="font-weight:bold; background-color:#f8fafc;">
+                            <td colspan="4" align="right">TỔNG CỘNG:</td>
+                            <td align="right">=SUM(E${startRow}:E${endRow})</td>
+                            <td align="right">=SUM(F${startRow}:F${endRow})</td>
+                            <td align="right">=SUM(G${startRow}:G${endRow})</td>
+                            <td align="right">=SUM(H${startRow}:H${endRow})</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
             </body>
             </html>
             `;
-
-            var blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+            
+            var blob = new Blob(['\ufeff' + html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
             var url = URL.createObjectURL(blob);
-            var link = document.createElement('a');
-            link.href = url;
-            link.download = "Hi_SPORTS_Kiem_Kho_" + new Date().toISOString().slice(0,10) + ".xls";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'KiemKho_HiSPORTS_' + dateStr.replace(/[\/:, ]/g, '-') + '.xls';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
 
         lamMoiHeThong();
