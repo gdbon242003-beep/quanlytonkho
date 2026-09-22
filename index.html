@@ -48,7 +48,6 @@
 
     <div class="max-w-[1600px] mx-auto p-4 md:p-6 lg:p-8">
         
-        <!-- HEADER -->
         <header class="bg-white border border-slate-200 rounded-2xl p-6 mb-6 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-center md:text-left">
                 <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-slate-900 via-indigo-950 to-indigo-600 bg-clip-text text-transparent flex items-center justify-center md:justify-start gap-3">
@@ -72,7 +71,6 @@
             </div>
         </header>
 
-        <!-- KPI STATS -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm flex items-center gap-4">
                 <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl font-bold"><i class="fa-solid fa-tag"></i></div>
@@ -104,7 +102,6 @@
             </div>
         </div>
 
-        <!-- FORM KHAI BÁO -->
         <section class="bg-white border border-slate-200 rounded-2xl p-6 mb-6 shadow-sm">
             <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                 <span class="w-1.5 h-5 bg-indigo-600 rounded-sm"></span>
@@ -135,8 +132,8 @@
             </form>
         </section>
 
-        <!-- CONTROL PANEL -->
         <div class="bg-white border border-slate-200 rounded-2xl p-5 mb-6 shadow-sm flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4">
+            
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-grow max-w-2xl">
                 <div class="relative flex-grow">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
@@ -164,7 +161,6 @@
             </div>
         </div>
 
-        <!-- BULK ACTION PANEL -->
         <div id="bulkActionPanel" class="hidden bg-indigo-50 border border-indigo-200 rounded-2xl p-4 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div class="flex items-center gap-3">
                 <span class="w-2.5 h-2.5 bg-indigo-600 rounded-full animate-ping"></span>
@@ -191,7 +187,6 @@
             </div>
         </div>
 
-        <!-- MAIN TABLE -->
         <main class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden mb-6">
             <div class="overflow-x-auto w-full">
                 <table id="inventoryTable" class="w-full text-left border-collapse min-w-[1100px]">
@@ -222,7 +217,6 @@
             </div>
         </main>
 
-        <!-- HISTORY LOG -->
         <section class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
@@ -268,7 +262,6 @@
 
     </div>
 
-    <!-- ACTION MODAL -->
     <div id="actionModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl border border-slate-200 w-full max-w-md shadow-xl overflow-hidden">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center">
@@ -305,7 +298,6 @@
         </div>
     </div>
 
-    <!-- BULK MODAL -->
     <div id="bulkModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl border border-slate-200 w-full max-w-2xl shadow-xl max-h-[90vh] flex flex-col overflow-hidden">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center flex-shrink-0">
@@ -329,7 +321,6 @@
         </div>
     </div>
 
-    <!-- SCANNER MODAL -->
     <div id="scannerModal" class="hidden fixed inset-0 bg-slate-950/85 z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 text-white rounded-2xl border border-slate-800 w-full max-w-lg shadow-2xl overflow-hidden">
             
@@ -400,7 +391,6 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT -->
     <script>
         var GOOGLE_SHEET_URL = '';
         var inventory = [];
@@ -444,11 +434,6 @@
             renderHistory();
             capNhatKhoiKpiThongKe();
             updateBulkUI();
-        }
-
-        function triggerAutoSaveCloud() {
-            // Hàm xử lý autosave (nếu bạn muốn code tự động đẩy lên Google Sheet sau mỗi thay đổi).
-            // Hiện tại được gọi trong luuDuLieu(true). Ta có thể để trống hoặc gọi dongBoLenGoogleSheet() nếu muốn.
         }
 
         function luuDuLieu(kichHoatAutoSync) {
@@ -1249,26 +1234,51 @@
             stopCameraReader();
         }
 
-        function startCameraReader() {
-            if (html5QrCode == null) {
-                html5QrCode = new Html5Qrcode("cameraReader");
+function startCameraReader() {
+    if (html5QrCode == null) {
+        // Khởi tạo thư viện
+        html5QrCode = new Html5Qrcode("cameraReader");
+    }
+    if (html5QrCode.isScanning) return;
+    
+    // CẤU HÌNH KHUNG QUÉT ĐỘNG:
+    // Tạo khung ngắm hình chữ nhật (rộng 90% màn hình) để bắt trọn mã vạch dài
+    var qrboxFunction = function(viewfinderWidth, viewfinderHeight) {
+        var width = Math.floor(viewfinderWidth * 0.85); // Chiếm 85% chiều rộng thiết bị
+        var height = 200; // Chiều cao cố định 200px tối ưu cho mã vạch
+        return { width: width, height: height };
+    };
+
+    // CẤU HÌNH TỐI ƯU CAMERA:
+    var config = {
+        fps: 30,              // Tăng tốc độ khung hình lên 30 FPS để xử lý hình ảnh tức thì
+        qrbox: qrboxFunction, // Áp dụng khung ngắm hình chữ nhật
+        disableFlip: false,   // Hỗ trợ quét chính xác cả khi mã vạch bị cầm lật ngược
+        aspectRatio: 1.0      // Đảm bảo tỷ lệ khung hình không bị méo trên các thiết bị mobile khác nhau
+    };
+
+    // Ưu tiên sử dụng camera sau (camera chính) có auto-focus
+    var cameraConfig = { 
+        facingMode: "environment" 
+    };
+
+    html5QrCode.start(cameraConfig, config,
+        function(decodedText) {
+            if (!isScanningPaused) {
+                playBeepSound('success');
+                xuLyMaVachQuetThanhCong(decodedText.trim().toUpperCase());
             }
-            if (html5QrCode.isScanning) return;
-            
-            html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: { width: 250, height: 250 } },
-                function(decodedText) {
-                    if (!isScanningPaused) {
-                        playBeepSound('success');
-                        xuLyMaVachQuetThanhCong(decodedText.trim().toUpperCase());
-                    }
-                },
-                function(errorMessage) { }
-            ).catch(function(err) {
-                console.warn("Lỗi khởi chạy camera:", err);
-                alert("⚠️ Không thể kết nối với Camera. Vui lòng kiểm tra quyền truy cập Camera trên trình duyệt của bạn.");
-                switchScannerDevice('gun'); 
-            });
+        },
+        function(errorMessage) { 
+            // Thư viện sẽ liên tục báo lỗi khi chưa tìm thấy mã trong khung hình, 
+            // cố tình để trống để tránh spam log làm chậm trình duyệt
         }
+    ).catch(function(err) {
+        console.warn("Lỗi khởi chạy camera:", err);
+        alert("⚠️ Không thể kết nối với Camera. Vui lòng kiểm tra quyền truy cập Camera trên trình duyệt của bạn.");
+        switchScannerDevice('gun'); 
+    });
+}
 
         function stopCameraReader() {
             if (html5QrCode && html5QrCode.isScanning) {
@@ -1392,127 +1402,208 @@
                     luuDuLieu(true);
                     lamMoiHeThong();
                     playBeepSound('success');
-                    showScannerResult('fa-solid fa-handshake-angle text-purple-300', 'CHO MƯỢN (+1)', '<div class="text-[14px] truncate">' + item.name + '</div><div class="mt-1 text-[11px] text-purple-200">Đang cho mượn: <span class="font-extrabold text-white text-sm">' + item.borrowedQty + '</span></div>', 'bg-purple-900/50 border border-purple-800');
+                    showScannerResult('fa-solid fa-handshake-angle text-purple-300', 'CHO MƯỢN (+1)', '<div class="text-[14px] truncate">' + item.name + '</div><div class="mt-1 text-[11px] text-purple-200">Đã mượn: <span class="font-extrabold text-white">' + item.borrowedQty + '</span> | Kho còn: ' + item.qty + '</div>', 'bg-purple-900/50 border border-purple-800');
                 }
                 tiepTucTrangThaiQuetTiepTheo();
             }
         }
 
-        // Tái khởi động lại trình quét sau khoảng trễ
-        function tiepTucTrangThaiQuetTiepTheo(delayTime) {
+        function tiepTucTrangThaiQuetTiepTheo(delay) {
+            var waitTime = delay || 400; 
             setTimeout(function() {
                 isScanningPaused = false;
-                if (currentScannerDevice === 'gun') {
+                if (currentScannerDevice === 'gun' && document.getElementById('scannerModal').classList.contains('hidden') === false) {
                     document.getElementById('hwScannerInput').focus();
                 }
-            }, delayTime || 1500);
+            }, waitTime);
         }
 
-        // --- CÁC HÀM XỬ LÝ CHỨC NĂNG MỞ RỘNG BỊ THIẾU TỪ BẢN GỐC ---
-
-        // 1. Hàm Xuất Dữ Liệu Ra File Excel (.csv)
-        function xuatBaoCaoExcel() {
-            if(inventory.length === 0) {
-                alert("⚠️ Kho không có dữ liệu để xuất báo cáo!");
-                return;
+        document.getElementById('scannerModal').addEventListener('click', function(e) {
+            if (currentScannerDevice === 'gun' && !e.target.closest('input') && !e.target.closest('button')) {
+                document.getElementById('hwScannerInput').focus();
             }
-            
-            // Dùng BOM để Excel hiển thị đúng tiếng Việt
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; 
-            csvContent += "Mã SKU,Tên Sản Phẩm,Tồn Khả Dụng,Đang Cho Mượn\r\n";
-            
-            inventory.forEach(function(item) {
-                let safeName = item.name.replace(/"/g, '""'); // Tránh lỗi dấu ngoặc kép trong nội dung
-                let row = `"${item.sku}","${safeName}",${item.qty},${item.borrowedQty}`;
-                csvContent += row + "\r\n";
-            });
-            
-            let encodedUri = encodeURI(csvContent);
-            let link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Bao_Cao_Kiem_Kho_" + layThoiGianHienTai().replace(/[: /]/g, '_') + ".csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+        });
 
-        // 2. Hàm Đồng Bộ Lên Google Sheet 
         async function dongBoLenGoogleSheet() {
-            var url = document.getElementById('sheetUrlInput').value.trim();
-            if(!url) {
-                alert("⚠️ Vui lòng dán đường link (URL) Web App của Google Apps Script vào ô phía trên để Đẩy Cloud!");
+            if (!GOOGLE_SHEET_URL) {
+                alert("⚠️ CHƯA CẤU HÌNH: Bạn cần điền URL của Google Apps Script vào ô ở góc phải trên cùng và Lưu lại trước khi dùng tính năng Cloud.");
+                document.getElementById('sheetUrlInput').focus();
                 return;
             }
             
             var btn = document.getElementById('btnSync');
             var originalHtml = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang Đẩy...';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang Đẩy...';
             btn.disabled = true;
+            btn.classList.add('opacity-70');
 
             try {
-                var payload = JSON.stringify({
-                    method: 'syncData',
-                    inventory: inventory,
-                    historyLog: historyLog
-                });
-                
-                await fetch(url, {
+                var payload = { method: "POST", data: JSON.stringify(inventory) };
+                var response = await fetch(GOOGLE_SHEET_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: payload
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: "data=" + encodeURIComponent(JSON.stringify(payload))
                 });
-                alert("✅ Đã gửi lệnh đồng bộ dữ liệu lên Google Sheet thành công!");
-            } catch(e) {
-                alert("⚠️ Lỗi đồng bộ Cloud (Thường do lỗi thiết lập Google Apps Script hoặc không có mạng): " + e.message);
+                var result = await response.json();
+                if(result.status === 'success') {
+                    playBeepSound('success');
+                    alert("✅ YAY! Đẩy dữ liệu lên Cloud Google Sheet thành công!");
+                } else {
+                    alert("⚠️ LỖI TỪ SERVER: " + result.message);
+                }
+            } catch(error) {
+                console.error("Lỗi đồng bộ:", error);
+                alert("⚠️ KHÔNG THỂ KẾT NỐI: Vui lòng kiểm tra lại mạng Internet hoặc URL App Script có bị chặn CORS không.");
             } finally {
                 btn.innerHTML = originalHtml;
                 btn.disabled = false;
+                btn.classList.remove('opacity-70');
             }
         }
 
-        // 3. Hàm Phục Hồi (Tải) Từ Google Sheet
+        function triggerAutoSaveCloud() {
+            if (!GOOGLE_SHEET_URL) return;
+            var payload = { method: "POST", data: JSON.stringify(inventory) };
+            fetch(GOOGLE_SHEET_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: "data=" + encodeURIComponent(JSON.stringify(payload))
+            }).catch(function(e) { console.log("Auto-save failed silent", e); });
+        }
+
         async function khoiPhucTuGoogleSheet() {
-            var url = document.getElementById('sheetUrlInput').value.trim();
-            if(!url) {
-                alert("⚠️ Vui lòng dán đường link (URL) Web App của Google Apps Script vào ô phía trên để Tải Cloud!");
+            if (!GOOGLE_SHEET_URL) {
+                alert("⚠️ Bạn chưa cấu hình Google Sheet URL!");
                 return;
             }
-            if(!confirm("⚠️ LƯU Ý QUAN TRỌNG: Việc tải dữ liệu từ Cloud sẽ GHI ĐÈ XÓA HẾT dữ liệu đang có hiện tại trên máy của bạn. Bạn có CHẮC CHẮN muốn tải không?")) {
-                return;
-            }
-            
+            if (!confirm("🚨 CẢNH BÁO QUAN TRỌNG: Quá trình Tải dữ liệu từ Cloud sẽ GHI ĐÈ XÓA TRẮNG toàn bộ dữ liệu hiện tại trên trình duyệt này. Bạn có chắc chắn không?")) return;
+
             var btn = document.getElementById('btnRestore');
             var originalHtml = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang Tải...';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang Tải...';
             btn.disabled = true;
 
             try {
-                var response = await fetch(url + "?method=getData");
-                var data = await response.json();
-                
-                if(data && data.inventory) {
-                    inventory = data.inventory;
-                    historyLog = data.historyLog || [];
-                    luuDuLieu(false); 
-                    luuLichSuLog();
-                    lamMoiHeThong();
-                    alert("✅ Khôi phục toàn bộ dữ liệu từ Cloud thành công!");
+                var response = await fetch(GOOGLE_SHEET_URL + "?method=GET");
+                var result = await response.json();
+                if(result.status === 'success') {
+                    if (result.data) {
+                        inventory = JSON.parse(result.data);
+                        luuDuLieu(false); 
+                        lamMoiHeThong();
+                        playBeepSound('success');
+                        alert("✅ Phục hồi dữ liệu từ Cloud thành công!");
+                    } else {
+                        alert("⚠️ Lỗi: Không có dữ liệu nào trả về từ Cloud.");
+                    }
                 } else {
-                    alert("⚠️ Lỗi: Cấu trúc dữ liệu trả về từ Cloud không đúng.");
+                    alert("⚠️ LỖI SERVER: " + result.message);
                 }
-            } catch(e) {
-                alert("⚠️ Lỗi tải dữ liệu Cloud: " + e.message);
+            } catch(error) {
+                console.error("Lỗi lấy dữ liệu:", error);
+                alert("⚠️ Lỗi khi kéo dữ liệu từ Cloud về. Vui lòng kiểm tra URL hoặc CORS.");
             } finally {
                 btn.innerHTML = originalHtml;
                 btn.disabled = false;
             }
         }
 
-        // Khởi chạy hệ thống lúc mở trang
-        window.onload = function() {
-            lamMoiHeThong();
-        };
+        function xuatBaoCaoExcel() {
+            if(inventory.length === 0) { alert("⚠️ Kho đang trống, không có dữ liệu để xuất Excel."); return; }
+            
+            var dateStr = new Date().toLocaleString('vi-VN');
+            var html = `
+            <html xmlns:x="urn:schemas-microsoft-com:office:excel">
+            <head>
+                <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
+                <!--[if gte mso 9]>
+                <xml>
+                    <x:ExcelWorkbook>
+                        <x:ExcelWorksheets>
+                            <x:ExcelWorksheet>
+                                <x:Name>KiemKho_HiSPORTS</x:Name>
+                                <x:WorksheetOptions>
+                                    <x:DisplayGridlines/>
+                                </x:WorksheetOptions>
+                            </x:ExcelWorksheet>
+                        </x:ExcelWorksheets>
+                    </x:ExcelWorkbook>
+                </xml>
+                <![endif]-->
+                <style>
+                    table { border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11pt; }
+                    th { background-color: #4f46e5; color: white; border: 1px solid #ccc; padding: 8px; }
+                    td { border: 1px solid #ccc; padding: 5px; }
+                    .header-title { font-size: 18pt; font-weight: bold; text-align: center; color: #1e1b4b; }
+                </style>
+            </head>
+            <body>
+                <table>
+                    <tr><td colspan="9" class="header-title">BÁO CÁO KIỂM KÊ TỒN KHO - HI SPORTS</td></tr>
+                    <tr><td colspan="9"><b>Thời gian trích xuất:</b> ${dateStr}</td></tr>
+                    <tr><td colspan="9"></td></tr>
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã SKU</th>
+                        <th>Mã Lẻ Thuộc Thùng</th>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Tồn Khả Dụng</th>
+                        <th>Đang Mượn</th>
+                        <th>Giá Trị Khả Dụng</th>
+                        <th>Giá Trị Đang Mượn</th>
+                        <th>Ghi chú mượn hàng chi tiết</th>
+                    </tr>
+                    <tbody>
+            `;
+            
+            var startRow = 6; 
+            var endRow = startRow + inventory.length - 1;
+            
+            inventory.forEach(function(item, idx) {
+                var notes = item.borrowList.map(function(b) { return "(" + b.qty + ") " + b.note; }).join(" | ");
+                var parentSkuText = item.parentSku ? item.parentSku + " (1 thùng = " + item.ratio + " lẻ)" : "";
+                
+                html += `
+                    <tr>
+                        <td align="center">${idx + 1}</td>
+                        <td>${item.sku}</td>
+                        <td>${parentSkuText}</td>
+                        <td>${item.name}</td>
+                        <td align="right">${item.qty}</td>
+                        <td align="right">${item.borrowedQty}</td>
+                        <td align="right"></td>
+                        <td align="right"></td>
+                        <td>${notes}</td>
+                    </tr>
+                `;
+            });
 
+            html += `
+                        <tr style="font-weight:bold; background-color:#f8fafc;">
+                            <td colspan="4" align="right">TỔNG CỘNG:</td>
+                            <td align="right">=SUM(E${startRow}:E${endRow})</td>
+                            <td align="right">=SUM(F${startRow}:F${endRow})</td>
+                            <td align="right">=SUM(G${startRow}:G${endRow})</td>
+                            <td align="right">=SUM(H${startRow}:H${endRow})</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </body>
+            </html>
+            `;
+            
+            var blob = new Blob(['\ufeff' + html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'KiemKho_HiSPORTS_' + dateStr.replace(/[\/:, ]/g, '-') + '.xls';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        lamMoiHeThong();
     </script>
 </body>
 </html>
